@@ -1,4 +1,11 @@
 import Link from "next/link";
+import { useContext } from "react";
+import { ThemeContext } from "@/context/theme";
+
+type ThemeContextType = {
+  theme: string;
+  toggleTheme: () => void;
+};
 
 const siteLinks = [
   { href: "/", label: "Home" },
@@ -11,6 +18,8 @@ const workLinks = [
 ];
 
 const NavBar = () => {
+  const { theme, toggleTheme } = useContext<ThemeContextType>(ThemeContext);
+
   return (
     <>
       <div className="flex justify-between items-center w-full h-[50px]">
