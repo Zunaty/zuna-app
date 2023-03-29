@@ -14,7 +14,8 @@ type PointsProviderProps = {
 
 export const PointsProvider = ({ children }: PointsProviderProps) => {
   const [points, setPoints] = useState<number>(() => {
-    const savedPoints = localStorage.getItem("points");
+    const savedPoints =
+      typeof window !== "undefined" ? localStorage.getItem("points") : null;
     return savedPoints ? parseInt(savedPoints, 10) : 0;
   });
 

@@ -20,6 +20,9 @@ const workLinks = [
 const NavBar = () => {
   const { theme, toggleTheme } = useContext<ThemeContextType>(ThemeContext);
 
+  document.body.style.backgroundColor = theme === "light" ? "#fff" : "#000";
+  document.body.style.color = theme === "light" ? "#000" : "#fff";
+
   return (
     <>
       <div className="flex justify-between items-center w-full h-[50px]">
@@ -30,15 +33,21 @@ const NavBar = () => {
           VLP
         </Link>
 
-        <div>
-          {siteLinks.map(({ href, label }) => (
-            <Link
-              key={`${href}${label}`}
-              href={href}
-            >
-              {label}
-            </Link>
-          ))}
+        <div className="flex gap-5">
+          <div className="flex gap-5">
+            {siteLinks.map(({ href, label }) => (
+              <Link
+                key={`${href}${label}`}
+                href={href}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          <button onClick={toggleTheme}>
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
         </div>
       </div>
     </>
