@@ -1,20 +1,17 @@
-// Next / React
-import { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 
 // Components
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
-const Home: NextPage = () => {
+const Projects = () => {
   return (
     <>
       <Head>
-        <title>VLP App</title>
+        <title>Projects</title>
         <meta
           name="description"
-          content="Victor L. Perez Portfolio App"
+          content="VLP Projects Page"
         />
         <meta
           name="viewport"
@@ -30,7 +27,7 @@ const Home: NextPage = () => {
 
       <main>
         <div className="flex flex-col items-center justify-center w-full h-screen">
-          <h1 className="text-[3rem]">Home Page</h1>
+          <h1 className="text-[3rem]">Projects Page</h1>
         </div>
       </main>
 
@@ -39,4 +36,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Projects;
