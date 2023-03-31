@@ -3,7 +3,8 @@ export const projectData = [
     title: "",
     description: "",
     image: "",
-    link: "",
+    siteLink: "",
+    githubLink: "",
     skills: [],
   },
 ];

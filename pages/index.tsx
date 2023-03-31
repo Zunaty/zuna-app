@@ -6,6 +6,7 @@ import Image from "next/image";
 // Components
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import Hero from "@/components/Home/Hero";
 
 const Home: NextPage = () => {
   return (
@@ -28,10 +29,8 @@ const Home: NextPage = () => {
 
       <NavBar />
 
-      <main>
-        <div className="flex flex-col items-center justify-center w-full h-screen">
-          <h1 className="text-[3rem]">Home Page</h1>
-        </div>
+      <main className="w-full max-w-screen-2xl p-5 mx-auto">
+        <Hero />
       </main>
 
       <Footer />
