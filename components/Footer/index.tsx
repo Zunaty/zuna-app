@@ -1,10 +1,10 @@
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <p className="footer__text">
+    <footer className="">
+      <div className="">
+        <div className="">
+          <div className="">
+            <p className="">
               © 2021, Built with{" "}
               <a
                 href="https://nextjs.org/"

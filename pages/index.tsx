@@ -12,10 +12,10 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>VLP App</title>
+        <title>Victor Perez Portfolio</title>
         <meta
           name="description"
-          content="Victor L. Perez Portfolio App"
+          content="Victor Perez Portfolio App"
         />
         <meta
           name="viewport"
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 
       <NavBar />
 
-      <main className="w-full max-w-screen-2xl p-5 mx-auto">
+      <main className="w-full max-w-screen-2xl min-h-screen p-5 mx-auto">
         <Hero />
       </main>
 
