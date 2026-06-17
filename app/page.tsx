@@ -1,44 +1,25 @@
-import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+
+import { ComingSoonZones, FeaturedProjects, HomeHero, HomeSkills } from "@/components/portfolio/home-sections";
+import { PageShell } from "@/components/layout/page-shell";
+import { site } from "@/lib/data/site";
+
+export const metadata: Metadata = {
+  title: site.name,
+  description: site.tagline,
+  openGraph: {
+    title: `${site.name} — ${site.title}`,
+    description: site.tagline,
+  },
+};
 
 export default function HomePage() {
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-16 sm:px-6 sm:py-24">
-      <section className="flex max-w-3xl flex-col gap-6">
-        <p className="text-sm font-medium uppercase tracking-widest text-primary">Phase 0 · Foundation</p>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Portfolio, playground, and things to explore.</h1>
-        <p className="text-lg text-muted-foreground">
-          A fresh start for zuna-app — Next.js 16, TypeScript, Tailwind, and shadcn/ui. Games, explore zones, and
-          achievements are on the way.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Button size="lg">Coming in Phase 1</Button>
-          <Button variant="outline" size="lg" disabled>
-            Playground
-          </Button>
-        </div>
-      </section>
-
-      <section className="grid gap-4 sm:grid-cols-3">
-        {[
-          {
-            title: "Portfolio",
-            description: "About, projects, resume, and contact.",
-          },
-          {
-            title: "Playground",
-            description: "Art Roulette, mini-games, and scores.",
-          },
-          {
-            title: "Explore",
-            description: "Pokédex, Star Wars, and more API demos.",
-          },
-        ].map((card) => (
-          <article key={card.title} className="rounded-xl border border-border bg-card p-5 shadow-sm">
-            <h2 className="font-semibold">{card.title}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{card.description}</p>
-          </article>
-        ))}
-      </section>
-    </div>
+    <PageShell className="flex flex-col gap-16 sm:gap-20">
+      <HomeHero />
+      <FeaturedProjects />
+      <HomeSkills />
+      <ComingSoonZones />
+    </PageShell>
   );
 }

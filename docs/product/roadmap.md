@@ -14,11 +14,11 @@ Public portfolio with a game-layer meta-progression system (achievements, points
 - [x] `AGENTS.md`, `docs/`, `.github/` CI
 - [x] Verify lint, typecheck, format, and build pass locally
 
-## Phase 1 — Portfolio shell
+## Phase 1 — Portfolio shell ✅ complete
 
-- [ ] Landing, About, Projects, Resume, Contact
-- [ ] New visual design (ground-up, not old Hero)
-- [ ] SEO metadata and OG images
+- [x] Landing, About, Projects, Resume, Contact
+- [x] New visual design (ground-up, not old Hero)
+- [x] SEO metadata and OG images
 
 ## Phase 2 — Supabase auth + profile
 

@@ -10,12 +10,12 @@ _Coming soon._
 
 ## What’s here
 
-| Zone           | Description                        | Status  |
-| -------------- | ---------------------------------- | ------- |
-| **Portfolio**  | About, projects, resume, contact   | Phase 1 |
-| **Playground** | Art Roulette, mini-games, scores   | Planned |
-| **Explore**    | Pokédex, Star Wars, API demos      | Planned |
-| **Account**    | Auth, saved progress, achievements | Planned |
+| Zone           | Description                        | Status   |
+| -------------- | ---------------------------------- | -------- |
+| **Portfolio**  | About, projects, resume, contact   | Live     |
+| **Playground** | Art Roulette, mini-games, scores   | Phase 4+ |
+| **Explore**    | Pokédex, Star Wars, API demos      | Planned  |
+| **Account**    | Auth, saved progress, achievements | Planned  |
 
 See [docs/product/roadmap.md](./docs/product/roadmap.md) for the full phased plan.
 
