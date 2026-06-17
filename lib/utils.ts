@@ -17,5 +17,6 @@ export function getSiteUrl(): string {
   return "http://localhost:3000";
 }
 
-export const hasEnvVars =
-  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) && Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY);
+import { hasSupabasePublicEnv } from "@/lib/supabase/env";
+
+export const hasEnvVars = hasSupabasePublicEnv;

@@ -10,7 +10,12 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "prepare": "husky"
+    "prepare": "husky",
+    "supabase": "npx --yes supabase@2.101.0",
+    "supabase:db-push": "yarn supabase db push",
+    "supabase:gen-types": "node scripts/gen-supabase-types.mjs",
+    "supabase:link": "yarn supabase link",
+    "supabase:migration:new": "yarn supabase migration new"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,mjs,cjs}": [
@@ -22,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-slot": "^1.2.2",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.2",

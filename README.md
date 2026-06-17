@@ -10,12 +10,12 @@ _Coming soon._
 
 ## What’s here
 
-| Zone           | Description                        | Status   |
-| -------------- | ---------------------------------- | -------- |
-| **Portfolio**  | About, projects, resume, contact   | Live     |
-| **Playground** | Art Roulette, mini-games, scores   | Phase 4+ |
-| **Explore**    | Pokédex, Star Wars, API demos      | Planned  |
-| **Account**    | Auth, saved progress, achievements | Planned  |
+| Zone           | Description                        | Status                             |
+| -------------- | ---------------------------------- | ---------------------------------- |
+| **Portfolio**  | About, projects, resume, contact   | Live                               |
+| **Playground** | Art Roulette, mini-games, scores   | Phase 4+                           |
+| **Explore**    | Pokédex, Star Wars, API demos      | Planned                            |
+| **Account**    | Auth, saved progress, achievements | Live (profile); achievements later |
 
 See [docs/product/roadmap.md](./docs/product/roadmap.md) for the full phased plan.
 
@@ -46,11 +46,11 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Environment variables
 
-| Variable                                       | Required | Description                                                       |
-| ---------------------------------------------- | -------- | ----------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                         | No       | Canonical site URL for metadata and OAuth (defaults to localhost) |
-| `NEXT_PUBLIC_SUPABASE_URL`                     | Phase 2+ | Supabase project URL                                              |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` | Phase 2+ | Supabase publishable key                                          |
+| Variable                               | Required   | Description                                                       |
+| -------------------------------------- | ---------- | ----------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                 | No         | Canonical site URL for metadata and OAuth (defaults to localhost) |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Phase 2+   | Supabase project URL                                              |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes (auth) | Publishable/anon key from Supabase API settings                   |
 
 ## Scripts
 
@@ -64,6 +64,17 @@ Open [http://localhost:3000](http://localhost:3000).
 | `yarn format`       | Format with Prettier          |
 | `yarn format:check` | Check formatting              |
 
+### Supabase
+
+| Command                              | Description                                    |
+| ------------------------------------ | ---------------------------------------------- |
+| `yarn supabase:link`                 | Link repo to your Supabase project (once)      |
+| `yarn supabase:migration:new <name>` | New migration file in `supabase/migrations/`   |
+| `yarn supabase:db-push`              | Apply pending migrations to the linked project |
+| `yarn supabase:gen-types`            | Regenerate `types/supabase/database.ts`        |
+
+See [supabase/README.md](./supabase/README.md) and [docs/database/README.md](./docs/database/README.md).
+
 ## Project structure
 
 ```
@@ -72,6 +83,7 @@ components/
   layout/             # Site header, footer
   ui/                 # shadcn/ui primitives
 docs/                 # Roadmap, architecture, improvement notes
+supabase/             # Migrations (source of truth for schema)
 lib/                  # Shared utilities
 ```
 

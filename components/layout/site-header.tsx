@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { ModeToggle } from "@/components/mode-toggle";
+import { UserNav } from "@/components/layout/user-nav";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -13,6 +14,7 @@ const navItems = [
   { href: "/projects", label: "Projects" },
   { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
+  { href: "/profile", label: "Profile" },
 ] as const;
 
 export function SiteHeader() {
@@ -57,6 +59,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1">
+          <UserNav />
           <ModeToggle />
           <button
             type="button"
@@ -90,6 +93,15 @@ export function SiteHeader() {
                 </li>
               );
             })}
+            <li className="border-t border-border/60 pt-2">
+              <Link
+                href="/auth/login"
+                onClick={() => setOpen(false)}
+                className="block rounded-md px-3 py-2 text-sm text-muted-foreground"
+              >
+                Sign in
+              </Link>
+            </li>
           </ul>
         </nav>
       ) : null}

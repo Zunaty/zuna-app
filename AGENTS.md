@@ -32,6 +32,7 @@ Personal portfolio site (repo: `zuna-app`). User-facing branding is **Victor Per
 - `components/layout/` — site chrome
 - `lib/` — shared utilities
 - `docs/` — roadmap, architecture, active improvements
+- `supabase/migrations/` — versioned SQL; push with `yarn supabase:db-push` after `yarn supabase:link`
 
 ## Phases
 

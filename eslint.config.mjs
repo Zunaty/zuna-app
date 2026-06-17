@@ -20,7 +20,7 @@ const config = [
     },
   },
   {
-    ignores: [".next/**", "node_modules/**", "supabase/**"],
+    ignores: [".next/**", "node_modules/**", "supabase/migrations/**", "types/supabase/database.ts"],
   },
   prettierConfig,
 ];

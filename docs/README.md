@@ -4,10 +4,11 @@ Canonical project docs for zuna-app.
 
 ## Index
 
-| Path                                                   | Description                  |
-| ------------------------------------------------------ | ---------------------------- |
-| [product/roadmap.md](./product/roadmap.md)             | Phased build plan and status |
-| [architecture/overview.md](./architecture/overview.md) | Routes, stack, and data flow |
+| Path                                                   | Description                       |
+| ------------------------------------------------------ | --------------------------------- |
+| [product/roadmap.md](./product/roadmap.md)             | Phased build plan and status      |
+| [architecture/overview.md](./architecture/overview.md) | Routes, stack, and data flow      |
+| [database/README.md](./database/README.md)             | Migrations and `db push` workflow |
 
 ## Improvements workflow
 

@@ -20,11 +20,12 @@ Public portfolio with a game-layer meta-progression system (achievements, points
 - [x] New visual design (ground-up, not old Hero)
 - [x] SEO metadata and OG images
 
-## Phase 2 — Supabase auth + profile
+## Phase 2 — Supabase auth + profile ✅ complete
 
-- [ ] Supabase project, `lib/supabase/*`, `proxy.ts`
-- [ ] Login, sign-up, callback
-- [ ] Profiles table + guest vs authenticated UX
+- [x] Supabase project, `lib/supabase/*`, `proxy.ts`
+- [x] Login, sign-up, callback
+- [x] Profiles table + guest vs authenticated UX
+- [x] Run `yarn supabase:link` then `yarn supabase:db-push` if `profiles` is not on the remote yet
 
 ## Phase 3 — Explore zone
 
