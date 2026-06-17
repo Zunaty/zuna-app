@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description: `Account and progress for ${site.name}.`,
 };
 
+// Auth-dependent — must not prerender at build time (CI has no Supabase env).
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
   const supabase = await createClient();
   const {
