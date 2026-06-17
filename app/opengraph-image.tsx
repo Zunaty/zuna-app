@@ -22,7 +22,7 @@ export default function OpenGraphImage() {
         fontFamily: "system-ui, sans-serif",
       }}
     >
-      <div style={{ fontSize: 28, opacity: 0.8, letterSpacing: "0.2em", textTransform: "uppercase" }}>Zuna</div>
+      <div style={{ fontSize: 28, opacity: 0.8, letterSpacing: "0.2em", textTransform: "uppercase" }}>Portfolio</div>
       <div style={{ fontSize: 72, fontWeight: 700, marginTop: 16, lineHeight: 1.1 }}>{site.name}</div>
       <div style={{ fontSize: 32, marginTop: 24, opacity: 0.85, maxWidth: 800 }}>{site.title}</div>
       <div style={{ fontSize: 22, marginTop: 16, opacity: 0.65, maxWidth: 720 }}>{site.tagline}</div>

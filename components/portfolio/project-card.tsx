@@ -13,6 +13,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <article className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm transition-colors hover:border-primary/30">
       <div className="flex-1">
         <h3 className="text-lg font-semibold">{project.title}</h3>
+        {project.employer ? <p className="mt-1 text-sm font-medium text-primary">{project.employer}</p> : null}
         <p className="mt-2 text-sm text-muted-foreground">{project.description}</p>
         <ul className="mt-4 space-y-1.5 text-sm text-muted-foreground">
           {project.highlights.map((item) => (

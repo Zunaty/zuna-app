@@ -29,16 +29,16 @@ export default function ResumePage() {
       <section className="space-y-10">
         <div>
           <h2 className="text-xl font-semibold">Experience</h2>
-          <ul className="mt-6 space-y-8">
+          <ul className="mt-6 space-y-10">
             {experience.map((job) => (
-              <li key={job.company} className="border-l-2 border-primary/30 pl-4">
+              <li key={`${job.company}-${job.period}`} className="border-l-2 border-primary/30 pl-4">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="font-semibold">{job.role}</h3>
                   <span className="text-sm text-muted-foreground">{job.period}</span>
                 </div>
                 <p className="text-sm font-medium text-muted-foreground">{job.company}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{job.summary}</p>
-                <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                {job.summary ? <p className="mt-2 text-sm text-muted-foreground">{job.summary}</p> : null}
+                <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted-foreground">
                   {job.bullets.map((bullet) => (
                     <li key={bullet}>{bullet}</li>
                   ))}
@@ -50,11 +50,21 @@ export default function ResumePage() {
 
         <div>
           <h2 className="text-xl font-semibold">Education</h2>
-          <ul className="mt-4 space-y-4">
+          <ul className="mt-6 space-y-8">
             {education.map((item) => (
-              <li key={item.school}>
-                <p className="font-medium">{item.school}</p>
-                <p className="text-sm text-muted-foreground">{item.detail}</p>
+              <li key={`${item.school}-${item.credential}`} className="border-l-2 border-border pl-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="font-semibold">{item.school}</p>
+                  {item.period ? <span className="text-sm text-muted-foreground">{item.period}</span> : null}
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">{item.credential}</p>
+                {item.bullets ? (
+                  <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted-foreground">
+                    {item.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>

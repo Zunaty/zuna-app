@@ -6,7 +6,7 @@ Last updated: `2026-06-17`
 
 ## Purpose
 
-zuna-app is a **public portfolio** that doubles as an interactive skills demo. Private work repos stay private; this repo shows engineering maturity recruiters can actually open.
+The `zuna-app` repository hosts **Victor Perez's public portfolio** — an interactive skills demo recruiters can inspect in the open. Private work repos stay private; this site shows how the work is built.
 
 ## Layers
 

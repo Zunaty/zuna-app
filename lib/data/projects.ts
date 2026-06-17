@@ -1,6 +1,7 @@
 export type Project = {
   slug: string;
   title: string;
+  employer?: string;
   description: string;
   highlights: string[];
   siteUrl?: string;
@@ -10,18 +11,60 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "comedy-platform",
+    title: "Comedy & Event Discovery Platform",
+    employer: "Koggin Labs",
+    description:
+      "AI-informed comedy and event discovery platform — public marketing site, admin dashboard, and shared Supabase layer in a Next.js monorepo.",
+    highlights: [
+      "Next.js 16 monorepo with public web app and internal dashboard",
+      "Supabase auth, RLS, typed database layer, and landing page builder",
+      "Automated testing, CI, and engineering standards across workspaces",
+    ],
+    skills: ["Next.js", "Supabase", "TypeScript", "Monorepo", "Vitest"],
+    featured: true,
+  },
+  {
+    slug: "art-hero",
+    title: "Art Hero — Creative AI Platform",
+    employer: "Koggin Labs",
+    description:
+      "AI-powered creative tooling with image generation, e-commerce flows, and Art Roulette — a roguelike prompt-building game.",
+    highlights: [
+      "Vercel AI SDK and streaming API routes for generative workflows",
+      "Complex client state for game mechanics and creative tooling",
+      "Supabase auth and user-generated content pipelines",
+    ],
+    skills: ["Next.js", "AI SDK", "Supabase", "LangChain", "Game design"],
+    featured: true,
+  },
+  {
+    slug: "black-swan-research",
+    title: "Blockchain Research & NFT Products",
+    employer: "Black Swan Research",
+    description:
+      "Full-stack applications combining AI analysis of blockchain datasets with Web3 integrations, subscriptions, and NFT product launches.",
+    highlights: [
+      "NextAuth, Stripe, and MongoDB across multiple production apps",
+      "OpenAI, LangChain, and Hugging Face for automated research workflows",
+      "Thirdweb, Alchemy, and Moralis for Ethereum-based product features",
+    ],
+    skills: ["Next.js", "MongoDB", "NextAuth", "Stripe", "Web3", "AI"],
+    featured: true,
+  },
+  {
     slug: "plan-3",
     title: "Plan_3 — Company Website",
     description:
       "Marketing site for a product ecosystem, built for clarity and conversion. Responsive layouts, component-driven UI, and analytics integration.",
     highlights: [
-      "Next.js App Router with SSR for performance and SEO",
+      "Next.js with SSR for performance and SEO",
       "UI/UX for ecosystem cards and product storytelling",
       "Google Analytics for behavior insights",
     ],
     siteUrl: "https://www.plan3.io/",
     skills: ["Next.js", "TypeScript", "Tailwind CSS", "UI/UX", "Analytics"],
-    featured: true,
+    featured: false,
   },
   {
     slug: "origins3",
@@ -35,32 +78,6 @@ export const projects: Project[] = [
     ],
     siteUrl: "https://www.origins3.io/",
     skills: ["Next.js", "TypeScript", "Tailwind CSS", "Marketing sites"],
-    featured: true,
-  },
-  {
-    slug: "comedy-platform",
-    title: "Comedy Platform — Events & Media",
-    description:
-      "Multi-app platform for comedy events, venues, comedians, podcasts, and admin tooling. Monorepo architecture with shared Supabase package.",
-    highlights: [
-      "Next.js 16 monorepo (public site + dashboard)",
-      "Supabase auth, RLS, and typed database layer",
-      "Landing page builder and media discovery",
-    ],
-    skills: ["Next.js", "Supabase", "TypeScript", "Monorepo", "RLS"],
-    featured: true,
-  },
-  {
-    slug: "art-hero",
-    title: "Art Hero — Creative AI Platform",
-    description:
-      "AI-powered creative tooling with image generation, e-commerce flows, and Art Roulette — a roguelike prompt-building game.",
-    highlights: [
-      "Vercel AI SDK and streaming API routes",
-      "Complex client state for game mechanics",
-      "Supabase auth and user-generated content",
-    ],
-    skills: ["Next.js", "AI SDK", "Supabase", "Game design", "Konva"],
     featured: false,
   },
 ];

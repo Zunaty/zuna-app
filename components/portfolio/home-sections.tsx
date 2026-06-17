@@ -18,7 +18,7 @@ export function HomeHero() {
       <div className="relative max-w-3xl">
         <p className="text-sm font-medium uppercase tracking-widest text-primary">Portfolio & playground</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Hi, I&apos;m {site.name.split(" ")[0]}.{" "}
+          Hi, I&apos;m {site.displayName}.{" "}
           <span className="text-muted-foreground">I build web products people enjoy using.</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground">{site.tagline}</p>
@@ -42,7 +42,7 @@ export function FeaturedProjects() {
     <section>
       <SectionHeading
         title="Selected work"
-        description="Production sites and platforms — client work and products where repos stay private, but the craft is here for you to see."
+        description="Recent product work at Koggin Labs and Black Swan Research — plus earlier client marketing sites. Repos stay private; this is the craft in the open."
       />
       <div className="grid gap-6 lg:grid-cols-2">
         {featured.map((project) => (
@@ -70,7 +70,7 @@ export function ComingSoonZones() {
     <section>
       <SectionHeading
         title="Beyond the resume"
-        description="Zuna is an interactive portfolio. Games, API explorations, and achievements are rolling out in later phases."
+        description="More than a static resume — games, API explorations, and achievements are rolling out in later phases."
       />
       <div className="grid gap-4 sm:grid-cols-2">
         {[

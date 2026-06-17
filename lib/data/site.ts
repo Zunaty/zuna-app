@@ -1,8 +1,19 @@
+const middleName = "Leonardo";
+
+/** Set to `false` for "Victor Leonardo Perez" on formal surfaces (resume, metadata). */
+const useMiddleInitial = true;
+
+const formalName = useMiddleInitial ? "Victor L. Perez" : `Victor ${middleName} Perez`;
+
 export const site = {
-  name: "Victor Perez",
-  title: "Full Stack Developer",
+  /** Resume, metadata, footer, OG image */
+  name: formalName,
+  /** Hero, about page, conversational copy */
+  displayName: "Victor",
+  middleName,
+  title: "Full Stack Engineer",
   tagline: "I build fast, polished web experiences — and sneak in a little game design along the way.",
-  email: "hello@victorlperez.dev",
+  email: "Zunaty@gmail.com",
   location: "United States",
 } as const;
 
@@ -13,7 +24,7 @@ export const socialLinks = [
   },
   {
     label: "GitHub",
-    href: "https://github.com/victorlperez",
+    href: "https://github.com/Zunaty",
   },
 ] as const;
 

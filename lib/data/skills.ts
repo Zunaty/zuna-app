@@ -5,14 +5,22 @@ export const skillGroups = [
   },
   {
     title: "Backend & data",
-    skills: ["Supabase", "PostgreSQL", "Server Actions", "REST APIs"],
+    skills: ["Supabase", "PostgreSQL", "MongoDB", "Node.js", "Server Actions"],
   },
   {
-    title: "Tooling",
-    skills: ["ESLint", "Vitest", "GitHub Actions", "Vercel"],
+    title: "Auth & payments",
+    skills: ["Supabase Auth", "NextAuth", "Stripe", "RLS"],
   },
   {
-    title: "Also exploring",
-    skills: ["AI SDK", "Mapbox", "Game UX", "Achievement systems"],
+    title: "AI & automation",
+    skills: ["OpenAI", "LangChain", "Vercel AI SDK", "Automation pipelines"],
+  },
+  {
+    title: "Web3",
+    skills: ["Thirdweb", "Alchemy", "Moralis", "Ethereum", "Smart Contracts", "Blockchain"],
+  },
+  {
+    title: "Tooling & delivery",
+    skills: ["Vitest", "GitHub Actions", "Vercel", "ESLint", "CI/CD"],
   },
 ] as const;

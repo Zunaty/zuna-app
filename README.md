@@ -1,8 +1,8 @@
-# Zuna
+# Victor Perez — Portfolio
 
 Public portfolio and interactive playground by [Victor Perez](https://github.com/Zunaty).
 
-Zuna is more than a static resume site — it's a place to explore projects, play small games, browse API-driven demos, and (eventually) earn achievements as you poke around. Built to showcase modern full-stack patterns recruiters can actually inspect in the open.
+More than a static resume — a place to explore projects, play small games, browse API-driven demos, and (eventually) earn achievements as you poke around. Built to showcase modern full-stack patterns recruiters can actually inspect in the open.
 
 ## Live demo
 
