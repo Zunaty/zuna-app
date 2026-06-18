@@ -54,7 +54,8 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirectWithCookies(request, response, "/auth/login");
+    const loginPath = `/auth/login?next=${encodeURIComponent(pathname)}`;
+    return redirectWithCookies(request, response, loginPath);
   }
 
   return response;

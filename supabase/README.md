@@ -46,8 +46,9 @@ Corporate VPN/proxy may block GitHub release downloads. Options:
 
 ## Migrations in this repo
 
-| Migration                     | Description                                  |
-| ----------------------------- | -------------------------------------------- |
-| `20260617180000_profiles.sql` | `profiles` table, RLS, auto-create on signup |
+| Migration                                       | Description                                          |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| `20260617180000_profiles.sql`                   | `profiles` table, RLS, auto-create on signup         |
+| `20260618120000_avatars_and_delete_account.sql` | `avatars` storage bucket, `delete_own_account()` RPC |
 
 More detail: [docs/database/README.md](../docs/database/README.md)

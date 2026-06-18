@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { ProfileSettings } from "@/components/profile/profile-settings";
 import { PageHeader, PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/data/site";
@@ -12,7 +13,6 @@ export const metadata: Metadata = {
   description: `Account and progress for ${site.name}.`,
 };
 
-// Auth-dependent — must not prerender at build time (CI has no Supabase env).
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
@@ -22,12 +22,19 @@ export default async function ProfilePage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/login");
+    redirect("/auth/login?next=/profile");
   }
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const displayName = profile?.display_name ?? user.user_metadata.display_name ?? user.email?.split("@")[0] ?? "Player";
+  const memberSince = user.created_at
+    ? new Date(user.created_at).toLocaleDateString(undefined, {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "—";
 
   return (
     <PageShell narrow>
@@ -37,38 +44,15 @@ export default async function ProfilePage() {
         description="Your hub for saved progress, scores, and achievements as the playground grows."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="font-semibold">Level & points</h2>
-          <p className="mt-4 text-3xl font-bold text-primary">Level {profile?.level ?? 1}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{profile?.points ?? 0} points</p>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Achievements and point earning roll out with the playground — your account is ready.
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="font-semibold">Account</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div>
-              <dt className="text-muted-foreground">Email</dt>
-              <dd className="font-medium">{user.email}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Member since</dt>
-              <dd className="font-medium">
-                {user.created_at
-                  ? new Date(user.created_at).toLocaleDateString(undefined, {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  : "—"}
-              </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
+      <ProfileSettings
+        userId={user.id}
+        email={user.email ?? "—"}
+        memberSince={memberSince}
+        initialDisplayName={displayName}
+        initialAvatarUrl={profile?.avatar_url ?? null}
+        level={profile?.level ?? 1}
+        points={profile?.points ?? 0}
+      />
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Button variant="outline" asChild>

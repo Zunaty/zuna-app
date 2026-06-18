@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { LoginForm } from "@/components/auth/auth-forms";
 import { PageHeader, PageShell } from "@/components/layout/page-shell";
@@ -16,7 +17,9 @@ export default function LoginPage() {
         title="Welcome back"
         description="Sign in to sync scores, favorites, and achievements when those features launch."
       />
-      <LoginForm />
+      <Suspense fallback={<div className="h-64 animate-pulse rounded-xl bg-muted" aria-hidden />}>
+        <LoginForm />
+      </Suspense>
     </PageShell>
   );
 }

@@ -7,6 +7,8 @@ import { useState } from "react";
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/layout/user-nav";
+import { useAuthUser } from "@/lib/auth/use-auth-user";
+import { comingSoonLinks } from "@/lib/data/site";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -14,12 +16,14 @@ const navItems = [
   { href: "/projects", label: "Projects" },
   { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
-  { href: "/profile", label: "Profile" },
-] as const;
+  ...comingSoonLinks.map((link) => ({ href: link.href, label: link.label })),
+];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { email, isLoading, signOut } = useAuthUser();
+  const loginHref = `/auth/login?next=${encodeURIComponent(pathname)}`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -93,15 +97,50 @@ export function SiteHeader() {
                 </li>
               );
             })}
-            <li className="border-t border-border/60 pt-2">
-              <Link
-                href="/auth/login"
-                onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm text-muted-foreground"
-              >
-                Sign in
-              </Link>
-            </li>
+            {isLoading ? (
+              <li className="border-t border-border/60 pt-2">
+                <div className="mx-3 h-9 animate-pulse rounded-md bg-muted" aria-hidden />
+              </li>
+            ) : email ? (
+              <>
+                <li className="border-t border-border/60 pt-2">
+                  <Link
+                    href="/profile"
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "block rounded-md px-3 py-2 text-sm",
+                      pathname === "/profile"
+                        ? "bg-accent font-medium text-accent-foreground"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                    )}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      void signOut();
+                    }}
+                    className="block w-full rounded-md px-3 py-2 text-left text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Sign out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li className="border-t border-border/60 pt-2">
+                <Link
+                  href={loginHref}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                >
+                  Sign in
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       ) : null}

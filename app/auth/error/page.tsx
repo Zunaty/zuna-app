@@ -7,9 +7,21 @@ type AuthErrorPageProps = {
   searchParams: Promise<{ error?: string }>;
 };
 
+function formatAuthError(error: string | undefined): string {
+  if (!error) {
+    return "Something went wrong during authentication.";
+  }
+
+  try {
+    return decodeURIComponent(error);
+  } catch {
+    return error;
+  }
+}
+
 export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps) {
   const { error } = await searchParams;
-  const message = error ? decodeURIComponent(error) : "Something went wrong during authentication.";
+  const message = formatAuthError(error);
 
   return (
     <PageShell narrow>
