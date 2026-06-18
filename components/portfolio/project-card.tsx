@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import { HoverLift } from "@/components/motion/hover-lift";
+import { SkillIcon } from "@/components/portfolio/skill-icon";
 import { Button } from "@/components/ui/button";
 import type { Project } from "@/lib/data/projects";
 
@@ -29,16 +30,17 @@ export function ProjectCard({ project, showAllProjectsLink = false }: ProjectCar
             ))}
           </ul>
         </div>
-        <div className="mt-6 flex flex-wrap gap-2">
+        <ul className="mt-6 flex flex-wrap gap-2">
           {project.skills.map((skill) => (
-            <span
+            <li
               key={skill}
-              className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground"
             >
+              <SkillIcon skill={skill} />
               {skill}
-            </span>
+            </li>
           ))}
-        </div>
+        </ul>
         <div className="mt-6 flex flex-wrap gap-3">
           {project.siteUrl ? (
             <Button variant="outline" size="sm" asChild>

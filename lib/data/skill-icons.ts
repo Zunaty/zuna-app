@@ -1,4 +1,17 @@
-import { Blocks, CircleDot, GitBranch, KeyRound, Server, Shield, Workflow, type LucideIcon } from "lucide-react";
+import {
+  BarChart3,
+  Blocks,
+  CircleDot,
+  Gamepad2,
+  GitBranch,
+  KeyRound,
+  Megaphone,
+  Palette,
+  Server,
+  Shield,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
 import type { SimpleIcon } from "simple-icons";
 import {
   siAlchemy,
@@ -54,4 +67,12 @@ export const skillIconMap: Record<string, SkillIconDef> = {
   Vercel: { kind: "brand", icon: siVercel },
   ESLint: { kind: "brand", icon: siEslint },
   "CI/CD": { kind: "generic", icon: GitBranch },
+  Monorepo: { kind: "generic", icon: Blocks },
+  "AI SDK": { kind: "brand", icon: siVercel },
+  "Game design": { kind: "generic", icon: Gamepad2 },
+  Web3: { kind: "generic", icon: Blocks },
+  AI: { kind: "brand", icon: siOpenai },
+  "UI/UX": { kind: "generic", icon: Palette },
+  Analytics: { kind: "generic", icon: BarChart3 },
+  "Marketing sites": { kind: "generic", icon: Megaphone },
 };
