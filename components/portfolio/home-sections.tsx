@@ -46,7 +46,7 @@ export function FeaturedProjects() {
       />
       <div className="grid gap-6 lg:grid-cols-2">
         {featured.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+          <ProjectCard key={project.slug} project={project} showAllProjectsLink />
         ))}
       </div>
     </section>

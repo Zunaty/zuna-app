@@ -6,9 +6,10 @@ import type { Project } from "@/lib/data/projects";
 
 type ProjectCardProps = {
   project: Project;
+  showAllProjectsLink?: boolean;
 };
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, showAllProjectsLink = false }: ProjectCardProps) {
   return (
     <article className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm transition-colors hover:border-primary/30">
       <div className="flex-1">
@@ -45,9 +46,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </a>
           </Button>
         ) : null}
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/projects">All projects</Link>
-        </Button>
+        {showAllProjectsLink ? (
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/projects">All projects</Link>
+          </Button>
+        ) : null}
       </div>
     </article>
   );
