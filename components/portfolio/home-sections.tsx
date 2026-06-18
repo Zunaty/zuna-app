@@ -73,16 +73,19 @@ export function ComingSoonZones() {
         description="More than a static resume — games, API explorations, and achievements are rolling out in later phases."
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        {[
-          { title: "Playground", description: "Art Roulette, mini-games, and saved scores." },
-          { title: "Explore", description: "Pokédex, Star Wars, and more API-driven demos." },
-        ].map((zone) => (
-          <div key={zone.title} className="rounded-xl border border-dashed border-border bg-muted/30 p-6">
-            <p className="text-xs font-medium uppercase tracking-wider text-primary">Coming soon</p>
-            <h3 className="mt-2 font-semibold">{zone.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{zone.description}</p>
-          </div>
-        ))}
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">Live now</p>
+          <h3 className="mt-2 font-semibold">Explore</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Pokédex, Star Wars, and more API-driven demos.</p>
+          <Button variant="outline" size="sm" className="mt-4" asChild>
+            <Link href="/explore">Browse Explore</Link>
+          </Button>
+        </div>
+        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6">
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">Coming soon</p>
+          <h3 className="mt-2 font-semibold">Playground</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Art Roulette, mini-games, and saved scores.</p>
+        </div>
       </div>
     </section>
   );

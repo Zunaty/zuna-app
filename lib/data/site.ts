@@ -28,7 +28,14 @@ export const socialLinks = [
   },
 ] as const;
 
+export const navLinks = [
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/resume", label: "Resume" },
+  { href: "/contact", label: "Contact" },
+  { href: "/explore", label: "Explore" },
+] as const;
+
 export const comingSoonLinks = [
   { label: "Playground", href: "/playground", description: "Art Roulette & mini-games" },
-  { label: "Explore", href: "/explore", description: "Pokédex, Star Wars & API demos" },
 ] as const;

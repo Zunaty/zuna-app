@@ -8,16 +8,10 @@ import { useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/layout/user-nav";
 import { useAuthUser } from "@/lib/auth/use-auth-user";
-import { comingSoonLinks } from "@/lib/data/site";
+import { comingSoonLinks, navLinks } from "@/lib/data/site";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { href: "/about", label: "About" },
-  { href: "/projects", label: "Projects" },
-  { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Contact" },
-  ...comingSoonLinks.map((link) => ({ href: link.href, label: link.label })),
-];
+const navItems = [...navLinks, ...comingSoonLinks.map((link) => ({ href: link.href, label: link.label }))];
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -44,7 +38,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}
@@ -81,7 +75,7 @@ export function SiteHeader() {
         <nav className="border-t border-border/60 px-4 py-3 md:hidden" aria-label="Mobile">
           <ul className="flex flex-col gap-1">
             {navItems.map((item) => {
-              const active = pathname === item.href;
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href}>
                   <Link
