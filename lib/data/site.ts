@@ -37,5 +37,5 @@ export const navLinks = [
 ] as const;
 
 export const comingSoonLinks = [
-  { label: "Playground", href: "/playground", description: "Art Roulette & mini-games" },
+  { label: "Playground", href: "/playground", description: "Type Racer & mini-games" },
 ] as const;

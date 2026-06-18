@@ -1,10 +1,12 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-17`
+Last updated: `2026-06-18`
 
 # Product roadmap
 
-Public portfolio with a game-layer meta-progression system (achievements, points, return visits).
+Infrastructure and platform milestones for the portfolio site. **Features and games** live in the [backlog](./backlog.md) — not every item needs a phase number.
+
+Public portfolio with an optional game-layer meta-progression system (achievements, points, return visits).
 
 ## Phase 0 — Foundation ✅ complete
 
@@ -29,51 +31,47 @@ Public portfolio with a game-layer meta-progression system (achievements, points
 
 ## Phase 3 — Explore zone
 
-- [ ] Pokédex (PokéAPI) — list, detail, favorites
-- [ ] Star Wars (SWAPI) — browse franchise content
+- [x] Pokédex (PokéAPI) — list, detail, collection
+- [x] Star Wars (SWAPI) — browse franchise content
+- [ ] Explore polish as needed (see [backlog](./backlog.md))
 
-## Phase 4 — Art Roulette core
+## Phase 4 — Playground foundation
 
-- [ ] Game loop, scoring, shop, audio
-- [ ] Guest play via localStorage
-- [ ] Vitest for reducer/scoring logic
+- [ ] Playground hub and first shippable game(s) — see [backlog](./backlog.md)
+- [ ] Shared patterns: guest localStorage, game layout, Vitest for pure game logic
 
-## Phase 5 — Art Roulette persistence
+## Phase 5 — Persistence & achievements
 
-- [ ] Save history and high scores to Supabase
+- [ ] Save game history and high scores to Supabase
 - [ ] Profile stats and optional leaderboard
+- [ ] Achievement system wired across zones
 
-## Phase 6 — Art Roulette + AI
+## Phase 6 — AI features
 
-- [ ] Image generation from built prompts
-- [ ] Rate limiting and env-gated API
+- [ ] Art Roulette image generation (env-gated, rate-limited)
+- [ ] Streaming chat UI and server route (`/chat`)
 
-## Phase 7 — AI chat
-
-- [ ] Streaming chat UI and server route
-
-## Phase 8 — More playground games
-
-- [ ] Type Racer — words / sentences / paragraphs ([spec](../improvements/active/type-racer.md))
-- [ ] Additional mini-games
-- [ ] Shared achievements across the app
-
-## Phase 9 — Polish + launch
+## Phase 7 — Polish + launch
 
 - [ ] Performance, a11y, analytics, custom domain
 
 ## Achievement system (cross-cutting)
 
-Runs across the whole site — optional meta-game, never gates core portfolio content.
+Runs across the whole site — optional meta-game, never gates core portfolio content. Full item list: [backlog — Account & meta](./backlog.md#account--meta).
 
-| Category            | Examples                                          |
-| ------------------- | ------------------------------------------------- |
-| Explorer            | Visit all sections, open all project case studies |
-| Pokédex / Star Wars | Catch milestones, favorites                       |
-| Roulette            | Streaks, legendary pulls, shop unlock             |
-| Meta                | Sign up, return visits, complete profile          |
-| Secret              | Hidden easter eggs                                |
+| Category            | Examples                                           |
+| ------------------- | -------------------------------------------------- |
+| Explorer            | Visit all sections, open all project case studies  |
+| Pokédex / Star Wars | Catch milestones, favorites                        |
+| Playground          | Game milestones (Type Racer WPM, Roulette streaks) |
+| Meta                | Sign up, return visits, complete profile           |
+| Secret              | Hidden easter eggs                                 |
 
 **Data model (Phase 2+):** `profiles`, `achievements`, `user_achievements`, optional `user_stats`.
 
 Guests unlock locally; signing in syncs progress.
+
+## Related
+
+- [backlog.md](./backlog.md) — games, features, polish (no phase assignment)
+- [improvements/active/](../improvements/active/) — detailed specs for in-flight work

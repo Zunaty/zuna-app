@@ -165,13 +165,13 @@ Run Lighthouse on `/` and `/explore/pokemon` before and after each motion/3D mil
 
 Track choices here as we implement:
 
-| Question               | Options                                                 | Lean                                              |
-| ---------------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template in Phase 9   |
-| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped |
-| Roulette visual        | 2D CSS wheel vs 3D drum                                 | 3D drum — justifies Three.js adoption             |
-| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time              |
-| Package install timing | Phase 3 polish vs Phase 4                               | **Framer Motion installed**; Three.js at Phase 4  |
+| Question               | Options                                                 | Lean                                                       |
+| ---------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
+| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template at launch polish      |
+| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped          |
+| Roulette visual        | 2D CSS wheel vs 3D drum                                 | 3D drum — justifies Three.js adoption                      |
+| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time                       |
+| Package install timing | Phase 3 polish vs later                                 | **Framer Motion installed**; Three.js when a game needs it |
 
 ## First implementation checklist
 

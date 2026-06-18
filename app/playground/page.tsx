@@ -1,49 +1,36 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
+import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
 import { PageHeader, PageShell } from "@/components/layout/page-shell";
-import { Button } from "@/components/ui/button";
 import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: "Playground",
-  description: `Mini-games, Art Roulette, and saved progress — coming soon on ${site.name}'s portfolio.`,
+  description: `Mini-games and interactive experiments on ${site.name}'s portfolio — Type Racer, Art Roulette, and more.`,
 };
 
 export default function PlaygroundPage() {
   return (
-    <PageShell narrow>
+    <PageShell>
       <PageHeader
         eyebrow="Playground"
-        title="Coming soon"
-        description="Art Roulette, mini-games, and a light achievement system — with optional sign-in to save scores and progress."
+        title="Mini-games"
+        description="Quick interactive experiments — scores save locally for now; sign in later when cloud sync ships."
       />
 
-      <div className="space-y-6 text-muted-foreground">
-        <p>
-          The playground is the fun half of this site: interactive experiments that reward curiosity. It&apos;s on the
-          roadmap after the portfolio and Explore demos are solid.
-        </p>
-        <p>
-          In the meantime, poke around{" "}
-          <Link href="/explore" className="font-medium text-foreground underline-offset-4 hover:underline">
-            Explore
-          </Link>{" "}
-          for live API demos, or{" "}
-          <Link href="/auth/sign-up" className="font-medium text-foreground underline-offset-4 hover:underline">
-            create an account
-          </Link>{" "}
-          so you&apos;re ready when scores and achievements roll out.
-        </p>
-      </div>
-
-      <div className="mt-10 flex flex-wrap gap-3">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/explore">Browse Explore</Link>
-        </Button>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/">Back home</Link>
-        </Button>
+      <div className="grid gap-6 md:grid-cols-2">
+        <PlaygroundGameCard
+          title="Type Racer"
+          description="Timed typing test with random words. Track WPM and accuracy — 30 or 60 second runs."
+          href="/playground/type-racer"
+          status="live"
+        />
+        <PlaygroundGameCard
+          title="Art Roulette"
+          description="Spin for art prompts, build a collection, and unlock shop items — the flagship playground game."
+          href="/playground/art-roulette"
+          status="coming-soon"
+        />
       </div>
     </PageShell>
   );

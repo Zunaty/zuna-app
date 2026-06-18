@@ -10,7 +10,7 @@ A Monkeytype-style typing game for the **Playground** zone. Random words, senten
 
 - Showcases real-time UI, keyboard handling, and measurable game state — good portfolio demo.
 - Natural fit for **Framer Motion** (caret pulse, character flip, results reveal) without needing Three.js.
-- Complements Art Roulette (chance/skill mix) and fills Phase 8 “more mini-games.”
+- Complements Art Roulette (chance/skill mix) in the [playground backlog](../../product/backlog.md).
 
 ## Route
 
@@ -47,7 +47,7 @@ Accuracy  = correct_chars / total_typed_chars * 100
 ```
 
 - **Correct char** — matches prompt at position (case-sensitive or insensitive — default insensitive for words, sensitive for quotes with punctuation).
-- Store best scores per mode in localStorage; sync to Supabase in Phase 5-style persistence pass.
+- Store best scores per mode in localStorage; sync to Supabase when persistence ships ([backlog](../../product/backlog.md)).
 
 ## UX details
 
@@ -115,27 +115,28 @@ Reducer + Vitest tests mirror Art Roulette pattern (Phase 4).
 
 Category: **Playground** / **Type Racer** in cross-cutting achievement table.
 
-## Phasing
+## Rollout
 
-| Step    | When                               | Deliverable                                    |
-| ------- | ---------------------------------- | ---------------------------------------------- |
-| Spec    | Now                                | This doc                                       |
-| MVP     | Phase 8 (or early playground pass) | Words 60s, local high score, basic UI          |
-| Polish  | Phase 8–9                          | Sentence/paragraph modes, motion, achievements |
-| Persist | Phase 5 pattern                    | Supabase `user_stats` / leaderboard optional   |
+| Step    | Status  | Deliverable                                    |
+| ------- | ------- | ---------------------------------------------- |
+| Spec    | Done    | This doc                                       |
+| MVP     | Done    | Words 30s/60s, local high score, basic UI      |
+| Polish  | Planned | Sentence/paragraph modes, motion, achievements |
+| Persist | Planned | Supabase `user_stats` / leaderboard optional   |
 
-Art Roulette remains Phase 4 priority; Type Racer can ship in parallel or right after Explore is stable — no hard dependency on Roulette.
+Ship order is flexible — see [backlog](../../product/backlog.md), not roadmap phases.
 
 ## Open decisions
 
-| Question                                     | Lean                                                |
-| -------------------------------------------- | --------------------------------------------------- |
-| Punish mistakes (Monkeytype “stop on error”) | Off by default; optional strict mode                |
-| Word list size                               | ~1k common words; expand later                      |
-| Quote licensing                              | Use public domain / self-written lines only         |
-| Leaderboard                                  | Local first; global leaderboard Phase 5+ if desired |
+| Question                                     | Lean                                        |
+| -------------------------------------------- | ------------------------------------------- |
+| Punish mistakes (Monkeytype “stop on error”) | Off by default; optional strict mode        |
+| Word list size                               | ~1k common words; expand later              |
+| Quote licensing                              | Use public domain / self-written lines only |
+| Leaderboard                                  | Local first; global when persistence ships  |
 
 ## Related
 
 - [motion-and-3d.md](./motion-and-3d.md) — Framer Motion conventions
-- [product/roadmap.md](../../product/roadmap.md) — Phase 8 mini-games
+- [product/backlog.md](../../product/backlog.md) — playground games wishlist
+- [product/roadmap.md](../../product/roadmap.md) — platform phases

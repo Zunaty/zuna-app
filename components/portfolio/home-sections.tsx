@@ -50,7 +50,7 @@ export function ComingSoonZones() {
     <section>
       <SectionHeading
         title="Beyond the resume"
-        description="More than a static resume — games, API explorations, and achievements are rolling out in later phases."
+        description="More than a static resume — games, API explorations, and achievements you can opt into."
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -61,10 +61,15 @@ export function ComingSoonZones() {
             <Link href="/explore">Browse Explore</Link>
           </Button>
         </div>
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">Coming soon</p>
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">Live now</p>
           <h3 className="mt-2 font-semibold">Playground</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Art Roulette, mini-games, and saved scores.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Type Racer is live — Art Roulette and more games on the way.
+          </p>
+          <Button variant="outline" size="sm" className="mt-4" asChild>
+            <Link href="/playground">Open Playground</Link>
+          </Button>
         </div>
       </div>
     </section>
