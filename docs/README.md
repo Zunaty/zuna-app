@@ -17,6 +17,7 @@ Canonical project docs for zuna-app.
 | ------------------------------------------------------------------------------ | --------------------------------------- |
 | [improvements/active/motion-and-3d.md](./improvements/active/motion-and-3d.md) | Framer Motion + Three.js ideas and plan |
 | [improvements/active/type-racer.md](./improvements/active/type-racer.md)       | Type Racer mini-game spec               |
+| [improvements/active/mapbox.md](./improvements/active/mapbox.md)               | Mapbox aviation map + geocoding explore |
 
 ## Improvements workflow
 

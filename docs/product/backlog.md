@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-06-18`
+Last updated: `2026-06-18` (mapbox rows)
 
 # Feature backlog
 
@@ -31,12 +31,13 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Explore
 
-| Item                                         | Status | Notes                                               |
-| -------------------------------------------- | ------ | --------------------------------------------------- |
-| Pokédex — list, detail, filters              | ✅     | PokéAPI                                             |
-| Pokédex — collection (favorite, caught, TCG) | ✅     | Guest favorites + auth sync                         |
-| Star Wars browse                             | ✅     | SWAPI                                               |
-| Explore polish / motion                      | ✅     | Page enter, grid stagger, toggles on explore routes |
+| Item                                         | Status  | Notes                                                                                    |
+| -------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| Pokédex — list, detail, filters              | ✅      | PokéAPI                                                                                  |
+| Pokédex — collection (favorite, caught, TCG) | ✅      | Guest favorites + auth sync                                                              |
+| Star Wars browse                             | ✅      | SWAPI                                                                                    |
+| Explore polish / motion                      | ✅      | Page enter, grid stagger, toggles on explore routes                                      |
+| **Geocoding fly-to**                         | Planned | `/explore/geo` — Mapbox Geocoding search + map; [spec](../improvements/active/mapbox.md) |
 
 ## Lab
 
@@ -46,21 +47,23 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Portfolio
 
-| Item                                                | Status  | Notes                               |
-| --------------------------------------------------- | ------- | ----------------------------------- |
-| Core pages (home, about, projects, resume, contact) | ✅      |                                     |
-| Project case studies                                | Ideas   | Deeper per-project pages if desired |
-| OG / SEO pass                                       | Partial | Metadata on main routes             |
+| Item                                                | Status  | Notes                                                                                                             |
+| --------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| Core pages (home, about, projects, resume, contact) | ✅      |                                                                                                                   |
+| Project case studies                                | Ideas   | Deeper per-project pages if desired                                                                               |
+| OG / SEO pass                                       | Partial | Metadata on main routes                                                                                           |
+| **Aviation flight map**                             | Planned | `/about` — KSLC hub, curved routes to Nephi, Fillmore, St. George, etc.; [spec](../improvements/active/mapbox.md) |
 
 ## Motion & 3D
 
-| Item                          | Status  | Notes                                                       |
-| ----------------------------- | ------- | ----------------------------------------------------------- |
-| Framer Motion foundation      | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
-| Home / Pokédex motion polish  | Partial | Hero stagger, grid, toggles                                 |
-| Page transitions              | Ideas   | Global or zone-scoped                                       |
-| Three.js — hero ambient       | Ideas   | Lazy WebGL background                                       |
-| Three.js — Art Roulette wheel | Ideas   | 3D drum when Roulette ships                                 |
+| Item                          | Status  | Notes                                                                                                                      |
+| ----------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Framer Motion foundation      | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md)                                                                |
+| Home / Pokédex motion polish  | Partial | Hero stagger, grid, toggles                                                                                                |
+| Page transitions              | Ideas   | Global or zone-scoped                                                                                                      |
+| **tsParticles**               | Planned | Hero ambient field, achievement bursts, Star Wars hyperspace — [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
+| Three.js — hero ambient       | Ideas   | Lazy WebGL background (or defer if tsParticles covers hero)                                                                |
+| Three.js — Art Roulette wheel | Ideas   | 3D drum when Roulette ships                                                                                                |
 
 ## Account & meta
 
