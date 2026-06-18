@@ -10,6 +10,13 @@ Canonical project docs for zuna-app.
 | [architecture/overview.md](./architecture/overview.md) | Routes, stack, and data flow      |
 | [database/README.md](./database/README.md)             | Migrations and `db push` workflow |
 
+## Active improvements
+
+| Path                                                                           | Description                             |
+| ------------------------------------------------------------------------------ | --------------------------------------- |
+| [improvements/active/motion-and-3d.md](./improvements/active/motion-and-3d.md) | Framer Motion + Three.js ideas and plan |
+| [improvements/active/type-racer.md](./improvements/active/type-racer.md)       | Type Racer mini-game spec               |
+
 ## Improvements workflow
 
 - Active work: `docs/improvements/active/`

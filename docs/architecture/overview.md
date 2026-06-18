@@ -44,9 +44,13 @@ Account       →  Supabase auth, saved progress, achievements
 | Language  | TypeScript 5, strict                          |
 | UI        | Tailwind + shadcn/ui + lucide                 |
 | Theme     | `next-themes`                                 |
+| Motion    | Framer Motion — active                        |
+| 3D        | Three.js + R3F — planned (Phase 4+)           |
 | Auth + DB | Supabase (`@supabase/ssr`) — Phase 2          |
 | AI        | Vercel AI SDK — Phase 6–7                     |
 | Quality   | ESLint 9, Prettier, Husky, Vitest when needed |
+
+See [motion-and-3d.md](../improvements/active/motion-and-3d.md) for integration ideas and phasing.
 
 ## Auth
 

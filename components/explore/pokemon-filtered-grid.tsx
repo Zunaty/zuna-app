@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { PokemonCard } from "@/components/explore/pokemon-card";
 import { usePokemonCollectionContext } from "@/components/explore/pokemon-collection-provider";
+import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
 import type { PokedexFilters } from "@/components/explore/pokemon-search-filters";
 import { countCollected, filterCollection, filterPokemonByName } from "@/lib/pokemon/collection";
 import { POKEMON_PAGE_SIZE } from "@/lib/pokemon/api";
@@ -232,6 +233,8 @@ export function PokemonFilteredGrid({
         : "No Pokémon match your filters."
       : "No Pokémon match your filters.";
 
+  const staggerKey = `${view}-${resetKey}-${debouncedSearch}-${filters.type}-${filters.collection}`;
+
   return (
     <>
       <p className="mb-4 text-sm text-muted-foreground">{statusText}</p>
@@ -241,11 +244,16 @@ export function PokemonFilteredGrid({
           {emptyMessage}
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <StaggerChildren
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+          staggerKey={staggerKey}
+        >
           {displayedPokemon.map((entry) => (
-            <PokemonCard key={entry.url} pokemon={entry} />
+            <StaggerItem key={entry.url}>
+              <PokemonCard pokemon={entry} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerChildren>
       )}
 
       <div ref={sentinelRef} className="mt-8 flex min-h-12 flex-col items-center justify-center gap-2">

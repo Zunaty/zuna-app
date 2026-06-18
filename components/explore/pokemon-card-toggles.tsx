@@ -1,7 +1,11 @@
 "use client";
 
+import { m } from "framer-motion";
+
 import { Gamepad2, Heart, Layers, type LucideIcon } from "lucide-react";
 
+import { instantTransition, springTransition } from "@/lib/motion/variants";
+import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 import type { CollectionToggleField } from "@/lib/pokemon/use-pokemon-collection-toggle";
@@ -86,25 +90,28 @@ function CardIconToggle({
   title?: string;
   loginHref?: string;
 }) {
+  const reduceMotion = useReducedMotion();
+
   if (loginHref && disabled) {
     return (
-      <a
+      <m.a
         href={loginHref}
         title={title ?? label}
         aria-label={title ?? label}
         onClick={(event) => event.stopPropagation()}
+        whileTap={reduceMotion ? undefined : { scale: 0.92 }}
         className={cn(
           "inline-flex size-7 items-center justify-center rounded-full bg-background/90 shadow-sm ring-1 ring-border transition-opacity",
           "text-muted-foreground/50 hover:text-muted-foreground",
         )}
       >
         <Icon className="size-3.5" />
-      </a>
+      </m.a>
     );
   }
 
   return (
-    <button
+    <m.button
       type="button"
       title={title ?? label}
       aria-label={label}
@@ -115,8 +122,11 @@ function CardIconToggle({
         event.stopPropagation();
         onClick();
       }}
+      animate={{ scale: active && !reduceMotion ? 1.06 : 1 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.92 }}
+      transition={reduceMotion ? instantTransition : springTransition}
       className={cn(
-        "inline-flex size-7 items-center justify-center rounded-full bg-background/90 shadow-sm ring-1 ring-border transition-all",
+        "inline-flex size-7 items-center justify-center rounded-full bg-background/90 shadow-sm ring-1 ring-border transition-colors",
         active
           ? cn(activeClassName, "opacity-100")
           : "text-muted-foreground/40 opacity-70 hover:text-muted-foreground hover:opacity-100",
@@ -124,6 +134,6 @@ function CardIconToggle({
       )}
     >
       <Icon className={cn("size-3.5", filled && active && "fill-current")} />
-    </button>
+    </m.button>
   );
 }

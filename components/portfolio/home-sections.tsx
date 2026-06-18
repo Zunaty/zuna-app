@@ -1,38 +1,16 @@
 import Link from "next/link";
 
+import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
 import { SectionHeading } from "@/components/portfolio/section-heading";
 import { SkillsGrid } from "@/components/portfolio/skills-grid";
 import { Button } from "@/components/ui/button";
 import { getFeaturedProjects } from "@/lib/data/projects";
-import { site } from "@/lib/data/site";
 
+import { HomeHeroMotion } from "./home-hero-motion";
 import { ProjectCard } from "./project-card";
 
 export function HomeHero() {
-  return (
-    <section className="relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-14 sm:px-10 sm:py-20">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/15 via-transparent to-transparent"
-        aria-hidden
-      />
-      <div className="relative max-w-3xl">
-        <p className="text-sm font-medium uppercase tracking-widest text-primary">Portfolio & playground</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Hi, I&apos;m {site.displayName}.{" "}
-          <span className="text-muted-foreground">I build web products people enjoy using.</span>
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground">{site.tagline}</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Button size="lg" asChild>
-            <Link href="/projects">View projects</Link>
-          </Button>
-          <Button variant="outline" size="lg" asChild>
-            <Link href="/contact">Get in touch</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
+  return <HomeHeroMotion />;
 }
 
 export function FeaturedProjects() {
@@ -44,11 +22,13 @@ export function FeaturedProjects() {
         title="Selected work"
         description="Recent product work at Koggin Labs and Black Swan Research — plus earlier client marketing sites. Repos stay private; this is the craft in the open."
       />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <StaggerChildren className="grid gap-6 lg:grid-cols-2" staggerKey="featured-projects">
         {featured.map((project) => (
-          <ProjectCard key={project.slug} project={project} showAllProjectsLink />
+          <StaggerItem key={project.slug}>
+            <ProjectCard project={project} showAllProjectsLink />
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerChildren>
     </section>
   );
 }

@@ -54,6 +54,7 @@ Public portfolio with a game-layer meta-progression system (achievements, points
 
 ## Phase 8 — More playground games
 
+- [ ] Type Racer — words / sentences / paragraphs ([spec](../improvements/active/type-racer.md))
 - [ ] Additional mini-games
 - [ ] Shared achievements across the app
 
