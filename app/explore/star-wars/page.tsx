@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ExploreZoneCard } from "@/components/explore/explore-zone-card";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
+import { PageShell } from "@/components/layout/page-shell";
 import { SWAPI_RESOURCES } from "@/lib/star-wars/api";
 import { site } from "@/lib/data/site";
 
@@ -14,29 +16,33 @@ export const metadata: Metadata = {
 export default function StarWarsPage() {
   return (
     <PageShell>
-      <PageHeader
-        eyebrow="Explore · SWAPI"
-        title="Star Wars archive"
-        description="Pick a category to browse characters, worlds, ships, and more — all live from the Star Wars API."
-      />
+      <PageEnter
+        header={{
+          eyebrow: "Explore · SWAPI",
+          title: "Star Wars archive",
+          description:
+            "Pick a category to browse characters, worlds, ships, and more — all live from the Star Wars API.",
+        }}
+      >
+        <div className="mb-6">
+          <Link href="/explore" className="text-sm text-muted-foreground hover:text-foreground">
+            ← All explore zones
+          </Link>
+        </div>
 
-      <div className="mb-6">
-        <Link href="/explore" className="text-sm text-muted-foreground hover:text-foreground">
-          ← All explore zones
-        </Link>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {SWAPI_RESOURCES.map((resource) => (
-          <ExploreZoneCard
-            key={resource.slug}
-            eyebrow="SWAPI"
-            title={resource.label}
-            description={resource.description}
-            href={`/explore/star-wars/${resource.slug}`}
-          />
-        ))}
-      </div>
+        <StaggerChildren className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerKey="star-wars-resources">
+          {SWAPI_RESOURCES.map((resource) => (
+            <StaggerItem key={resource.slug}>
+              <ExploreZoneCard
+                eyebrow="SWAPI"
+                title={resource.label}
+                description={resource.description}
+                href={`/explore/star-wars/${resource.slug}`}
+              />
+            </StaggerItem>
+          ))}
+        </StaggerChildren>
+      </PageEnter>
     </PageShell>
   );
 }

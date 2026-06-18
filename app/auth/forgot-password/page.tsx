@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { ForgotPasswordForm } from "@/components/auth/auth-forms";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 
 export const metadata: Metadata = {
   title: "Forgot password",
@@ -11,12 +12,15 @@ export const metadata: Metadata = {
 export default function ForgotPasswordPage() {
   return (
     <PageShell narrow>
-      <PageHeader
-        eyebrow="Account"
-        title="Reset your password"
-        description="Enter your email and we'll send a link to choose a new password."
-      />
-      <ForgotPasswordForm />
+      <PageEnter
+        header={{
+          eyebrow: "Account",
+          title: "Reset your password",
+          description: "Enter your email and we'll send a link to choose a new password.",
+        }}
+      >
+        <ForgotPasswordForm />
+      </PageEnter>
     </PageShell>
   );
 }

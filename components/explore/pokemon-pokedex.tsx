@@ -9,6 +9,7 @@ import {
 import { PokemonFilteredGrid } from "@/components/explore/pokemon-filtered-grid";
 import { PokemonSearchFilters, usePokedexFilters } from "@/components/explore/pokemon-search-filters";
 import { PokemonViewToggle } from "@/components/explore/pokemon-view-toggle";
+import { FadeIn } from "@/components/motion/fade-in";
 import { countCollected } from "@/lib/pokemon/collection";
 import type { PokedexView } from "@/lib/pokemon/constants";
 import type { PokemonCollectionEntry } from "@/lib/pokemon/collection";
@@ -50,13 +51,17 @@ function PokemonPokedexContent({
 
   return (
     <>
-      <div className="mb-6">
-        <PokemonViewToggle view={view} collectionCount={collectionCount} onChange={handleViewChange} />
-      </div>
+      <FadeIn delay={0.12}>
+        <div className="mb-6">
+          <PokemonViewToggle view={view} collectionCount={collectionCount} onChange={handleViewChange} />
+        </div>
+      </FadeIn>
 
-      <div className="mb-6">
-        <PokemonSearchFilters view={view} filters={filters} onChange={setFilters} />
-      </div>
+      <FadeIn delay={0.16}>
+        <div className="mb-6">
+          <PokemonSearchFilters view={view} filters={filters} onChange={setFilters} />
+        </div>
+      </FadeIn>
 
       <PokemonFilteredGrid
         view={view}

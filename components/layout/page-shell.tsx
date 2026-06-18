@@ -20,6 +20,8 @@ type PageHeaderProps = {
   description?: string;
 };
 
+export type { PageHeaderProps };
+
 export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
   return (
     <header className="mb-10 max-w-3xl">

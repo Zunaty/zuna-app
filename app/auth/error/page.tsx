@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 
 type AuthErrorPageProps = {
@@ -25,10 +26,11 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
 
   return (
     <PageShell narrow>
-      <PageHeader eyebrow="Account" title="Authentication error" description={message} />
-      <Button asChild>
-        <Link href="/auth/login">Try again</Link>
-      </Button>
+      <PageEnter header={{ eyebrow: "Account", title: "Authentication error", description: message }}>
+        <Button asChild>
+          <Link href="/auth/login">Try again</Link>
+        </Button>
+      </PageEnter>
     </PageShell>
   );
 }

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { PokemonPokedex } from "@/components/explore/pokemon-pokedex";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 import { fetchPokemonList } from "@/lib/pokemon/api";
 import { getUserPokemonCollection } from "@/lib/pokemon/server-collection";
 import { site } from "@/lib/data/site";
@@ -25,9 +26,9 @@ export default async function PokemonListPage() {
 
   return (
     <PageShell>
-      <PageHeader eyebrow="Explore · PokéAPI" title="Pokédex" description={description} />
-
-      <PokemonPokedex initialPokemon={data.results} totalCount={data.count} initialCollection={collection} />
+      <PageEnter header={{ eyebrow: "Explore · PokéAPI", title: "Pokédex", description }}>
+        <PokemonPokedex initialPokemon={data.results} totalCount={data.count} initialCollection={collection} />
+      </PageEnter>
     </PageShell>
   );
 }

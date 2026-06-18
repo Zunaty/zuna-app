@@ -179,6 +179,7 @@ Track choices here as we implement:
 - [x] Add `MotionProvider` + `useReducedMotion` hook
 - [x] Add `lib/motion/variants.ts` with shared tokens (duration, ease)
 - [x] Pilot: home hero stagger, featured projects, Pokémon grid + toggle springs
+- [x] App-wide page enter (`PageEnter`, `PageHeaderMotion`, card hovers, list staggers)
 - [ ] Document bundle impact in PR description
 - [ ] Phase 4: `yarn add three @react-three/fiber @react-three/drei @types/three`
 - [ ] Add `CanvasShell` + first scene (roulette or hero — pick one)

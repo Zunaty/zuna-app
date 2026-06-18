@@ -31,12 +31,12 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Explore
 
-| Item                                         | Status  | Notes                        |
-| -------------------------------------------- | ------- | ---------------------------- |
-| Pokédex — list, detail, filters              | ✅      | PokéAPI                      |
-| Pokédex — collection (favorite, caught, TCG) | ✅      | Guest favorites + auth sync  |
-| Star Wars browse                             | ✅      | SWAPI                        |
-| Explore polish / motion                      | Partial | Grid stagger, toggle springs |
+| Item                                         | Status | Notes                                               |
+| -------------------------------------------- | ------ | --------------------------------------------------- |
+| Pokédex — list, detail, filters              | ✅     | PokéAPI                                             |
+| Pokédex — collection (favorite, caught, TCG) | ✅     | Guest favorites + auth sync                         |
+| Star Wars browse                             | ✅     | SWAPI                                               |
+| Explore polish / motion                      | ✅     | Page enter, grid stagger, toggles on explore routes |
 
 ## Lab
 

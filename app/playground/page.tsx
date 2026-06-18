@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
 import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
+import { PageShell } from "@/components/layout/page-shell";
 import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
@@ -12,26 +14,33 @@ export const metadata: Metadata = {
 export default function PlaygroundPage() {
   return (
     <PageShell>
-      <PageHeader
-        eyebrow="Playground"
-        title="Mini-games"
-        description="Quick interactive experiments — scores save locally for now; sign in later when cloud sync ships."
-      />
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <PlaygroundGameCard
-          title="Type Racer"
-          description="Timed typing test with random words. Track WPM and accuracy — 30 or 60 second runs."
-          href="/playground/type-racer"
-          status="live"
-        />
-        <PlaygroundGameCard
-          title="Art Roulette"
-          description="Spin for art prompts, build a collection, and unlock shop items — the flagship playground game."
-          href="/playground/art-roulette"
-          status="coming-soon"
-        />
-      </div>
+      <PageEnter
+        header={{
+          eyebrow: "Playground",
+          title: "Mini-games",
+          description:
+            "Quick interactive experiments — scores save locally for now; sign in later when cloud sync ships.",
+        }}
+      >
+        <StaggerChildren className="grid gap-6 md:grid-cols-2" staggerKey="playground-games">
+          <StaggerItem>
+            <PlaygroundGameCard
+              title="Type Racer"
+              description="Timed typing test with random words. Track WPM and accuracy — 30 or 60 second runs."
+              href="/playground/type-racer"
+              status="live"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PlaygroundGameCard
+              title="Art Roulette"
+              description="Spin for art prompts, build a collection, and unlock shop items — the flagship playground game."
+              href="/playground/art-roulette"
+              status="coming-soon"
+            />
+          </StaggerItem>
+        </StaggerChildren>
+      </PageEnter>
     </PageShell>
   );
 }

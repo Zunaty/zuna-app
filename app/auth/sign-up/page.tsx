@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { SignUpForm } from "@/components/auth/auth-forms";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 
 export const metadata: Metadata = {
   title: "Sign up",
@@ -11,12 +12,15 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <PageShell narrow>
-      <PageHeader
-        eyebrow="Account"
-        title="Create an account"
-        description="The portfolio is fully open without signing in. An account lets you save progress later."
-      />
-      <SignUpForm />
+      <PageEnter
+        header={{
+          eyebrow: "Account",
+          title: "Create an account",
+          description: "The portfolio is fully open without signing in. An account lets you save progress later.",
+        }}
+      >
+        <SignUpForm />
+      </PageEnter>
     </PageShell>
   );
 }

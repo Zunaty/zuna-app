@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { TypeRacerGame } from "@/components/playground/type-racer/type-racer-game";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/data/site";
 
@@ -14,19 +15,21 @@ export const metadata: Metadata = {
 export default function TypeRacerPage() {
   return (
     <PageShell narrow>
-      <PageHeader
-        eyebrow="Playground"
-        title="Type Racer"
-        description="Type as many words as you can before the timer runs out. Best scores save in your browser."
-      />
+      <PageEnter
+        header={{
+          eyebrow: "Playground",
+          title: "Type Racer",
+          description: "Type as many words as you can before the timer runs out. Best scores save in your browser.",
+        }}
+      >
+        <TypeRacerGame />
 
-      <TypeRacerGame />
-
-      <div className="mt-10">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/playground">Back to Playground</Link>
-        </Button>
-      </div>
+        <div className="mt-10">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/playground">Back to Playground</Link>
+          </Button>
+        </div>
+      </PageEnter>
     </PageShell>
   );
 }

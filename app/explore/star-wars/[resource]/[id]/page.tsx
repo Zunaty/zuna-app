@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { SwapiRecordDetails } from "@/components/explore/swapi-record-details";
+import { PageContentMotion } from "@/components/motion/page-content-motion";
+import { PageHeaderMotion } from "@/components/motion/page-header-motion";
 import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,27 +56,26 @@ export default async function StarWarsDetailPage({ params }: StarWarsDetailPageP
 
   return (
     <PageShell narrow>
-      <div className="mb-8 space-y-3">
-        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <Link href="/explore/star-wars" className="hover:text-foreground">
-            Star Wars
-          </Link>
-          <span aria-hidden>/</span>
-          <Link href={`/explore/star-wars/${resourceSlug}`} className="hover:text-foreground">
-            {resource.label}
-          </Link>
+      <PageHeaderMotion eyebrow="Explore · SWAPI" title={title} />
+
+      <PageContentMotion>
+        <div className="mb-8 space-y-3">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <Link href="/explore/star-wars" className="hover:text-foreground">
+              Star Wars
+            </Link>
+            <span aria-hidden>/</span>
+            <Link href={`/explore/star-wars/${resourceSlug}`} className="hover:text-foreground">
+              {resource.label}
+            </Link>
+          </div>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={`/explore/star-wars/${resourceSlug}`}>← Back to {resource.label}</Link>
+          </Button>
         </div>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/explore/star-wars/${resourceSlug}`}>← Back to {resource.label}</Link>
-        </Button>
-      </div>
 
-      <header className="mb-8">
-        <p className="mb-2 text-sm font-medium uppercase tracking-widest text-primary">SWAPI</p>
-        <h1 className="text-3xl font-bold capitalize tracking-tight sm:text-4xl">{title}</h1>
-      </header>
-
-      <SwapiRecordDetails record={record} referenceLabels={referenceLabels} />
+        <SwapiRecordDetails record={record} referenceLabels={referenceLabels} />
+      </PageContentMotion>
     </PageShell>
   );
 }

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { UpdatePasswordForm } from "@/components/auth/auth-forms";
-import { PageHeader, PageShell } from "@/components/layout/page-shell";
+import { PageEnter } from "@/components/motion/page-enter";
+import { PageShell } from "@/components/layout/page-shell";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -24,12 +25,15 @@ export default async function UpdatePasswordPage() {
 
   return (
     <PageShell narrow>
-      <PageHeader
-        eyebrow="Account"
-        title="Choose a new password"
-        description="Your reset link is valid for a limited time. Pick a strong password to finish."
-      />
-      <UpdatePasswordForm />
+      <PageEnter
+        header={{
+          eyebrow: "Account",
+          title: "Choose a new password",
+          description: "Your reset link is valid for a limited time. Pick a strong password to finish.",
+        }}
+      >
+        <UpdatePasswordForm />
+      </PageEnter>
     </PageShell>
   );
 }
