@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
-import { PokemonFavoritesSection } from "@/components/explore/pokemon-favorites-section";
-import { PokemonInfiniteGrid } from "@/components/explore/pokemon-infinite-grid";
+import { PokemonPokedex } from "@/components/explore/pokemon-pokedex";
 import { PageHeader, PageShell } from "@/components/layout/page-shell";
 import { fetchPokemonList } from "@/lib/pokemon/api";
+import { getUserPokemonCollection } from "@/lib/pokemon/server-collection";
 import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
@@ -13,27 +12,22 @@ export const metadata: Metadata = {
 };
 
 export default async function PokemonListPage() {
-  const data = await fetchPokemonList(0);
+  const [data, { collection }] = await Promise.all([fetchPokemonList(0), getUserPokemonCollection()]);
+
+  const favoriteCount = collection.filter((entry) => entry.isFavorite).length;
+  const caughtCount = collection.filter((entry) => entry.caughtInGame).length;
+  const cardCount = collection.filter((entry) => entry.hasCard).length;
+  const hasCollection = favoriteCount > 0 || caughtCount > 0 || cardCount > 0;
+
+  const description = hasCollection
+    ? `${data.count.toLocaleString()} species from PokéAPI. Search, filter by type, and track your collection (${favoriteCount} favorites, ${caughtCount} caught, ${cardCount} cards).`
+    : `${data.count.toLocaleString()} species from PokéAPI. Search and filter by type — sign in to track favorites, in-game catches, and TCG cards.`;
 
   return (
     <PageShell>
-      <PageHeader
-        eyebrow="Explore · PokéAPI"
-        title="Pokédex"
-        description={`${data.count.toLocaleString()} species from the public PokéAPI. Scroll to load more — favorites are saved in your browser for now.`}
-      />
+      <PageHeader eyebrow="Explore · PokéAPI" title="Pokédex" description={description} />
 
-      <section className="mb-12">
-        <h2 className="mb-4 text-lg font-semibold">Your favorites</h2>
-        <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-muted" aria-hidden />}>
-          <PokemonFavoritesSection />
-        </Suspense>
-      </section>
-
-      <section>
-        <h2 className="mb-4 text-lg font-semibold">All Pokémon</h2>
-        <PokemonInfiniteGrid initialPokemon={data.results} totalCount={data.count} />
-      </section>
+      <PokemonPokedex initialPokemon={data.results} totalCount={data.count} initialCollection={collection} />
     </PageShell>
   );
 }

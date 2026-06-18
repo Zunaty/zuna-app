@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { PokemonFavoriteButton } from "@/components/explore/pokemon-favorite-button";
+import { PokemonDetailCollection } from "@/components/explore/pokemon-detail-collection";
 import { PageShell } from "@/components/layout/page-shell";
 import { Button } from "@/components/ui/button";
 import { fetchPokemon, formatPokemonName, getPokemonSprite } from "@/lib/pokemon/api";
+import { getUserPokemonCollection } from "@/lib/pokemon/server-collection";
 import { site } from "@/lib/data/site";
 
 type PokemonDetailPageProps = {
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: PokemonDetailPageProps): Prom
 
 export default async function PokemonDetailPage({ params }: PokemonDetailPageProps) {
   const { id } = await params;
-  const pokemon = await fetchPokemon(id);
+  const [pokemon, { collection }] = await Promise.all([fetchPokemon(id), getUserPokemonCollection()]);
 
   if (!pokemon) {
     notFound();
@@ -39,6 +40,7 @@ export default async function PokemonDetailPage({ params }: PokemonDetailPagePro
 
   const name = formatPokemonName(pokemon.name);
   const sprite = getPokemonSprite(pokemon);
+  const collectionEntry = collection.find((entry) => entry.pokemonId === pokemon.id) ?? null;
 
   return (
     <PageShell>
@@ -57,8 +59,8 @@ export default async function PokemonDetailPage({ params }: PokemonDetailPagePro
           ) : null}
           <p className="mt-4 text-sm text-muted-foreground">#{String(pokemon.id).padStart(3, "0")}</p>
           <h1 className="mt-1 text-3xl font-bold capitalize">{name}</h1>
-          <div className="mt-4">
-            <PokemonFavoriteButton pokemonId={pokemon.id} pokemonName={name} />
+          <div className="mt-4 w-full">
+            <PokemonDetailCollection pokemonId={pokemon.id} pokemonSlug={pokemon.name} initialEntry={collectionEntry} />
           </div>
         </div>
 

@@ -33,6 +33,42 @@ export type Database = {
   };
   public: {
     Tables: {
+      pokemon_collection: {
+        Row: {
+          caught_in_game: boolean;
+          created_at: string;
+          has_card: boolean;
+          id: string;
+          is_favorite: boolean;
+          pokemon_id: number;
+          pokemon_slug: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          caught_in_game?: boolean;
+          created_at?: string;
+          has_card?: boolean;
+          id?: string;
+          is_favorite?: boolean;
+          pokemon_id: number;
+          pokemon_slug: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          caught_in_game?: boolean;
+          created_at?: string;
+          has_card?: boolean;
+          id?: string;
+          is_favorite?: boolean;
+          pokemon_id?: number;
+          pokemon_slug?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
