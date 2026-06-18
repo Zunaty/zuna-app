@@ -1,3 +1,4 @@
+import { SkillIcon } from "@/components/portfolio/skill-icon";
 import { skillGroups } from "@/lib/data/skills";
 
 export function SkillsGrid() {
@@ -10,8 +11,9 @@ export function SkillsGrid() {
             {group.skills.map((skill) => (
               <li
                 key={skill}
-                className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground"
               >
+                <SkillIcon skill={skill} />
                 {skill}
               </li>
             ))}
