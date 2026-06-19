@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 
 import { AviationFlightMapSection } from "@/components/maps/aviation-flight-map-section";
 import { PageEnter } from "@/components/motion/page-enter";
+import { SectionHeadingMotion } from "@/components/motion/section-heading-motion";
 import { PageShell } from "@/components/layout/page-shell";
 import { SkillsGrid } from "@/components/portfolio/skills-grid";
+import { portfolioStackGroups } from "@/lib/data/portfolio-stack";
 import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
@@ -42,8 +44,21 @@ export default function AboutPage() {
         <AviationFlightMapSection />
 
         <section className="mt-14">
-          <h2 className="mb-6 text-xl font-semibold">Technical focus</h2>
+          <SectionHeadingMotion
+            title="Technical focus"
+            description="The stacks and domains I work in day to day — from product UI to auth, data, and automation."
+            className="mb-6 max-w-2xl"
+          />
           <SkillsGrid staggerKey="about-skills" />
+        </section>
+
+        <section className="mt-14">
+          <SectionHeadingMotion
+            title="Built with"
+            description="The libraries, services, and tooling running this portfolio — App Router on the front, Supabase and Mapbox where it counts, CI on every push."
+            className="mb-6 max-w-2xl"
+          />
+          <SkillsGrid staggerKey="about-portfolio-stack" groups={portfolioStackGroups} />
         </section>
       </PageEnter>
     </PageShell>
