@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { AviationFlightMapSection } from "@/components/maps/aviation-flight-map-section";
 import { PageEnter } from "@/components/motion/page-enter";
 import { PageShell } from "@/components/layout/page-shell";
 import { SkillsGrid } from "@/components/portfolio/skills-grid";
@@ -37,6 +38,8 @@ export default function AboutPage() {
             system that rewards curiosity. The portfolio pages come first; the playground follows.
           </p>
         </div>
+
+        <AviationFlightMapSection />
 
         <section className="mt-14">
           <h2 className="mb-6 text-xl font-semibold">Technical focus</h2>
