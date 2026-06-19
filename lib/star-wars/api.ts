@@ -1,4 +1,4 @@
-import { fetchJson } from "@/lib/explore/fetch";
+import { EXPLORE_FETCH_REVALIDATE_SECONDS, fetchJson } from "@/lib/explore/fetch";
 
 import type { SwapiListResponse, SwapiRecord } from "./types";
 
@@ -90,15 +90,42 @@ export function formatSwapiValue(value: string | number | boolean): string {
   return text;
 }
 
-export async function fetchSwapiList(resource: SwapiResourceSlug, page = 1): Promise<SwapiListResponse> {
-  return fetchJson<SwapiListResponse>(`${SWAPI_BASE}/${resource}/?page=${page}`);
+export type SwapiListResult = { status: "success"; data: SwapiListResponse } | { status: "unavailable" };
+
+export type SwapiDetailResult =
+  | { status: "success"; data: SwapiRecord }
+  | { status: "not_found" }
+  | { status: "unavailable" };
+
+export async function fetchSwapiList(resource: SwapiResourceSlug, page = 1): Promise<SwapiListResult> {
+  try {
+    const data = await fetchJson<SwapiListResponse>(`${SWAPI_BASE}/${resource}/?page=${page}`);
+    return { status: "success", data };
+  } catch {
+    return { status: "unavailable" };
+  }
 }
 
-export async function fetchSwapiDetail(resource: SwapiResourceSlug, id: string): Promise<SwapiRecord | null> {
+export async function fetchSwapiDetail(resource: SwapiResourceSlug, id: string): Promise<SwapiDetailResult> {
+  const url = `${SWAPI_BASE}/${resource}/${id}/`;
+
   try {
-    return await fetchJson<SwapiRecord>(`${SWAPI_BASE}/${resource}/${id}/`);
+    const res = await fetch(url, {
+      next: { revalidate: EXPLORE_FETCH_REVALIDATE_SECONDS },
+    });
+
+    if (res.status === 404) {
+      return { status: "not_found" };
+    }
+
+    if (!res.ok) {
+      return { status: "unavailable" };
+    }
+
+    const data = (await res.json()) as SwapiRecord;
+    return { status: "success", data };
   } catch {
-    return null;
+    return { status: "unavailable" };
   }
 }
 

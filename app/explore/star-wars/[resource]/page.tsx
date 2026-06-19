@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ExplorePagination } from "@/components/explore/pagination";
 import { SwapiResultsList } from "@/components/explore/swapi-results-list";
+import { SwapiUnavailableNotice } from "@/components/explore/swapi-unavailable-notice";
 import { PageEnter } from "@/components/motion/page-enter";
 import { PageContentMotion } from "@/components/motion/page-content-motion";
 import { PageShell } from "@/components/layout/page-shell";
@@ -43,7 +44,33 @@ export default async function StarWarsResourcePage({ params, searchParams }: Sta
   }
 
   const currentPage = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
-  const data = await fetchSwapiList(resourceSlug, currentPage);
+  const result = await fetchSwapiList(resourceSlug, currentPage);
+
+  if (result.status === "unavailable") {
+    return (
+      <PageShell>
+        <PageEnter
+          header={{
+            eyebrow: "Explore · SWAPI",
+            title: resource.label,
+            description: "Browse entries from the Star Wars API.",
+          }}
+        >
+          <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <Link href="/explore/star-wars" className="hover:text-foreground">
+              Star Wars
+            </Link>
+            <span aria-hidden>/</span>
+            <span className="text-foreground">{resource.label}</span>
+          </div>
+
+          <SwapiUnavailableNotice />
+        </PageEnter>
+      </PageShell>
+    );
+  }
+
+  const { data } = result;
   const totalPages = Math.ceil(data.count / SWAPI_PAGE_SIZE);
 
   return (

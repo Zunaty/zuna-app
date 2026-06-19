@@ -1,9 +1,9 @@
-const REVALIDATE_SECONDS = 60 * 60 * 24;
+export const EXPLORE_FETCH_REVALIDATE_SECONDS = 60 * 60 * 24;
 
 export async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     ...init,
-    next: { revalidate: REVALIDATE_SECONDS },
+    next: { revalidate: EXPLORE_FETCH_REVALIDATE_SECONDS },
   });
 
   if (!res.ok) {
