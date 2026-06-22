@@ -32,6 +32,7 @@ export type Round = {
   roundVariables: PromptVariable[];
   shopVariables: PromptVariable[];
   shopSpent?: number;
+  shopEvents?: ShopEvent[];
   scrapped: boolean;
   scrappedBonusAmount: number | null;
 };
@@ -61,6 +62,16 @@ export type ShopItem = {
 export type Shop = {
   possibleRarities: Rarity[];
   items: ShopItem[];
+};
+
+export type ShopEvent = {
+  id: string;
+  action: "purchase" | "refresh";
+  timestamp: number;
+  price: number;
+  itemName?: string;
+  itemRarity?: Rarity;
+  itemType?: "variable" | "buff";
 };
 
 export type Game = {

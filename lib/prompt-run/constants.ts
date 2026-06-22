@@ -60,6 +60,7 @@ export const SHOP_UNLOCK_ROUND = 2;
 export const SHOP_ITEMS_COUNT = 3;
 export const SHOP_REFRESH_BASE_COST = 250;
 export const SHOP_ITEM_COOLDOWN_ROUNDS = 2;
+export const RARITY_BOOST_DURATION_ROUNDS = 3;
 
 export const DEFAULT_SHOP: Shop = {
   possibleRarities: ["rare", "legendary"],

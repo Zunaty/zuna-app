@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
-import type { Game, Round } from "@/lib/prompt-run/types";
+import type { Game, Round, ShopItem } from "@/lib/prompt-run/types";
 
 import { CurrentRoundPicks, RunHistory } from "./run-history";
 import { PromptCard } from "./prompt-card";
+import { ShopPanel } from "./shop-panel";
 
 type RoundStageProps = {
   game: Game;
@@ -14,9 +15,23 @@ type RoundStageProps = {
   onSelect: (variable: Parameters<typeof PromptCard>[0]["variable"]) => void;
   onSkip: () => void;
   onReroll: () => void;
+  onPurchaseShopItem: (item: ShopItem) => void;
+  onRefreshShop: () => void;
+  canAffordShopItem: (item: ShopItem) => boolean;
+  canRefreshShop: () => boolean;
 };
 
-export function RoundStage({ game, round, onSelect, onSkip, onReroll }: RoundStageProps) {
+export function RoundStage({
+  game,
+  round,
+  onSelect,
+  onSkip,
+  onReroll,
+  onPurchaseShopItem,
+  onRefreshShop,
+  canAffordShopItem,
+  canRefreshShop,
+}: RoundStageProps) {
   const category = round.currentCategory;
 
   return (
@@ -46,23 +61,36 @@ export function RoundStage({ game, round, onSelect, onSkip, onReroll }: RoundSta
       </div>
 
       {category ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {category.availableOptions.map((variable) => (
-            <PromptCard key={variable.id} variable={variable} onSelect={onSelect} />
-          ))}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">Choose one option, or reroll / skip this category.</p>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={onReroll} disabled={game.rerollCharges <= 0}>
+                Reroll options
+              </Button>
+              <Button type="button" variant="ghost" size="sm" onClick={onSkip}>
+                Skip category
+              </Button>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {category.availableOptions.map((variable) => (
+              <PromptCard key={variable.id} variable={variable} onSelect={onSelect} />
+            ))}
+          </div>
         </div>
       ) : null}
 
-      <CurrentRoundPicks picks={round.roundVariables} />
+      <CurrentRoundPicks picks={[...round.roundVariables, ...round.shopVariables]} />
 
-      <div className="flex flex-wrap gap-3">
-        <Button type="button" variant="outline" onClick={onReroll} disabled={game.rerollCharges <= 0}>
-          Reroll options
-        </Button>
-        <Button type="button" variant="ghost" onClick={onSkip}>
-          Skip category
-        </Button>
-      </div>
+      <ShopPanel
+        game={game}
+        round={round}
+        onPurchase={onPurchaseShopItem}
+        onRefresh={onRefreshShop}
+        canAffordItem={canAffordShopItem}
+        canRefreshShop={canRefreshShop}
+      />
     </div>
   );
 }

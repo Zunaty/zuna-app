@@ -335,7 +335,7 @@ Category: **Playground** / **Prompt Run** in [roadmap achievement table](../../p
 | Step              | Status  | Deliverable                                                   |
 | ----------------- | ------- | ------------------------------------------------------------- |
 | Spec              | Done    | This doc                                                      |
-| Game loop (no AI) | 🚧      | Round drafting MVP at `/playground/prompt-run` — shop pending |
+| Game loop (no AI) | 🚧      | Round drafting + shop at `/playground/prompt-run`; AI pending |
 | Generate API      | Planned | `fal-ai/flux-2/turbo` route, env gate, rate limits            |
 | Polish            | Planned | Motion, audio, onboarding                                     |
 | Persist           | 🚧      | Active run + best score in localStorage; Supabase schema TBD  |

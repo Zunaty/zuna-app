@@ -16,6 +16,10 @@ export function PromptRunGame() {
     selectVariable,
     skipCategory,
     rerollCategory,
+    purchaseShopItem,
+    refreshShop,
+    canAffordItem,
+    canRefreshShop,
     continueToOverview,
     resetRun,
   } = usePromptRun();
@@ -26,8 +30,8 @@ export function PromptRunGame() {
         <CardHeader>
           <CardTitle>Start a run</CardTitle>
           <CardDescription>
-            Draft prompt fragments across six categories, chase streaks, and assemble a prompt each round. Runs save in
-            this browser so you can pick up where you left off. Shop and AI generation come later.
+            Draft prompt fragments across six categories, chase streaks, and assemble a prompt each round. The shop
+            unlocks on round 2. Runs save in this browser so you can pick up where you left off.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -41,7 +45,17 @@ export function PromptRunGame() {
 
   if (game.phase === "round" && round) {
     return (
-      <RoundStage game={game} round={round} onSelect={selectVariable} onSkip={skipCategory} onReroll={rerollCategory} />
+      <RoundStage
+        game={game}
+        round={round}
+        onSelect={selectVariable}
+        onSkip={skipCategory}
+        onReroll={rerollCategory}
+        onPurchaseShopItem={purchaseShopItem}
+        onRefreshShop={refreshShop}
+        canAffordShopItem={canAffordItem}
+        canRefreshShop={canRefreshShop}
+      />
     );
   }
 

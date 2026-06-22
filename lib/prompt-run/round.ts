@@ -10,9 +10,16 @@ export function createId(): string {
   return `prompt-run-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-export function createCategoryOptions(category: string, random: () => number): PromptVariable[] {
+export function createCategoryOptions(
+  category: string,
+  random: () => number,
+  options?: { rarityBoost?: boolean },
+): PromptVariable[] {
   const words = pickRandomWords(category, OPTIONS_PER_CATEGORY, random);
-  return words.map((name) => createPromptVariable(createId(), name, random(), random()));
+  return words.map((name) => {
+    const rarityRandom = options?.rarityBoost ? random() * 0.2 : random();
+    return createPromptVariable(createId(), name, rarityRandom, random());
+  });
 }
 
 export function createRound(params: {
@@ -20,14 +27,17 @@ export function createRound(params: {
   categorySequence: readonly string[];
   random: () => number;
   now?: number;
+  rarityBoost?: boolean;
 }): Round {
   const categories: RoundCategory[] = params.categorySequence.map((name) => {
-    const options = createCategoryOptions(name, params.random);
+    const categoryOptions = createCategoryOptions(name, params.random, {
+      rarityBoost: params.rarityBoost,
+    });
     return {
       id: createId(),
       name,
       skipped: false,
-      availableOptions: options,
+      availableOptions: categoryOptions,
     };
   });
 
@@ -43,6 +53,8 @@ export function createRound(params: {
     currentCategory: categories[0] ?? null,
     roundVariables: [],
     shopVariables: [],
+    shopSpent: 0,
+    shopEvents: [],
     scrapped: false,
     scrappedBonusAmount: null,
   };
