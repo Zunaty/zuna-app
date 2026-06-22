@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-18`
+Last updated: `2026-06-22`
 
 # Product roadmap
 
@@ -48,7 +48,7 @@ Public portfolio with an optional game-layer meta-progression system (achievemen
 
 ## Phase 6 — AI features
 
-- [ ] Art Roulette image generation (env-gated, rate-limited)
+- [ ] Prompt Run image generation — [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) (`fal-ai/flux-2/turbo`, $0.008/MP); env-gated, rate-limited; [spec](../improvements/active/prompt-run.md)
 - [ ] Streaming chat UI and server route (`/chat`)
 
 ## Phase 7 — Polish + launch
@@ -59,13 +59,13 @@ Public portfolio with an optional game-layer meta-progression system (achievemen
 
 Runs across the whole site — optional meta-game, never gates core portfolio content. Full item list: [backlog — Account & meta](./backlog.md#account--meta).
 
-| Category            | Examples                                           |
-| ------------------- | -------------------------------------------------- |
-| Explorer            | Visit all sections, open all project case studies  |
-| Pokédex / Star Wars | Catch milestones, favorites                        |
-| Playground          | Game milestones (Type Racer WPM, Roulette streaks) |
-| Meta                | Sign up, return visits, complete profile           |
-| Secret              | Hidden easter eggs                                 |
+| Category            | Examples                                             |
+| ------------------- | ---------------------------------------------------- |
+| Explorer            | Visit all sections, open all project case studies    |
+| Pokédex / Star Wars | Catch milestones, favorites                          |
+| Playground          | Game milestones (Type Racer WPM, Prompt Run streaks) |
+| Meta                | Sign up, return visits, complete profile             |
+| Secret              | Hidden easter eggs                                   |
 
 **Data model (Phase 2+):** `profiles`, `achievements`, `user_achievements`, optional `user_stats`.
 

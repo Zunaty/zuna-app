@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-06-18` (mapbox rows)
+Last updated: `2026-06-22` (prompt run rename)
 
 # Feature backlog
 
@@ -10,15 +10,15 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Playground — games
 
-| Item                        | Status  | Route / notes                                                                                          |
-| --------------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
-| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)    |
-| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md) |
-| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                     |
-| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                               |
-| **Art Roulette**            | Planned | `/playground/art-roulette` — game loop, scoring, shop, audio                                           |
-| Art Roulette — AI images    | Planned | Prompt → generated art; rate-limited API                                                               |
-| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                            |
+| Item                        | Status  | Route / notes                                                                                                  |
+| --------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)            |
+| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)         |
+| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                             |
+| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                       |
+| **Prompt Run**              | Planned | `/playground/prompt-run` — roguelike prompt builder, shop, audio; [spec](../improvements/active/prompt-run.md) |
+| Prompt Run — AI images      | Planned | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                 |
+| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                                    |
 
 ## Playground — platform
 
@@ -28,7 +28,7 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 | Guest progress (localStorage) | Partial | Type Racer best scores; extend per game        |
 | Saved scores to Supabase      | Planned | Profile stats, optional leaderboard            |
 | Shared achievements           | Planned | Cross-game; never gates portfolio content      |
-| Game audio                    | Planned | Art Roulette first                             |
+| Game audio                    | Planned | Prompt Run first                               |
 
 ## Explore
 
@@ -57,14 +57,14 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Motion & 3D
 
-| Item                          | Status  | Notes                                                                                                                      |
-| ----------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Framer Motion foundation      | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md)                                                                |
-| Home / Pokédex motion polish  | Partial | Hero stagger, grid, toggles                                                                                                |
-| Page transitions              | Ideas   | Global or zone-scoped                                                                                                      |
-| **tsParticles**               | Planned | Hero ambient field, achievement bursts, Star Wars hyperspace — [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
-| Three.js — hero ambient       | Ideas   | Lazy WebGL background (or defer if tsParticles covers hero)                                                                |
-| Three.js — Art Roulette wheel | Ideas   | 3D drum when Roulette ships                                                                                                |
+| Item                         | Status  | Notes                                                                                                                      |
+| ---------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Framer Motion foundation     | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md)                                                                |
+| Home / Pokédex motion polish | Partial | Hero stagger, grid, toggles                                                                                                |
+| Page transitions             | Ideas   | Global or zone-scoped                                                                                                      |
+| **tsParticles**              | Planned | Hero ambient field, achievement bursts, Star Wars hyperspace — [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
+| Three.js — hero ambient      | Ideas   | Lazy WebGL background (or defer if tsParticles covers hero)                                                                |
+| Three.js — Prompt Run scene  | Ideas   | Optional 3D category stage when game ships                                                                                 |
 
 ## Account & meta
 

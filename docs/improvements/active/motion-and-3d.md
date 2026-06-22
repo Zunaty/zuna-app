@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-18`
+Last updated: `2026-06-22`
 
 # Motion & 3D — Framer Motion, tsParticles, Three.js
 
@@ -10,9 +10,9 @@ Ideas and conventions for **Framer Motion**, **tsParticles**, and **Three.js** (
 
 | Library            | Role on this site                                                                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Framer Motion**  | UI motion — page transitions, list stagger, micro-interactions, game feedback (Art Roulette spins, achievement toasts). Complements Tailwind + `tailwindcss-animate` for declarative, orchestrated animation.       |
+| **Framer Motion**  | UI motion — page transitions, list stagger, micro-interactions, game feedback (Prompt Run card reveals, achievement toasts). Complements Tailwind + `tailwindcss-animate` for declarative, orchestrated animation.  |
 | **tsParticles**    | Lightweight canvas particle effects — hero ambient fields, one-shot celebration bursts, zone-themed backgrounds (e.g. Star Wars hyperspace). Prefer over Three.js when the effect is 2D particles, not 3D geometry. |
-| **Three.js (R3F)** | Signature moments that need real 3D — roulette drum, holographic card frames, mesh-based scenes. Used sparingly so the portfolio stays fast and accessible.                                                         |
+| **Three.js (R3F)** | Signature moments that need real 3D — optional Prompt Run stage backdrop, holographic card frames, mesh-based scenes. Used sparingly so the portfolio stays fast and accessible.                                    |
 
 **Portfolio angle:** Recruiters see polished interaction design _and_ WebGL literacy in one repo — without turning every page into a GPU demo.
 
@@ -57,7 +57,7 @@ components/three/
   canvas-shell.tsx        # dynamic import boundary, resize, fallback
   scenes/
     hero-ambient.tsx      # Home hero background
-    roulette-wheel.tsx    # Art Roulette (Phase 4)
+    prompt-run-stage.tsx  # Prompt Run — optional 3D backdrop (Phase 4)
     achievement-burst.tsx # Unlock celebration (cross-cutting)
 
 lib/motion/
@@ -79,7 +79,7 @@ Keep scene components small. Heavy logic (game state, API) stays in `lib/` — T
 | **Pokémon detail**     | Shared element transition from list card → detail art | 3            | `layoutId` on artwork; fallback if reduced motion |
 | **Collection toggles** | Spring on favorite/caught/card toggle                 | 3            | Small delight; keep snappy                        |
 | **Route transitions**  | Soft fade/slide between major zones                   | 9            | Template-level; test with App Router layouts      |
-| **Art Roulette**       | Spin deceleration, rarity flash, shop item reveal     | 4            | Core game feel — motion is essential here         |
+| **Prompt Run**         | Card reveal, rarity flash, shop item pop              | 4            | Core game feel — motion is essential here         |
 | **Achievements**       | Toast slide-in, badge scale pop                       | 4–5          | Cross-cutting; pair with optional 3D burst        |
 | **Profile stats**      | Count-up or bar fill on first view                    | 5            | `useInView` + motion values                       |
 
@@ -90,9 +90,9 @@ Keep scene components small. Heavy logic (game state, API) stays in `lib/` — T
 | **Home hero**          | Soft particle field or abstract gradient mesh  | 1 polish / 9 | **tsParticles first** — slow drift, muted colors; pointer-none; keep CSS gradient fallback |
 | **Explore hub**        | None required                                  | —            | CSS is enough for zone cards                                                               |
 | **Pokémon detail**     | Optional holographic card frame around artwork | 3+           | Nice-to-have; 2D UI must remain primary                                                    |
-| **Art Roulette**       | 3D wheel / drum / orb for the pull             | 4            | Strong candidate — game centerpiece                                                        |
+| **Prompt Run**         | Optional 3D stage backdrop (cards stay 2D)     | 4            | Nice-to-have; 2D card UI is primary                                                        |
 | **Achievement unlock** | Short particle burst (1–2s) then unmount       | 4–5          | **tsParticles** — trigger once; don’t loop                                                 |
-| **Playground landing** | Teaser loop of roulette wheel                  | 4            | Marketing for the zone                                                                     |
+| **Playground landing** | Teaser loop or ambient particles               | 4            | Marketing for the zone                                                                     |
 | **Star Wars**          | Hyperspace streak transition (detail enter)    | 3            | **tsParticles** streak preset; fun easter egg; skip if perf budget tight                   |
 
 ## Phasing recommendation
@@ -100,7 +100,7 @@ Keep scene components small. Heavy logic (game state, API) stays in `lib/` — T
 ```text
 Now (Phase 3)     → Document only (this file). Ship Pokédex UX first.
 Phase 3 polish    → Framer Motion: grid stagger, toggle springs, optional layoutId on detail
-Phase 4           → Framer Motion: Art Roulette game loop; Three.js: roulette scene
+Phase 4           → Framer Motion: Prompt Run game loop; optional Three.js stage backdrop
 Phase 5           → Achievement celebrations (motion + optional 3D burst)
 Phase 9           → Home hero tsParticles ambient (or Three.js if 3D), route transitions, perf pass
 ```
@@ -181,7 +181,7 @@ Start with Option B; upgrade to A if the transition feels worth the complexity.
 | --------------------------- | ------------------------------------------------------------------------------------ |
 | LCP routes (home, projects) | No Three.js on first paint unless hero scene is lazy and below fold                  |
 | Explore list                | No WebGL; motion stagger only on visible batch                                       |
-| Playground / Roulette       | WebGL allowed; preload on `/playground` hover or idle                                |
+| Playground / Prompt Run     | WebGL allowed; preload on `/playground` hover or idle                                |
 | JS chunk                    | Split Three.js into its own dynamic chunk; never import `three` in Server Components |
 
 Run Lighthouse on `/` and `/explore/pokemon` before and after each motion/3D milestone.
@@ -190,21 +190,21 @@ Run Lighthouse on `/` and `/explore/pokemon` before and after each motion/3D mil
 
 - All motion respects `prefers-reduced-motion: reduce` (instant state changes or opacity-only).
 - WebGL canvases: `aria-hidden="true"` on decorative scenes; game controls remain keyboard-accessible outside the canvas.
-- No seizure-inducing flashes (Art Roulette rarity effects — cap frequency and contrast).
+- No seizure-inducing flashes (Prompt Run rarity effects — cap frequency and contrast).
 - Provide static fallbacks (current CSS gradients, images) when WebGL fails or is disabled.
 
 ## Open decisions
 
 Track choices here as we implement:
 
-| Question               | Options                                                 | Lean                                                                                     |
-| ---------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template at launch polish                                    |
-| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped                                        |
-| Roulette visual        | 2D CSS wheel vs 3D drum                                 | 3D drum — justifies Three.js adoption                                                    |
-| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time                                                     |
-| Hero particles         | tsParticles vs Three.js gradient mesh                   | **tsParticles** — lighter for 2D ambient; Three.js if we need depth                      |
-| Package install timing | Phase 3 polish vs later                                 | **Framer Motion installed**; tsParticles at hero polish; Three.js when Roulette needs 3D |
+| Question               | Options                                                 | Lean                                                                                          |
+| ---------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template at launch polish                                         |
+| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped                                             |
+| Prompt Run 3D backdrop | Skip vs optional ambient scene                          | **2D cards first** — 3D only if it adds clear value                                           |
+| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time                                                          |
+| Hero particles         | tsParticles vs Three.js gradient mesh                   | **tsParticles** — lighter for 2D ambient; Three.js if we need depth                           |
+| Package install timing | Phase 3 polish vs later                                 | **Framer Motion installed**; tsParticles at hero polish; Three.js only if Prompt Run needs 3D |
 
 ## First implementation checklist
 
@@ -217,7 +217,7 @@ Track choices here as we implement:
 - [ ] `yarn add @tsparticles/react @tsparticles/slim @tsparticles/engine`
 - [ ] Add `ParticlesShell` + `hero-ambient` preset (home hero pilot)
 - [ ] Phase 4: `yarn add three @react-three/fiber @react-three/drei @types/three`
-- [ ] Add `CanvasShell` + first scene (roulette or hero — pick one)
+- [ ] Add `CanvasShell` + first scene (Prompt Run backdrop or hero — pick one)
 - [ ] CI still passes lint, typecheck, build
 
 ## Related docs

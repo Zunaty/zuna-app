@@ -13,7 +13,7 @@ _Coming soon._
 | Zone           | Description                        | Status                             |
 | -------------- | ---------------------------------- | ---------------------------------- |
 | **Portfolio**  | About, projects, resume, contact   | Live                               |
-| **Playground** | Art Roulette, mini-games, scores   | Phase 4+                           |
+| **Playground** | Prompt Run, mini-games, scores     | Phase 4+                           |
 | **Explore**    | Pokédex, Star Wars, API demos      | Planned                            |
 | **Account**    | Auth, saved progress, achievements | Live (profile); achievements later |
 

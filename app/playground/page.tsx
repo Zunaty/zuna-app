@@ -8,7 +8,7 @@ import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: "Playground",
-  description: `Mini-games and interactive experiments on ${site.name}'s portfolio — Type Racer, Art Roulette, and more.`,
+  description: `Mini-games and interactive experiments on ${site.name}'s portfolio — Type Racer, Prompt Run, and more.`,
 };
 
 export default function PlaygroundPage() {
@@ -33,9 +33,9 @@ export default function PlaygroundPage() {
           </StaggerItem>
           <StaggerItem>
             <PlaygroundGameCard
-              title="Art Roulette"
-              description="Spin for art prompts, build a collection, and unlock shop items — the flagship playground game."
-              href="/playground/art-roulette"
+              title="Prompt Run"
+              description="Roguelike prompt builder — draft categories, shop for buffs, then generate art from your run."
+              href="/playground/prompt-run"
               status="coming-soon"
             />
           </StaggerItem>

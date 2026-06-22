@@ -10,7 +10,7 @@ A Monkeytype-style typing game for the **Playground** zone. Random words, senten
 
 - Showcases real-time UI, keyboard handling, and measurable game state — good portfolio demo.
 - Natural fit for **Framer Motion** (caret pulse, character flip, results reveal) without needing Three.js.
-- Complements Art Roulette (chance/skill mix) in the [playground backlog](../../product/backlog.md).
+- Complements Prompt Run (chance/skill mix) in the [playground backlog](../../product/backlog.md). See [prompt-run.md](./prompt-run.md).
 
 ## Route
 
@@ -18,7 +18,7 @@ A Monkeytype-style typing game for the **Playground** zone. Random words, senten
 /playground/type-racer
 ```
 
-Linked from `/playground` hub alongside Art Roulette when both ship.
+Linked from `/playground` hub alongside Prompt Run when both ship.
 
 ## Core loop
 
@@ -102,7 +102,7 @@ type TypeRacerState = {
 };
 ```
 
-Reducer + Vitest tests mirror Art Roulette pattern (Phase 4).
+Reducer + Vitest tests mirror Prompt Run pattern — see [prompt-run.md](./prompt-run.md).
 
 ## Achievements (later)
 
