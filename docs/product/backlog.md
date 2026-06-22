@@ -10,14 +10,15 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Playground — games
 
-| Item                        | Status  | Route / notes                                                                          |
-| --------------------------- | ------- | -------------------------------------------------------------------------------------- |
-| **Type Racer**              | ✅ MVP  | `/playground/type-racer` — words 30s/60s; [spec](../improvements/active/type-racer.md) |
-| Type Racer — sentence mode  | Planned | Curated one-liners                                                                     |
-| Type Racer — paragraph mode | Planned | Short passages, 120s cap                                                               |
-| **Art Roulette**            | Planned | `/playground/art-roulette` — game loop, scoring, shop, audio                           |
-| Art Roulette — AI images    | Planned | Prompt → generated art; rate-limited API                                               |
-| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                            |
+| Item                        | Status  | Route / notes                                                                                          |
+| --------------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| **Type Racer**              | ✅ MVP  | `/playground/type-racer` — words 30s/60s; [spec](../improvements/active/type-racer.md)                 |
+| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md) |
+| Type Racer — sentence mode  | Planned | Curated one-liners                                                                                     |
+| Type Racer — paragraph mode | Planned | Short passages, 120s cap                                                                               |
+| **Art Roulette**            | Planned | `/playground/art-roulette` — game loop, scoring, shop, audio                                           |
+| Art Roulette — AI images    | Planned | Prompt → generated art; rate-limited API                                                               |
+| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                            |
 
 ## Playground — platform
 

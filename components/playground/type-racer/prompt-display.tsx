@@ -1,11 +1,21 @@
 "use client";
 
+import { m } from "framer-motion";
+
+import { instantTransition } from "@/lib/motion/variants";
 import { cn } from "@/lib/utils";
+
+export type KeystrokeFx = {
+  index: number;
+  correct: boolean;
+};
 
 type PromptDisplayProps = {
   prompt: string;
   input: string;
+  keystrokeFx: KeystrokeFx | null;
   disabled?: boolean;
+  reduceMotion?: boolean;
 };
 
 function getCharClassName(char: string, index: number, input: string, cursorIndex: number): string {
@@ -24,22 +34,46 @@ function getCharClassName(char: string, index: number, input: string, cursorInde
   return "text-muted-foreground/50";
 }
 
+function findWordStartIndex(prompt: string, index: number): number {
+  let start = index;
+  while (start > 0 && prompt[start - 1] !== " ") {
+    start--;
+  }
+  return start;
+}
+
 function PromptChar({
   char,
   index,
   input,
   cursorIndex,
+  keystrokeFx,
+  reduceMotion,
 }: {
   char: string;
   index: number;
   input: string;
   cursorIndex: number;
+  keystrokeFx: KeystrokeFx | null;
+  reduceMotion: boolean;
 }) {
-  return <span className={getCharClassName(char, index, input, cursorIndex)}>{char}</span>;
+  const shouldPulse = !reduceMotion && keystrokeFx?.correct === true && keystrokeFx.index === index;
+
+  return (
+    <m.span
+      className={getCharClassName(char, index, input, cursorIndex)}
+      animate={shouldPulse ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+      transition={shouldPulse ? { duration: 0.12 } : instantTransition}
+    >
+      {char}
+    </m.span>
+  );
 }
 
-export function PromptDisplay({ prompt, input, disabled }: PromptDisplayProps) {
+export function PromptDisplay({ prompt, input, keystrokeFx, disabled, reduceMotion = false }: PromptDisplayProps) {
   const cursorIndex = input.length;
+  const shakeWordStart =
+    !reduceMotion && keystrokeFx?.correct === false ? findWordStartIndex(prompt, keystrokeFx.index) : null;
 
   const words: { text: string; startIndex: number }[] = [];
   let wordStart = 0;
@@ -64,9 +98,15 @@ export function PromptDisplay({ prompt, input, disabled }: PromptDisplayProps) {
       {words.map((word) => {
         const spaceIndex = word.startIndex + word.text.length;
         const hasTrailingSpace = spaceIndex < prompt.length;
+        const shouldShake = shakeWordStart === word.startIndex;
 
         return (
-          <span key={word.startIndex} className="inline">
+          <m.span
+            key={word.startIndex}
+            className="inline"
+            animate={shouldShake ? { x: [0, -3, 3, -2, 2, 0] } : { x: 0 }}
+            transition={shouldShake ? { duration: 0.18 } : instantTransition}
+          >
             {word.text.split("").map((char, offset) => (
               <PromptChar
                 key={word.startIndex + offset}
@@ -74,12 +114,21 @@ export function PromptDisplay({ prompt, input, disabled }: PromptDisplayProps) {
                 index={word.startIndex + offset}
                 input={input}
                 cursorIndex={cursorIndex}
+                keystrokeFx={keystrokeFx}
+                reduceMotion={reduceMotion}
               />
             ))}
             {hasTrailingSpace ? (
-              <PromptChar char=" " index={spaceIndex} input={input} cursorIndex={cursorIndex} />
+              <PromptChar
+                char=" "
+                index={spaceIndex}
+                input={input}
+                cursorIndex={cursorIndex}
+                keystrokeFx={keystrokeFx}
+                reduceMotion={reduceMotion}
+              />
             ) : null}
-          </span>
+          </m.span>
         );
       })}
     </div>

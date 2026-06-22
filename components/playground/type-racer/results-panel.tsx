@@ -32,7 +32,7 @@ export function ResultsPanel({ mode, stats, isPersonalBest, bestScore, onRetry }
     <div className="space-y-6 rounded-xl border border-border bg-card p-6">
       <div>
         <h2 className="text-xl font-semibold">Results</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{TYPE_RACER_MODE_LABEL[mode]} · words mode</p>
+        <p className="mt-1 text-sm text-muted-foreground">{TYPE_RACER_MODE_LABEL[mode]}</p>
       </div>
 
       {isPersonalBest ? (
