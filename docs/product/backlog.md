@@ -10,25 +10,25 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Playground — games
 
-| Item                        | Status  | Route / notes                                                                                                  |
-| --------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)            |
-| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)         |
-| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                             |
-| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                       |
-| **Prompt Run**              | Planned | `/playground/prompt-run` — roguelike prompt builder, shop, audio; [spec](../improvements/active/prompt-run.md) |
-| Prompt Run — AI images      | Planned | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                 |
-| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                                    |
+| Item                        | Status  | Route / notes                                                                                            |
+| --------------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)      |
+| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)   |
+| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                       |
+| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                 |
+| **Prompt Run**              | 🚧      | `/playground/prompt-run` — round loop MVP; shop + AI later; [spec](../improvements/active/prompt-run.md) |
+| Prompt Run — AI images      | Planned | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited           |
+| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                              |
 
 ## Playground — platform
 
-| Item                          | Status  | Notes                                          |
-| ----------------------------- | ------- | ---------------------------------------------- |
-| Playground hub                | ✅      | `/playground` — card grid linking to each game |
-| Guest progress (localStorage) | Partial | Type Racer best scores; extend per game        |
-| Saved scores to Supabase      | Planned | Profile stats, optional leaderboard            |
-| Shared achievements           | Planned | Cross-game; never gates portfolio content      |
-| Game audio                    | Planned | Prompt Run first                               |
+| Item                          | Status  | Notes                                                      |
+| ----------------------------- | ------- | ---------------------------------------------------------- |
+| Playground hub                | ✅      | `/playground` — card grid linking to each game             |
+| Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run active run + best score |
+| Saved scores to Supabase      | Planned | Profile stats, optional leaderboard                        |
+| Shared achievements           | Planned | Cross-game; never gates portfolio content                  |
+| Game audio                    | Planned | Prompt Run first                                           |
 
 ## Explore
 

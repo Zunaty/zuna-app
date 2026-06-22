@@ -1,0 +1,80 @@
+export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
+
+export type Phase = "fresh" | "round" | "generate" | "overview";
+
+export type PromptVariable = {
+  id: string;
+  name: string;
+  rarity: Rarity;
+  points: number;
+  streakMultiplier: number | null;
+  /** Set when the player picks this variable (category it was chosen from). */
+  categoryName?: string;
+};
+
+export type RoundCategory = {
+  id: string;
+  name: string;
+  skipped: boolean;
+  availableOptions: PromptVariable[];
+};
+
+export type Round = {
+  id: string;
+  roundNumber: number;
+  roundStartTime: number;
+  roundEndTime: number | null;
+  roundDuration: number | null;
+  roundScore: number;
+  roundBonusRerolls: number;
+  roundCategories: RoundCategory[];
+  currentCategory: RoundCategory | null;
+  roundVariables: PromptVariable[];
+  shopVariables: PromptVariable[];
+  shopSpent?: number;
+  scrapped: boolean;
+  scrappedBonusAmount: number | null;
+};
+
+export type Buff = {
+  id: string;
+  type: "buff" | "debuff";
+  active: boolean;
+  name: string;
+  description: string;
+  roundStart: number;
+  duration: number;
+};
+
+export type ShopItem = {
+  id: string;
+  name: string;
+  rarity: Rarity;
+  price: number;
+  description?: string;
+  type: "variable" | "buff";
+  variable?: PromptVariable;
+  isOnCooldown?: boolean;
+  cooldownEndRound?: number | null;
+};
+
+export type Shop = {
+  possibleRarities: Rarity[];
+  items: ShopItem[];
+};
+
+export type Game = {
+  id: string;
+  phase: Phase;
+  completedRounds: number;
+  totalScore: number;
+  rerollCharges: number;
+  streak: number;
+  streakRecord: number;
+  speedBonusCount: number;
+  rounds: Round[];
+  shopUnlocked: boolean;
+  shopItemsUsed: number;
+  buffs: Buff[];
+  shop: Shop;
+};

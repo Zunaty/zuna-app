@@ -65,7 +65,7 @@ export function ComingSoonZones() {
             <p className="text-xs font-medium uppercase tracking-wider text-primary">Live now</p>
             <h3 className="mt-2 font-semibold">Playground</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Type Racer is live — Prompt Run and more games on the way.
+              Type Racer and Prompt Run are live — more playground games on the way.
             </p>
             <Button variant="outline" size="sm" className="mt-4" asChild>
               <Link href="/playground">Open Playground</Link>

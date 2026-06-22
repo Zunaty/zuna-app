@@ -36,7 +36,7 @@ export default function PlaygroundPage() {
               title="Prompt Run"
               description="Roguelike prompt builder — draft categories, shop for buffs, then generate art from your run."
               href="/playground/prompt-run"
-              status="coming-soon"
+              status="live"
             />
           </StaggerItem>
         </StaggerChildren>

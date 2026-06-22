@@ -1,0 +1,57 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePromptRun } from "@/lib/prompt-run/use-prompt-run";
+
+import { GeneratePanel, OverviewPanel, RoundStage } from "./round-stage";
+
+export function PromptRunGame() {
+  const {
+    game,
+    round,
+    assembledPrompt,
+    startRun,
+    startRound,
+    selectVariable,
+    skipCategory,
+    rerollCategory,
+    continueToOverview,
+    resetRun,
+  } = usePromptRun();
+
+  if (game.phase === "fresh") {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Start a run</CardTitle>
+          <CardDescription>
+            Draft prompt fragments across six categories, chase streaks, and assemble a prompt each round. Runs save in
+            this browser so you can pick up where you left off. Shop and AI generation come later.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button type="button" onClick={startRun}>
+            Start run
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (game.phase === "round" && round) {
+    return (
+      <RoundStage game={game} round={round} onSelect={selectVariable} onSkip={skipCategory} onReroll={rerollCategory} />
+    );
+  }
+
+  if (game.phase === "generate") {
+    return <GeneratePanel prompt={assembledPrompt} rounds={game.rounds} onContinue={continueToOverview} />;
+  }
+
+  if (game.phase === "overview") {
+    return <OverviewPanel game={game} prompt={assembledPrompt} onNextRound={startRound} onNewRun={resetRun} />;
+  }
+
+  return null;
+}

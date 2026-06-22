@@ -72,6 +72,19 @@ descriptors → subjects → actions → styles → backgrounds → colors
 - **3 options** per category; player must complete at least **2** categories (cannot skip below that).
 - **Reroll charges**: start with 3, max 5; +1 per completed round; bonus charges earned mid-round by high point thresholds.
 
+### How rarity works
+
+Rarity is **not** one roll per round. Each **option card** gets its own independent rarity and point roll:
+
+| When        | What gets rolled                                                                   |
+| ----------- | ---------------------------------------------------------------------------------- |
+| Round start | All 3 options × each category (18 cards total for the default 6-category sequence) |
+| Reroll      | 3 new options for the **current** category only                                    |
+
+So in one round you might see a Legendary descriptor, a Common subject, and a Rare style — each pick keeps the rarity it had when you selected it. That chosen `{ name, rarity, points, categoryName }` is appended to `round.roundVariables` and shown in **run history**.
+
+Probabilities and point ranges are in [Rarities & scoring](#rarities--scoring) below.
+
 ## Rarities & scoring
 
 | Rarity    | Point range | Roll chance |
@@ -204,6 +217,57 @@ Log generation count server-side for cost monitoring. Phase 6 in [roadmap](../..
 
 Framer Motion targets: card flip on reveal, shop purchase pop, generate loading pulse, overview image stagger.
 
+## Run history (UI)
+
+Ported from Art Hero `RouletteHistory.tsx` / `History.tsx` — simplified for portfolio theme.
+
+| Surface                  | Shows                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| **During round**         | `CurrentRoundPicks` — picks so far with rarity + category                                 |
+| **Generate / Overview**  | `RunHistory` — expandable list of completed rounds, each with all picks, scores, duration |
+| **Future: start screen** | Archive of past completed runs (localStorage → Supabase)                                  |
+
+Each completed round in `game.rounds[]` stores full `roundVariables` (with `categoryName` on pick). Shop picks land in `shopVariables` when the shop ships.
+
+## Persistence
+
+### Phase 1 — guest (implemented / in progress)
+
+| Data                              | Storage                          | Notes                                           |
+| --------------------------------- | -------------------------------- | ----------------------------------------------- |
+| Settings (category order, volume) | `localStorage` `zuna-prompt-run` | Already wired                                   |
+| **Active run** (resume)           | Same key, `activeRun`            | Game + in-progress round; restored on page load |
+| Best run score                    | Same key, `bestRun`              | Updated when a 7-round run finishes             |
+| Completed run archive             | Not yet                          | Art Hero kept `roulette.games[]` in memory + DB |
+
+Guests can **pick up where they left off** in the same browser. Clearing site data loses the run.
+
+### Phase 2 — Supabase (planned, Phase 5+)
+
+Requires schema design before AI images ship at scale. Suggested tables (draft):
+
+```text
+prompt_run_games      — one row per finished (or abandoned) run; user_id, total_score, completed_rounds, started_at, finished_at
+prompt_run_rounds     — FK game; round_number, score, duration_ms, prompt_text, scrapped
+prompt_run_picks      — FK round; category, variable_name, rarity, points, sort_order
+prompt_run_generations — FK round; fal request metadata, image_url, seed, created_at
+```
+
+| Feature              | Guest                        | Authenticated                                                                             |
+| -------------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| Resume active run    | localStorage                 | Sync `activeRun` JSON to `prompt_run_games` with `status = in_progress`                   |
+| History of past runs | localStorage archive (later) | Query completed games + rounds                                                            |
+| Generated images     | Session / URL only           | Store URL + metadata in `prompt_run_generations`; optional Supabase Storage if we re-host |
+| Leaderboard          | —                            | Optional high-score from finished runs                                                    |
+
+**Open questions** (decide before migration):
+
+- Store fal image URLs only (cheap) vs copy to Supabase Storage (durable if fal links expire)?
+- One active in-progress run per user, or allow multiple?
+- Sync on every pick (chatty) vs debounced / on phase change?
+
+Lean: **debounced sync on phase change** for auth users; images store fal URL + prompt snapshot on generate; resume merges local + remote on login (local wins if newer `savedAt`).
+
 ## File layout (when built)
 
 ```text
@@ -212,6 +276,7 @@ app/api/playground/prompt-run/generate/route.ts
 
 components/playground/prompt-run/
   prompt-run-game.tsx        # client shell, phase router
+  run-history.tsx            # RunHistory + CurrentRoundPicks
   start-screen.tsx
   round-stage.tsx
   prompt-card.tsx
@@ -267,13 +332,13 @@ Category: **Playground** / **Prompt Run** in [roadmap achievement table](../../p
 
 ## Rollout
 
-| Step              | Status  | Deliverable                                        |
-| ----------------- | ------- | -------------------------------------------------- |
-| Spec              | Done    | This doc                                           |
-| Game loop (no AI) | Planned | Rounds, scoring, shop, localStorage — no API       |
-| Generate API      | Planned | `fal-ai/flux-2/turbo` route, env gate, rate limits |
-| Polish            | Planned | Motion, audio, onboarding                          |
-| Persist           | Planned | Supabase scores / image history optional           |
+| Step              | Status  | Deliverable                                                   |
+| ----------------- | ------- | ------------------------------------------------------------- |
+| Spec              | Done    | This doc                                                      |
+| Game loop (no AI) | 🚧      | Round drafting MVP at `/playground/prompt-run` — shop pending |
+| Generate API      | Planned | `fal-ai/flux-2/turbo` route, env gate, rate limits            |
+| Polish            | Planned | Motion, audio, onboarding                                     |
+| Persist           | 🚧      | Active run + best score in localStorage; Supabase schema TBD  |
 
 Build order: **game loop first** (playable without spend), then wire generation in Phase 6.
 
