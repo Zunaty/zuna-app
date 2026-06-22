@@ -34,7 +34,8 @@ export type PromptRunAction =
       newRound: Round;
       willUnlockShop: boolean;
       nextShopItems: ShopItem[];
-    };
+    }
+  | { type: "RESTORE"; state: PromptRunModelState };
 
 export function promptRunReducer(state: PromptRunModelState, action: PromptRunAction): PromptRunModelState {
   switch (action.type) {
@@ -145,6 +146,9 @@ export function promptRunReducer(state: PromptRunModelState, action: PromptRunAc
         },
         round: action.newRound,
       };
+    }
+    case "RESTORE": {
+      return action.state;
     }
     default:
       return state;

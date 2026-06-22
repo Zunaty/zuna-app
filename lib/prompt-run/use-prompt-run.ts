@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 
 import { assemblePrompt } from "@/lib/prompt-run/assemble-prompt";
 import {
@@ -39,7 +39,7 @@ import {
 import type { Buff, PromptVariable, Round, ShopEvent, ShopItem } from "@/lib/prompt-run/types";
 
 function createInitialState() {
-  return getActiveRun() ?? createFreshModelState();
+  return createFreshModelState();
 }
 
 function expireBuffs(buffs: Buff[], completedRounds: number): Buff[] {
@@ -56,8 +56,21 @@ export function usePromptRun() {
   const [model, dispatch] = useReducer(promptRunReducer, undefined, createInitialState);
   const { game, round } = model;
   const [categorySequence] = useState<readonly string[]>(() => getPromptRunSettings().categorySequence);
+  const skipInitialPersistence = useRef(true);
 
   useEffect(() => {
+    const saved = getActiveRun();
+    if (saved) {
+      dispatch({ type: "RESTORE", state: saved });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (skipInitialPersistence.current) {
+      skipInitialPersistence.current = false;
+      return;
+    }
+
     if (game.phase === "fresh") {
       clearActiveRun();
       return;

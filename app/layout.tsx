@@ -7,6 +7,7 @@ import { MotionProvider } from "@/components/motion/motion-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getServerResolvedThemeClass, getServerThemePreference } from "@/lib/theme/server";
 import { site } from "@/lib/data/site";
 import { getSiteUrl } from "@/lib/utils";
 
@@ -36,15 +37,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [initialTheme, themeClass] = await Promise.all([getServerThemePreference(), getServerResolvedThemeClass()]);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={themeClass} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider initialTheme={initialTheme}>
           <MotionProvider>
             <div className="flex min-h-screen flex-col">
               <SiteHeader />

@@ -5,6 +5,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { hasSupabasePublicEnv, supabasePublishableKey, supabaseUrl } from "@/lib/supabase/env";
 import type { Database } from "@/types/supabase";
 
+function withThemeClientHints(response: NextResponse) {
+  response.headers.set("Accept-CH", "Sec-CH-Prefers-Color-Scheme");
+  return response;
+}
+
 function redirectWithCookies(request: NextRequest, response: NextResponse, pathname: string) {
   const url = request.nextUrl.clone();
   url.pathname = pathname;
@@ -12,11 +17,11 @@ function redirectWithCookies(request: NextRequest, response: NextResponse, pathn
   response.cookies.getAll().forEach((cookie) => {
     redirectResponse.cookies.set(cookie.name, cookie.value);
   });
-  return redirectResponse;
+  return withThemeClientHints(redirectResponse);
 }
 
 export async function proxy(request: NextRequest) {
-  const response = await updateSession(request);
+  const response = withThemeClientHints(await updateSession(request));
   const pathname = request.nextUrl.pathname;
 
   if (pathname === "/auth/callback") {
@@ -28,7 +33,7 @@ export async function proxy(request: NextRequest) {
     const callbackUrl = new URL("/auth/callback", request.nextUrl.origin);
     callbackUrl.searchParams.set("code", code);
     callbackUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(callbackUrl);
+    return withThemeClientHints(NextResponse.redirect(callbackUrl));
   }
 
   if (!pathname.startsWith("/profile") || !hasSupabasePublicEnv) {

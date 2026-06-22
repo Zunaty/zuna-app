@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import mapboxgl, { type Map } from "mapbox-gl";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/lib/theme/theme-provider";
 
 import { getPublicMapboxToken } from "@/lib/mapbox/env";
 import { getMapboxStyleUrl, resolveMapboxTheme, type MapboxTheme } from "@/lib/mapbox/styles";
