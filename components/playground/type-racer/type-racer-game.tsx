@@ -3,18 +3,22 @@
 import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { CompetitiveSettings } from "@/components/playground/type-racer/competitive-settings";
 import { LiveStats } from "@/components/playground/type-racer/live-stats";
 import { ModePicker } from "@/components/playground/type-racer/mode-picker";
 import { PromptDisplay, type KeystrokeFx } from "@/components/playground/type-racer/prompt-display";
 import { ResultsPanel } from "@/components/playground/type-racer/results-panel";
 import { Button } from "@/components/ui/button";
-import { TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
+import { isCountdownMode, TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
+import { charsMatch } from "@/lib/type-racer/matching";
+import { formatElapsedSeconds } from "@/lib/type-racer/scoring";
 import { instantTransition, springTransition } from "@/lib/motion/variants";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { useTypeRacer } from "@/lib/type-racer/use-type-racer";
 
 export function TypeRacerGame() {
-  const { state, liveStats, setMode, start, skipCountdown, setInput, reset } = useTypeRacer();
+  const { state, liveStats, matchOptions, setMode, setStrictMode, start, skipCountdown, setInput, reset } =
+    useTypeRacer();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const lastTabAtRef = useRef(0);
   const keystrokeFxTimeoutRef = useRef<number | null>(null);
@@ -88,7 +92,7 @@ export function TypeRacerGame() {
       const index = value.length - 1;
       setKeystrokeFx({
         index,
-        correct: value[index] === state.prompt[index],
+        correct: charsMatch(value[index], state.prompt[index], matchOptions),
       });
       if (keystrokeFxTimeoutRef.current !== null) {
         window.clearTimeout(keystrokeFxTimeoutRef.current);
@@ -102,23 +106,37 @@ export function TypeRacerGame() {
     setInput(value);
   };
 
-  const timeLeftSeconds = (state.timeLeftMs / 1000).toFixed(1);
   const isActive = state.phase === "countdown" || state.phase === "running";
+  const showCountdown = isCountdownMode(state.mode);
+  const timerLabel =
+    state.phase === "running"
+      ? showCountdown
+        ? `${((state.timeLeftMs ?? 0) / 1000).toFixed(1)}s`
+        : `${formatElapsedSeconds(state.elapsedMs)}s`
+      : null;
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <ModePicker mode={state.mode} disabled={isActive} onModeChange={setMode} />
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="space-y-4">
+          <ModePicker mode={state.mode} disabled={isActive} onModeChange={setMode} />
+          <CompetitiveSettings
+            mode={state.mode}
+            strictMode={state.strictMode}
+            disabled={isActive}
+            onStrictModeChange={setStrictMode}
+          />
+        </div>
         <div className="flex flex-col items-end gap-1">
           {state.phase === "idle" ? (
             <Button size="lg" onClick={handleStart}>
               Start test
             </Button>
           ) : null}
-          {state.phase === "running" ? (
+          {state.phase === "running" && timerLabel ? (
             <>
               <p className="font-mono text-2xl font-semibold tabular-nums" aria-live="polite">
-                {timeLeftSeconds}s
+                {timerLabel}
               </p>
               {liveStats ? <LiveStats stats={liveStats} timerStarted={state.timerStarted} /> : null}
             </>
@@ -168,10 +186,11 @@ export function TypeRacerGame() {
             prompt={state.prompt}
             input={state.input}
             keystrokeFx={keystrokeFx}
+            matchOptions={matchOptions}
             reduceMotion={reduceMotion ?? false}
           />
           <label className="sr-only" htmlFor="type-racer-input">
-            Type the words shown above
+            Type the prompt shown above
           </label>
           <textarea
             id="type-racer-input"

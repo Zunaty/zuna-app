@@ -122,7 +122,7 @@ Category: **Playground** / **Type Racer** in cross-cutting achievement table.
 | Spec         | Done    | This doc                                                                              |
 | MVP          | Done    | Words 30s/60s, local high score, basic UI                                             |
 | Words polish | Done    | [type-racer-polish.md](./type-racer-polish.md) — live stats, timer, motion, shortcuts |
-| Modes+meta   | Planned | Sentence/paragraph modes, achievements                                                |
+| Modes+meta   | Done    | Sentence/paragraph modes, strict mode, case rules                                     |
 | Persist      | Planned | Supabase `user_stats` / leaderboard optional                                          |
 
 Ship order is flexible — see [backlog](../../product/backlog.md), not roadmap phases.

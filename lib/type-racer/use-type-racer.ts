@@ -2,13 +2,11 @@
 
 import { useCallback, useEffect, useReducer } from "react";
 
-import {
-  TYPE_RACER_COUNTDOWN_START,
-  TYPE_RACER_MODE_DURATION_MS,
-  type TypeRacerMode,
-} from "@/lib/type-racer/constants";
-import { generateWordPrompt } from "@/lib/type-racer/prompts";
+import { getModeDurationMs, TYPE_RACER_COUNTDOWN_START, type TypeRacerMode } from "@/lib/type-racer/constants";
+import { getMatchOptions, isStrictInputValid, promptsEqual } from "@/lib/type-racer/matching";
+import { generatePrompt } from "@/lib/type-racer/prompts";
 import { computeStats, type TypeRacerStats } from "@/lib/type-racer/scoring";
+import { getSettings, saveSettings } from "@/lib/type-racer/settings";
 import { getBestScore, saveBestScoreIfBetter, type TypeRacerBestScore } from "@/lib/type-racer/storage";
 
 export type TypeRacerPhase = "idle" | "countdown" | "running" | "finished";
@@ -19,10 +17,11 @@ type TypeRacerState = {
   prompt: string;
   input: string;
   countdown: number;
-  timeLeftMs: number;
+  timeLeftMs: number | null;
   elapsedMs: number;
   timerStarted: boolean;
   startedAt: number | null;
+  strictMode: boolean;
   stats: TypeRacerStats | null;
   isPersonalBest: boolean;
   bestScore: TypeRacerBestScore | null;
@@ -30,6 +29,7 @@ type TypeRacerState = {
 
 type TypeRacerAction =
   | { type: "SET_MODE"; mode: TypeRacerMode }
+  | { type: "SET_STRICT_MODE"; strictMode: boolean }
   | { type: "START" }
   | { type: "TICK_COUNTDOWN" }
   | { type: "BEGIN_RUNNING" }
@@ -38,17 +38,24 @@ type TypeRacerAction =
   | { type: "TICK_TIMER"; now: number }
   | { type: "RESET" };
 
+function getInitialTimeLeftMs(mode: TypeRacerMode): number | null {
+  return getModeDurationMs(mode);
+}
+
 function createInitialState(mode: TypeRacerMode = "words-60"): TypeRacerState {
+  const settings = getSettings();
+
   return {
     phase: "idle",
     mode,
     prompt: "",
     input: "",
     countdown: TYPE_RACER_COUNTDOWN_START,
-    timeLeftMs: TYPE_RACER_MODE_DURATION_MS[mode],
+    timeLeftMs: getInitialTimeLeftMs(mode),
     elapsedMs: 0,
     timerStarted: false,
     startedAt: null,
+    strictMode: settings.strictMode,
     stats: null,
     isPersonalBest: false,
     bestScore: null,
@@ -60,17 +67,29 @@ function getElapsedMs(state: TypeRacerState, now: number): number {
     return 0;
   }
 
-  const duration = TYPE_RACER_MODE_DURATION_MS[state.mode];
-  return Math.min(duration, now - state.startedAt);
+  const duration = getModeDurationMs(state.mode);
+  const elapsed = now - state.startedAt;
+
+  if (duration === null) {
+    return elapsed;
+  }
+
+  return Math.min(duration, elapsed);
 }
 
-function getTimeLeftMs(state: TypeRacerState, now: number): number {
-  const duration = TYPE_RACER_MODE_DURATION_MS[state.mode];
+function getTimeLeftMs(state: TypeRacerState, now: number): number | null {
+  const duration = getModeDurationMs(state.mode);
+
+  if (duration === null) {
+    return null;
+  }
+
   return Math.max(0, duration - getElapsedMs(state, now));
 }
 
 function finishState(state: TypeRacerState, elapsedMs: number): TypeRacerState {
-  const stats = computeStats(state.prompt, state.input, elapsedMs);
+  const matchOptions = getMatchOptions(state.mode);
+  const stats = computeStats(state.prompt, state.input, elapsedMs, matchOptions);
   const isPersonalBest = saveBestScoreIfBetter(state.mode, stats);
 
   return {
@@ -93,18 +112,26 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
       return {
         ...state,
         mode: action.mode,
-        timeLeftMs: TYPE_RACER_MODE_DURATION_MS[action.mode],
+        timeLeftMs: getInitialTimeLeftMs(action.mode),
         bestScore: getBestScore(action.mode),
       };
+    }
+    case "SET_STRICT_MODE": {
+      if (state.phase !== "idle") {
+        return state;
+      }
+
+      saveSettings({ strictMode: action.strictMode });
+      return { ...state, strictMode: action.strictMode };
     }
     case "START":
       return {
         ...state,
         phase: "countdown",
-        prompt: generateWordPrompt(),
+        prompt: generatePrompt(state.mode),
         input: "",
         countdown: TYPE_RACER_COUNTDOWN_START,
-        timeLeftMs: TYPE_RACER_MODE_DURATION_MS[state.mode],
+        timeLeftMs: getInitialTimeLeftMs(state.mode),
         elapsedMs: 0,
         timerStarted: false,
         startedAt: null,
@@ -126,7 +153,7 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         timerStarted: false,
         startedAt: null,
         elapsedMs: 0,
-        timeLeftMs: TYPE_RACER_MODE_DURATION_MS[state.mode],
+        timeLeftMs: getInitialTimeLeftMs(state.mode),
       };
     case "SET_INPUT": {
       if (state.phase !== "running") {
@@ -134,13 +161,19 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
       }
 
       const nextInput = action.value.replace(/\r?\n/g, " ");
+      const matchOptions = getMatchOptions(state.mode);
+
+      if (state.strictMode && !isStrictInputValid(state.prompt, state.input, nextInput, matchOptions)) {
+        return state;
+      }
+
       const shouldStartTimer = !state.timerStarted && nextInput.length > 0;
       const nextState: TypeRacerState = {
         ...state,
         input: nextInput,
         timerStarted: state.timerStarted || shouldStartTimer,
         startedAt: shouldStartTimer ? action.now : state.startedAt,
-        timeLeftMs: shouldStartTimer ? TYPE_RACER_MODE_DURATION_MS[state.mode] : getTimeLeftMs(state, action.now),
+        timeLeftMs: shouldStartTimer ? getInitialTimeLeftMs(state.mode) : getTimeLeftMs(state, action.now),
         elapsedMs: 0,
       };
 
@@ -148,9 +181,8 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         nextState.elapsedMs = getElapsedMs(nextState, action.now);
       }
 
-      if (nextInput === state.prompt) {
-        const elapsedMs = nextState.elapsedMs;
-        return finishState(nextState, elapsedMs);
+      if (promptsEqual(state.prompt, nextInput, matchOptions)) {
+        return finishState(nextState, nextState.elapsedMs);
       }
 
       return nextState;
@@ -160,11 +192,11 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         return state;
       }
 
-      const timeLeftMs = getTimeLeftMs(state, action.now);
+      const duration = getModeDurationMs(state.mode);
       const elapsedMs = getElapsedMs(state, action.now);
+      const timeLeftMs = getTimeLeftMs(state, action.now);
 
-      if (timeLeftMs === 0) {
-        const duration = TYPE_RACER_MODE_DURATION_MS[state.mode];
+      if (duration !== null && timeLeftMs === 0) {
         return finishState({ ...state, timeLeftMs, elapsedMs: duration }, duration);
       }
 
@@ -172,7 +204,7 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
     }
     case "RESET": {
       const next = createInitialState(state.mode);
-      return { ...next, bestScore: getBestScore(state.mode) };
+      return { ...next, strictMode: state.strictMode, bestScore: getBestScore(state.mode) };
     }
     default:
       return state;
@@ -219,6 +251,10 @@ export function useTypeRacer(initialMode: TypeRacerMode = "words-60") {
     dispatch({ type: "SET_MODE", mode });
   }, []);
 
+  const setStrictMode = useCallback((strictMode: boolean) => {
+    dispatch({ type: "SET_STRICT_MODE", strictMode });
+  }, []);
+
   const start = useCallback(() => {
     dispatch({ type: "START" });
   }, []);
@@ -235,12 +271,16 @@ export function useTypeRacer(initialMode: TypeRacerMode = "words-60") {
     dispatch({ type: "RESET" });
   }, []);
 
-  const liveStats = state.phase === "running" ? computeStats(state.prompt, state.input, state.elapsedMs) : null;
+  const matchOptions = getMatchOptions(state.mode);
+  const liveStats =
+    state.phase === "running" ? computeStats(state.prompt, state.input, state.elapsedMs, matchOptions) : null;
 
   return {
     state,
     liveStats,
+    matchOptions,
     setMode,
+    setStrictMode,
     start,
     skipCountdown,
     setInput,

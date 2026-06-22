@@ -1,0 +1,23 @@
+/** Curated one-liners — public domain or original lines only. */
+export const TYPE_RACER_SENTENCES = [
+  "To be, or not to be, that is the question.",
+  "Ship small, learn fast, and iterate with intention.",
+  "Clean code reads like well-written prose.",
+  "TypeScript catches mistakes before your users do.",
+  "The server renders first; the client enhances second.",
+  "Measure twice, refactor once.",
+  "A good API feels obvious the day you ship it.",
+  "Latency is a feature whether you plan for it or not.",
+  "Accessibility is not a polish pass; it is part of the product.",
+  "State is easy to add and expensive to remove.",
+  "Prefer boring technology until the problem is no longer boring.",
+  "The best error message tells you what to do next.",
+  "Composition beats inheritance in UI and in teams.",
+  "Cache invalidation is still harder than it looks.",
+  "Read the docs before you fight the framework.",
+  "Small pull requests review faster and ship safer.",
+  "Naming things well is a form of documentation.",
+  "The keyboard is the fastest path through your interface.",
+  "Progressive enhancement keeps the page usable everywhere.",
+  "Delete code with the same confidence you add it.",
+] as const;

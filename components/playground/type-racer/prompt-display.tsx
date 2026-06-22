@@ -3,6 +3,8 @@
 import { m } from "framer-motion";
 
 import { instantTransition } from "@/lib/motion/variants";
+import type { MatchOptions } from "@/lib/type-racer/matching";
+import { charsMatch } from "@/lib/type-racer/matching";
 import { cn } from "@/lib/utils";
 
 export type KeystrokeFx = {
@@ -14,17 +16,26 @@ type PromptDisplayProps = {
   prompt: string;
   input: string;
   keystrokeFx: KeystrokeFx | null;
+  matchOptions: MatchOptions;
   disabled?: boolean;
   reduceMotion?: boolean;
 };
 
-function getCharClassName(char: string, index: number, input: string, cursorIndex: number): string {
+function getCharClassName(
+  char: string,
+  index: number,
+  input: string,
+  cursorIndex: number,
+  matchOptions: MatchOptions,
+): string {
   const typed = input[index];
   const isPast = index < input.length;
   const isCursor = index === cursorIndex;
 
   if (isPast) {
-    return typed === char ? "text-emerald-600 dark:text-emerald-400" : "text-destructive bg-destructive/15";
+    return charsMatch(typed, char, matchOptions)
+      ? "text-emerald-600 dark:text-emerald-400"
+      : "text-destructive bg-destructive/15";
   }
 
   if (isCursor) {
@@ -48,6 +59,7 @@ function PromptChar({
   input,
   cursorIndex,
   keystrokeFx,
+  matchOptions,
   reduceMotion,
 }: {
   char: string;
@@ -55,13 +67,14 @@ function PromptChar({
   input: string;
   cursorIndex: number;
   keystrokeFx: KeystrokeFx | null;
+  matchOptions: MatchOptions;
   reduceMotion: boolean;
 }) {
   const shouldPulse = !reduceMotion && keystrokeFx?.correct === true && keystrokeFx.index === index;
 
   return (
     <m.span
-      className={getCharClassName(char, index, input, cursorIndex)}
+      className={getCharClassName(char, index, input, cursorIndex, matchOptions)}
       animate={shouldPulse ? { scale: [1, 1.15, 1] } : { scale: 1 }}
       transition={shouldPulse ? { duration: 0.12 } : instantTransition}
     >
@@ -70,7 +83,14 @@ function PromptChar({
   );
 }
 
-export function PromptDisplay({ prompt, input, keystrokeFx, disabled, reduceMotion = false }: PromptDisplayProps) {
+export function PromptDisplay({
+  prompt,
+  input,
+  keystrokeFx,
+  matchOptions,
+  disabled,
+  reduceMotion = false,
+}: PromptDisplayProps) {
   const cursorIndex = input.length;
   const shakeWordStart =
     !reduceMotion && keystrokeFx?.correct === false ? findWordStartIndex(prompt, keystrokeFx.index) : null;
@@ -115,6 +135,7 @@ export function PromptDisplay({ prompt, input, keystrokeFx, disabled, reduceMoti
                 input={input}
                 cursorIndex={cursorIndex}
                 keystrokeFx={keystrokeFx}
+                matchOptions={matchOptions}
                 reduceMotion={reduceMotion}
               />
             ))}
@@ -125,6 +146,7 @@ export function PromptDisplay({ prompt, input, keystrokeFx, disabled, reduceMoti
                 input={input}
                 cursorIndex={cursorIndex}
                 keystrokeFx={keystrokeFx}
+                matchOptions={matchOptions}
                 reduceMotion={reduceMotion}
               />
             ) : null}

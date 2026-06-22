@@ -1,3 +1,6 @@
+import type { MatchOptions } from "@/lib/type-racer/matching";
+import { charsMatch } from "@/lib/type-racer/matching";
+
 export type TypeRacerStats = {
   wpm: number;
   rawWpm: number;
@@ -7,12 +10,17 @@ export type TypeRacerStats = {
   elapsedMs: number;
 };
 
-export function computeStats(prompt: string, input: string, elapsedMs: number): TypeRacerStats {
+export function computeStats(
+  prompt: string,
+  input: string,
+  elapsedMs: number,
+  matchOptions: MatchOptions,
+): TypeRacerStats {
   const totalTyped = input.length;
   let correctChars = 0;
 
   for (let i = 0; i < totalTyped; i++) {
-    if (input[i] === prompt[i]) {
+    if (charsMatch(input[i], prompt[i], matchOptions)) {
       correctChars++;
     }
   }

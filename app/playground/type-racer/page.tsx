@@ -19,7 +19,8 @@ export default function TypeRacerPage() {
         header={{
           eyebrow: "Playground",
           title: "Type Racer",
-          description: "Type as many words as you can before the timer runs out. Best scores save in your browser.",
+          description:
+            "Type random words, a sentence, or a short paragraph. Track WPM and accuracy — best scores save in your browser.",
         }}
       >
         <TypeRacerGame />

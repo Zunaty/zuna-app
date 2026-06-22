@@ -26,7 +26,7 @@ export default function PlaygroundPage() {
           <StaggerItem>
             <PlaygroundGameCard
               title="Type Racer"
-              description="Timed typing test with random words. Track WPM and accuracy — 30 or 60 second runs."
+              description="Timed typing tests — random words, sentences, or paragraphs with WPM and accuracy scoring."
               href="/playground/type-racer"
               status="live"
             />

@@ -1,0 +1,9 @@
+/** Short passages — 2–4 sentences, public domain or original. */
+export const TYPE_RACER_PARAGRAPHS = [
+  "The morning brief was simple: clear the weather, file the plan, and fly the lesson. We launched into a smooth climb, ran the checklist by memory, and let the radios do their quiet work. On final, the runway looked shorter than it felt on the chart. A stable approach turned into a smooth touchdown and a grin you could not hide under the headset.",
+  "Every portfolio tells a story, but the best ones let the work speak first. Lead with outcomes, show the constraints, and explain the tradeoffs you made under pressure. Recruiters skim fast; give them a clear headline, a crisp visual, and one detail that proves you were in the room when decisions happened.",
+  "A reducer makes game state predictable because every transition passes through one function. You describe events, test the pure logic, and keep side effects at the edges. When the UI bugs appear, you replay the actions instead of guessing which hook fired twice.",
+  "Good typing practice is not about hitting keys faster; it is about reducing hesitation. Keep your eyes on the words ahead, trust your muscle memory, and let corrections happen without breaking rhythm. Accuracy first, then speed follows like a shadow.",
+  "Maps are interfaces for places you have never stood. A marker is not the territory, but the right projection and a thoughtful legend can still teach someone the shape of a journey. Zoom in for detail, zoom out for context, and animate between them when you want the story to land.",
+  "Testing pure functions is the cheapest confidence you can buy in a web app. Feed them inputs, assert the outputs, and leave the browser out of it until you must. When scoring logic is tested, the game feels fair even when the animations are flashy.",
+] as const;
