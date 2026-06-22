@@ -66,10 +66,10 @@ export function RoundStage({
             <p className="text-sm text-muted-foreground">Choose one option, or reroll / skip this category.</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" variant="outline" size="sm" onClick={onReroll} disabled={game.rerollCharges <= 0}>
-                Reroll options
+                Reroll
               </Button>
               <Button type="button" variant="ghost" size="sm" onClick={onSkip}>
-                Skip category
+                Skip
               </Button>
             </div>
           </div>

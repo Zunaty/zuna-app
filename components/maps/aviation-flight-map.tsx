@@ -72,26 +72,37 @@ function fitUtahBounds(map: Map): void {
   map.fitBounds(bounds, { padding: 56, maxZoom: 8, duration: 0 });
 }
 
-function animateRouteOpacity(map: Map, reduceMotion: boolean): void {
+function animateRouteOpacity(map: Map, reduceMotion: boolean): () => void {
   if (reduceMotion) {
     map.setPaintProperty(ROUTES_LAYER_ID, "line-opacity", 0.9);
-    return;
+    return () => {};
   }
 
   const durationMs = 900;
   const start = performance.now();
+  let frameId = 0;
+  let cancelled = false;
 
   const tick = (now: number) => {
+    if (cancelled || !map.getLayer(ROUTES_LAYER_ID)) {
+      return;
+    }
+
     const progress = Math.min((now - start) / durationMs, 1);
     map.setPaintProperty(ROUTES_LAYER_ID, "line-opacity", 0.15 + progress * 0.75);
 
     if (progress < 1) {
-      requestAnimationFrame(tick);
+      frameId = requestAnimationFrame(tick);
     }
   };
 
   map.setPaintProperty(ROUTES_LAYER_ID, "line-opacity", 0.15);
-  requestAnimationFrame(tick);
+  frameId = requestAnimationFrame(tick);
+
+  return () => {
+    cancelled = true;
+    cancelAnimationFrame(frameId);
+  };
 }
 
 export function AviationFlightMap() {
@@ -143,7 +154,7 @@ export function AviationFlightMap() {
       upsertGeoJsonSource(map, WAYPOINTS_SOURCE_ID, waypointCollection);
       ensureRouteLayers(map);
       fitUtahBounds(map);
-      animateRouteOpacity(map, reduceMotion ?? false);
+      const stopOpacityAnimation = animateRouteOpacity(map, reduceMotion ?? false);
 
       popupRef.current?.remove();
       popupRef.current = new mapboxgl.Popup({
@@ -207,6 +218,7 @@ export function AviationFlightMap() {
       map.on("click", WAYPOINTS_LAYER_ID, onWaypointClick);
 
       return () => {
+        stopOpacityAnimation();
         map.off("mousemove", ROUTES_LAYER_ID, onRouteMove);
         map.off("mouseleave", ROUTES_LAYER_ID, onRouteLeave);
         map.off("click", ROUTES_LAYER_ID, onRouteClick);

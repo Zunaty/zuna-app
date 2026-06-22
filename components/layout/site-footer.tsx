@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { comingSoonLinks, site, socialLinks } from "@/lib/data/site";
+import { navLinks, site, socialLinks } from "@/lib/data/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -11,6 +11,20 @@ export function SiteFooter() {
         <div>
           <p className="font-semibold text-foreground">{site.name}</p>
           <p className="mt-1 text-sm text-muted-foreground">{site.title}</p>
+          <p className="mt-3 text-sm text-muted-foreground">{site.tagline}</p>
+        </div>
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Site</p>
+          <ul className="mt-3 space-y-2 text-sm">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-muted-foreground transition-colors hover:text-foreground">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>
@@ -29,21 +43,13 @@ export function SiteFooter() {
               </li>
             ))}
             <li>
-              <Link href="/contact" className="text-muted-foreground transition-colors hover:text-foreground">
-                Contact
-              </Link>
+              <a
+                href={`mailto:${site.email}`}
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Email
+              </a>
             </li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Coming soon</p>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            {comingSoonLinks.map((link) => (
-              <li key={link.href}>
-                {link.label} — {link.description}
-              </li>
-            ))}
           </ul>
         </div>
       </div>
@@ -53,7 +59,7 @@ export function SiteFooter() {
           <p>
             © {year} {site.name}. Built with Next.js.
           </p>
-          <p>Interactive portfolio — achievements & games on the way.</p>
+          <p>Type Racer & Prompt Run live — achievements on the way.</p>
         </div>
       </div>
     </footer>

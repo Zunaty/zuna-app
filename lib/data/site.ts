@@ -33,9 +33,6 @@ export const navLinks = [
   { href: "/projects", label: "Projects" },
   { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
+  { href: "/playground", label: "Playground" },
   { href: "/explore", label: "Explore" },
-] as const;
-
-export const comingSoonLinks = [
-  { label: "Playground", href: "/playground", description: "Type Racer & mini-games" },
 ] as const;
