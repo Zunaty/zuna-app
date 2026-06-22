@@ -36,10 +36,7 @@ export function FeaturedProjects() {
 export function HomeSkills() {
   return (
     <section>
-      <SectionHeadingMotion
-        title="Skills"
-        description="The stack I reach for most often — and what this site is built to demonstrate."
-      />
+      <SectionHeadingMotion title="Skills" />
       <SkillsGrid staggerKey="home-skills" />
     </section>
   );

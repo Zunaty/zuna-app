@@ -44,20 +44,12 @@ export default function AboutPage() {
         <AviationFlightMapSection />
 
         <section className="mt-14">
-          <SectionHeadingMotion
-            title="Technical focus"
-            description="The stacks and domains I work in day to day — from product UI to auth, data, and automation."
-            className="mb-6 max-w-2xl"
-          />
+          <SectionHeadingMotion title="Technical focus" className="mb-6 max-w-2xl" />
           <SkillsGrid staggerKey="about-skills" />
         </section>
 
         <section className="mt-14">
-          <SectionHeadingMotion
-            title="Built with"
-            description="The libraries, services, and tooling running this portfolio — App Router on the front, Supabase and Mapbox where it counts, CI on every push."
-            className="mb-6 max-w-2xl"
-          />
+          <SectionHeadingMotion title="Built with" className="mb-6 max-w-2xl" />
           <SkillsGrid staggerKey="about-portfolio-stack" groups={portfolioStackGroups} />
         </section>
       </PageEnter>
