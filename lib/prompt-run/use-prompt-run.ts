@@ -36,7 +36,7 @@ import {
   saveActiveRun,
   saveBestRunIfBetter,
 } from "@/lib/prompt-run/storage";
-import type { Buff, PromptVariable, Round, ShopEvent, ShopItem } from "@/lib/prompt-run/types";
+import type { Buff, GeneratedImage, PromptVariable, Round, ShopEvent, ShopItem } from "@/lib/prompt-run/types";
 
 function createInitialState() {
   return createFreshModelState();
@@ -440,6 +440,10 @@ export function usePromptRun() {
     dispatch({ type: "PHASE_SET", phase: "overview" });
   }, []);
 
+  const setGeneratedImage = useCallback((image: GeneratedImage) => {
+    dispatch({ type: "SET_GENERATED_IMAGE", image });
+  }, []);
+
   const resetRun = useCallback(() => {
     clearActiveRun();
     dispatch({ type: "GAME_RESET" });
@@ -460,6 +464,7 @@ export function usePromptRun() {
     canAffordItem,
     canRefreshShop,
     continueToOverview,
+    setGeneratedImage,
     resetRun,
   };
 }

@@ -5,7 +5,7 @@ import {
   SPEED_BONUS_THRESHOLD,
 } from "@/lib/prompt-run/constants";
 import { createId } from "@/lib/prompt-run/round";
-import type { Game, Phase, Round, ShopItem } from "@/lib/prompt-run/types";
+import type { Game, GeneratedImage, Phase, Round, ShopItem } from "@/lib/prompt-run/types";
 
 export type PromptRunModelState = {
   game: Game;
@@ -35,7 +35,8 @@ export type PromptRunAction =
       willUnlockShop: boolean;
       nextShopItems: ShopItem[];
     }
-  | { type: "RESTORE"; state: PromptRunModelState };
+  | { type: "RESTORE"; state: PromptRunModelState }
+  | { type: "SET_GENERATED_IMAGE"; image: GeneratedImage };
 
 export function promptRunReducer(state: PromptRunModelState, action: PromptRunAction): PromptRunModelState {
   switch (action.type) {
@@ -149,6 +150,19 @@ export function promptRunReducer(state: PromptRunModelState, action: PromptRunAc
     }
     case "RESTORE": {
       return action.state;
+    }
+    case "SET_GENERATED_IMAGE": {
+      if (state.game.rounds.length === 0 || state.game.phase !== "generate") {
+        return state;
+      }
+      const lastIndex = state.game.rounds.length - 1;
+      const lastRound = state.game.rounds[lastIndex];
+      const updatedRounds = [...state.game.rounds];
+      updatedRounds[lastIndex] = { ...lastRound, generatedImage: action.image };
+      return {
+        ...state,
+        game: { ...state.game, rounds: updatedRounds },
+      };
     }
     default:
       return state;

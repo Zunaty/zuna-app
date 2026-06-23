@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePromptRun } from "@/lib/prompt-run/use-prompt-run";
 
-import { GeneratePanel, OverviewPanel, RoundStage } from "./round-stage";
+import { GeneratePanel } from "./generate-panel";
+import { OverviewPanel, RoundStage } from "./round-stage";
 
 export function PromptRunGame() {
   const {
@@ -21,6 +22,7 @@ export function PromptRunGame() {
     canAffordItem,
     canRefreshShop,
     continueToOverview,
+    setGeneratedImage,
     resetRun,
   } = usePromptRun();
 
@@ -60,7 +62,16 @@ export function PromptRunGame() {
   }
 
   if (game.phase === "generate") {
-    return <GeneratePanel prompt={assembledPrompt} rounds={game.rounds} onContinue={continueToOverview} />;
+    const lastRound = game.rounds[game.rounds.length - 1];
+    return (
+      <GeneratePanel
+        prompt={assembledPrompt}
+        rounds={game.rounds}
+        existingImage={lastRound?.generatedImage}
+        onImageGenerated={setGeneratedImage}
+        onContinue={continueToOverview}
+      />
+    );
   }
 
   if (game.phase === "overview") {

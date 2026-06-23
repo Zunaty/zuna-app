@@ -19,6 +19,13 @@ export type RoundCategory = {
   availableOptions: PromptVariable[];
 };
 
+export type GeneratedImage = {
+  url: string;
+  width?: number;
+  height?: number;
+  seed?: number;
+};
+
 export type Round = {
   id: string;
   roundNumber: number;
@@ -35,6 +42,7 @@ export type Round = {
   shopEvents?: ShopEvent[];
   scrapped: boolean;
   scrappedBonusAmount: number | null;
+  generatedImage?: GeneratedImage | null;
 };
 
 export type Buff = {

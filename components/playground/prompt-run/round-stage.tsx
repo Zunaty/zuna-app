@@ -3,7 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
+import { getGeneratedImageFilename } from "@/lib/prompt-run/download-image";
 import type { Game, Round, ShopItem } from "@/lib/prompt-run/types";
+
+import { DownloadImageButton } from "./download-image-button";
 
 import { CurrentRoundPicks, RunHistory } from "./run-history";
 import { PromptCard } from "./prompt-card";
@@ -95,36 +98,6 @@ export function RoundStage({
   );
 }
 
-type GeneratePanelProps = {
-  prompt: string;
-  rounds: Round[];
-  onContinue: () => void;
-};
-
-export function GeneratePanel({ prompt, rounds, onContinue }: GeneratePanelProps) {
-  const lastRoundId = rounds[rounds.length - 1]?.id ?? null;
-
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Your prompt</CardTitle>
-          <CardDescription>
-            Image generation ships in a later phase — preview the assembled prompt for now.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="rounded-lg border bg-muted/30 p-4 text-sm leading-relaxed">{prompt || "No prompt yet."}</p>
-          <Button type="button" onClick={onContinue}>
-            Continue to overview
-          </Button>
-        </CardContent>
-      </Card>
-      <RunHistory rounds={rounds} defaultExpandedRoundId={lastRoundId} title="This run" />
-    </div>
-  );
-}
-
 type OverviewPanelProps = {
   game: Game;
   prompt: string;
@@ -151,6 +124,24 @@ export function OverviewPanel({ game, prompt, onNextRound, onNewRun }: OverviewP
               Last round scored <span className="font-mono font-medium text-foreground">{lastRound.roundScore}</span>{" "}
               points.
             </p>
+          ) : null}
+          {lastRound?.generatedImage ? (
+            <div className="space-y-3">
+              <div className="overflow-hidden rounded-lg border bg-muted/20">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={lastRound.generatedImage.url}
+                  alt="Generated from your prompt"
+                  className="mx-auto max-h-[min(50vh,480px)] w-full object-contain"
+                  width={lastRound.generatedImage.width}
+                  height={lastRound.generatedImage.height}
+                />
+              </div>
+              <DownloadImageButton
+                url={lastRound.generatedImage.url}
+                filename={getGeneratedImageFilename(lastRound.roundNumber, lastRound.generatedImage.seed)}
+              />
+            </div>
           ) : null}
           <p className="rounded-lg border bg-muted/30 p-4 text-sm leading-relaxed">{prompt}</p>
           <div className="flex flex-wrap gap-3">
