@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 
+import { playRaritySound } from "@/lib/prompt-run/audio";
 import { assemblePrompt } from "@/lib/prompt-run/assemble-prompt";
+import { migratePromptRunState } from "@/lib/prompt-run/migrate-state";
 import {
   BONUS_REROLL_BASE_POINTS,
   FIRST_BONUS_RATIO,
@@ -13,15 +15,13 @@ import {
   SHOP_ITEM_COOLDOWN_ROUNDS,
   SHOP_REFRESH_BASE_COST,
   SHOP_UNLOCK_ROUND,
+  VOLUME_MAX,
+  VOLUME_MIN,
+  VOLUME_STEP,
 } from "@/lib/prompt-run/constants";
 import { promptRunReducer } from "@/lib/prompt-run/reducer";
 import { createCategoryOptions, createId, createRound } from "@/lib/prompt-run/round";
-import {
-  computePickScore,
-  finalizeRoundScore,
-  getStreakMultiplier,
-  nextStreakAfterPick,
-} from "@/lib/prompt-run/scoring";
+import { computePickScore, getStreakMultiplier, nextStreakAfterPick } from "@/lib/prompt-run/scoring";
 import {
   generateShopItems,
   getRerollChargeAmount,
@@ -35,6 +35,8 @@ import {
   getPromptRunSettings,
   saveActiveRun,
   saveBestRunIfBetter,
+  savePromptRunSettings,
+  type PromptRunSettings,
 } from "@/lib/prompt-run/storage";
 import type { Buff, GeneratedImage, PromptVariable, Round, ShopEvent, ShopItem } from "@/lib/prompt-run/types";
 
@@ -55,13 +57,14 @@ function expireBuffs(buffs: Buff[], completedRounds: number): Buff[] {
 export function usePromptRun() {
   const [model, dispatch] = useReducer(promptRunReducer, undefined, createInitialState);
   const { game, round } = model;
+  const [settings, setSettings] = useState<PromptRunSettings>(() => getPromptRunSettings());
   const [categorySequence] = useState<readonly string[]>(() => getPromptRunSettings().categorySequence);
   const skipInitialPersistence = useRef(true);
 
   useEffect(() => {
     const saved = getActiveRun();
     if (saved) {
-      dispatch({ type: "RESTORE", state: saved });
+      dispatch({ type: "RESTORE", state: migratePromptRunState(saved) });
     }
   }, []);
 
@@ -120,7 +123,6 @@ export function usePromptRun() {
     (finalRound: Round, streakUpdate: { streak: number; streakRecord: number }) => {
       const endTime = Date.now();
       const duration = endTime - finalRound.roundStartTime;
-      const finalScore = finalizeRoundScore(finalRound, duration);
       const nextCompletedRounds = game.completedRounds + 1;
 
       dispatch({
@@ -130,7 +132,6 @@ export function usePromptRun() {
           roundEndTime: endTime,
           roundDuration: duration,
           currentCategory: null,
-          roundScore: finalScore,
         },
         durationMs: duration,
         streakUpdate,
@@ -187,6 +188,8 @@ export function usePromptRun() {
         return;
       }
 
+      playRaritySound(selected.rarity, settings);
+
       const appliedMultiplier = getStreakMultiplier(game.streak);
       const pickScore = computePickScore(selected.points, game.streak);
       const newRoundScore = round.roundScore + pickScore;
@@ -232,7 +235,7 @@ export function usePromptRun() {
       dispatch({ type: "ROUND_UPDATE", round: updatedRound });
       dispatch({ type: "SET_STREAK", ...streakUpdate });
     },
-    [endRound, game.phase, game.streak, game.streakRecord, rerollChargeThresholds, round],
+    [endRound, game.phase, game.streak, game.streakRecord, rerollChargeThresholds, round, settings],
   );
 
   const skipCategory = useCallback(() => {
@@ -440,6 +443,14 @@ export function usePromptRun() {
     dispatch({ type: "PHASE_SET", phase: "overview" });
   }, []);
 
+  const scrapRound = useCallback(() => {
+    dispatch({ type: "SCRAP_ROUND" });
+  }, []);
+
+  const failGeneration = useCallback((message?: string) => {
+    dispatch({ type: "GENERATION_FAILED", message });
+  }, []);
+
   const setGeneratedImage = useCallback((image: GeneratedImage) => {
     dispatch({ type: "SET_GENERATED_IMAGE", image });
   }, []);
@@ -449,11 +460,56 @@ export function usePromptRun() {
     dispatch({ type: "GAME_RESET" });
   }, []);
 
+  const toggleMute = useCallback(() => {
+    setSettings((current) => {
+      const next = { ...current, isMuted: !current.isMuted };
+      savePromptRunSettings(next);
+      return next;
+    });
+  }, []);
+
+  const adjustVolume = useCallback((delta: number) => {
+    setSettings((current) => {
+      const volume = Math.round(Math.min(VOLUME_MAX, Math.max(VOLUME_MIN, current.volume + delta)) * 10) / 10;
+      const next = {
+        ...current,
+        volume,
+        isMuted: delta > 0 && volume > 0 ? false : current.isMuted,
+      };
+      savePromptRunSettings(next);
+      return next;
+    });
+  }, []);
+
+  const decreaseVolume = useCallback(() => {
+    adjustVolume(-VOLUME_STEP);
+  }, [adjustVolume]);
+
+  const increaseVolume = useCallback(() => {
+    adjustVolume(VOLUME_STEP);
+  }, [adjustVolume]);
+
+  const dismissOnboarding = useCallback(() => {
+    setSettings((current) => {
+      if (current.hasSeenOnboarding) {
+        return current;
+      }
+      const next = { ...current, hasSeenOnboarding: true };
+      savePromptRunSettings(next);
+      return next;
+    });
+  }, []);
+
+  const lastRound = game.rounds[game.rounds.length - 1];
+  const canScrap =
+    game.phase === "generate" && !lastRound?.scrapped && !lastRound?.generatedImage && !lastRound?.generationFailed;
+
   return {
     game,
     round,
     assembledPrompt,
     categorySequence,
+    settings,
     startRun,
     startRound,
     selectVariable,
@@ -464,7 +520,14 @@ export function usePromptRun() {
     canAffordItem,
     canRefreshShop,
     continueToOverview,
+    scrapRound,
+    failGeneration,
+    canScrap,
     setGeneratedImage,
     resetRun,
+    toggleMute,
+    decreaseVolume,
+    increaseVolume,
+    dismissOnboarding,
   };
 }

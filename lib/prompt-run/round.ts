@@ -57,5 +57,8 @@ export function createRound(params: {
     shopEvents: [],
     scrapped: false,
     scrappedBonusAmount: null,
+    generationFailed: false,
+    generationFailureBonusAmount: null,
+    generationFailureMessage: null,
   };
 }

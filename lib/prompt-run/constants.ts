@@ -1,6 +1,10 @@
 import type { Game, Phase, Shop, ShopItem } from "@/lib/prompt-run/types";
 
-export const MAX_ROUNDS = 7;
+export const MAX_ROUNDS = 3;
+
+export const VOLUME_MIN = 0;
+export const VOLUME_MAX = 1;
+export const VOLUME_STEP = 0.1;
 
 export const DEFAULT_CATEGORY_SEQUENCE = [
   "descriptors",

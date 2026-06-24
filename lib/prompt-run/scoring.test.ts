@@ -6,6 +6,7 @@ import {
   computePickScore,
   computeRoundBonuses,
   computeScrapBonus,
+  computeFailedGenerationBonus,
   finalizeRoundScore,
   getStreakMultiplier,
   nextStreakAfterPick,
@@ -54,7 +55,7 @@ describe("round bonuses", () => {
   });
 
   it("finalizes round score with bonuses", () => {
-    const score = finalizeRoundScore(
+    const result = finalizeRoundScore(
       {
         roundScore: 100,
         roundVariables: [variable("a", "legendary", 200)],
@@ -62,7 +63,18 @@ describe("round bonuses", () => {
       },
       20_000,
     );
-    expect(score).toBe(100 + 250 + 500 + 400);
+    expect(result.pickScore).toBe(100);
+    expect(result.finalScore).toBe(100 + 250 + 500 + 400);
+    expect(result.roundBonuses).toEqual({ speedBonus: 250, epicBonus: 400, perfectBonus: 500 });
+  });
+
+  it("withholds speed bonus when a category was skipped", () => {
+    const skippedCategories: RoundCategory[] = [
+      { id: "1", name: "descriptors", skipped: true, availableOptions: [] },
+      { id: "2", name: "subjects", skipped: false, availableOptions: [] },
+    ];
+    const bonuses = computeRoundBonuses([variable("a", "rare", 50)], skippedCategories, 20_000);
+    expect(bonuses.speedBonus).toBe(0);
   });
 });
 
@@ -77,5 +89,11 @@ describe("assemblePrompt", () => {
 describe("computeScrapBonus", () => {
   it("returns one third of round score floored", () => {
     expect(computeScrapBonus(301)).toBe(100);
+  });
+});
+
+describe("computeFailedGenerationBonus", () => {
+  it("returns double the scrap bonus", () => {
+    expect(computeFailedGenerationBonus(726)).toBe(484);
   });
 });

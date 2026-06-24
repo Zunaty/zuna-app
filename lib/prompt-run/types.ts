@@ -26,6 +26,12 @@ export type GeneratedImage = {
   seed?: number;
 };
 
+export type RoundBonusBreakdown = {
+  speedBonus: number;
+  epicBonus: number;
+  perfectBonus: number;
+};
+
 export type Round = {
   id: string;
   roundNumber: number;
@@ -42,6 +48,12 @@ export type Round = {
   shopEvents?: ShopEvent[];
   scrapped: boolean;
   scrappedBonusAmount: number | null;
+  generationFailed: boolean;
+  generationFailureBonusAmount: number | null;
+  generationFailureMessage?: string | null;
+  /** Pick score before round-end bonuses (speed / epic / perfect). */
+  pickScore?: number;
+  roundBonuses?: RoundBonusBreakdown;
   generatedImage?: GeneratedImage | null;
 };
 

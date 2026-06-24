@@ -10,15 +10,15 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Playground — games
 
-| Item                        | Status  | Route / notes                                                                                            |
-| --------------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)      |
-| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)   |
-| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                       |
-| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                 |
-| **Prompt Run**              | 🚧      | `/playground/prompt-run` — rounds, shop, history; AI later; [spec](../improvements/active/prompt-run.md) |
-| Prompt Run — AI images      | Planned | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited           |
-| Additional mini-games       | Ideas   | TBD — backlog as ideas land                                                                              |
+| Item                        | Status | Route / notes                                                                                                       |
+| --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅     | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)                 |
+| Type Racer — words polish   | ✅     | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)              |
+| Type Racer — sentence mode  | ✅     | Curated one-liners                                                                                                  |
+| Type Racer — paragraph mode | ✅     | Short passages, 120s cap                                                                                            |
+| **Prompt Run**              | 🚧     | `/playground/prompt-run` — rounds, shop, generate; polish in progress; [spec](../improvements/active/prompt-run.md) |
+| Prompt Run — AI images      | ✅     | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                      |
+| Additional mini-games       | Ideas  | TBD — backlog as ideas land                                                                                         |
 
 ## Playground — platform
 
@@ -28,7 +28,7 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 | Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run active run + best score |
 | Saved scores to Supabase      | Planned | Profile stats, optional leaderboard                        |
 | Shared achievements           | Planned | Cross-game; never gates portfolio content                  |
-| Game audio                    | Planned | Prompt Run first                                           |
+| Game audio                    | Partial | Prompt Run rarity sounds + mute toggle                     |
 
 ## Explore
 

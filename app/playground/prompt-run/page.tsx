@@ -20,7 +20,7 @@ export default function PromptRunPage() {
           eyebrow: "Playground",
           title: "Prompt Run",
           description:
-            "Draft through prompt categories, chase rarity streaks, and build a run-long prompt. AI image generation ships in a later phase.",
+            "Draft through prompt categories, chase rarity streaks, spend in the shop, then generate AI art from your assembled prompt.",
         }}
       >
         <PromptRunGame />

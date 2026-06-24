@@ -5,11 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getGeneratedImageFilename } from "@/lib/prompt-run/download-image";
+import { computeFailedGenerationBonus, computeScrapBonus } from "@/lib/prompt-run/scoring";
 import type { GeneratedImage, Round } from "@/lib/prompt-run/types";
 import { cn } from "@/lib/utils";
 
-import { DownloadImageButton } from "./download-image-button";
 import { RunHistory } from "./run-history";
 
 type GenerateResponse = {
@@ -25,17 +24,30 @@ type GeneratePanelProps = {
   existingImage?: GeneratedImage | null;
   onImageGenerated: (image: GeneratedImage) => void;
   onContinue: () => void;
+  onScrap: () => void;
+  onGenerationFailed: (message: string) => void;
+  canScrap: boolean;
 };
 
-export function GeneratePanel({ prompt, rounds, existingImage, onImageGenerated, onContinue }: GeneratePanelProps) {
+export function GeneratePanel({
+  prompt,
+  rounds,
+  existingImage,
+  onImageGenerated,
+  onContinue,
+  onScrap,
+  onGenerationFailed,
+  canScrap,
+}: GeneratePanelProps) {
   const lastRoundId = rounds[rounds.length - 1]?.id ?? null;
   const [generationEnabled, setGenerationEnabled] = useState<boolean | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [truncated, setTruncated] = useState(false);
 
   const image = existingImage ?? null;
-  const lastRoundNumber = rounds[rounds.length - 1]?.roundNumber;
+  const lastRoundScore = rounds[rounds.length - 1]?.roundScore ?? 0;
+  const scrapBonus = computeScrapBonus(lastRoundScore);
+  const failedGenerationBonus = computeFailedGenerationBonus(lastRoundScore);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,13 +78,19 @@ export function GeneratePanel({ prompt, rounds, existingImage, onImageGenerated,
     };
   }, []);
 
+  const handleGenerationFailure = useCallback(
+    (message: string) => {
+      onGenerationFailed(message);
+    },
+    [onGenerationFailed],
+  );
+
   const generateImage = useCallback(async () => {
     if (!prompt.trim() || isGenerating) {
       return;
     }
 
     setIsGenerating(true);
-    setError(null);
     setTruncated(false);
 
     try {
@@ -85,13 +103,13 @@ export function GeneratePanel({ prompt, rounds, existingImage, onImageGenerated,
       const data = (await response.json()) as GenerateResponse;
 
       if (!response.ok) {
-        setError(data.error ?? "Failed to generate image.");
+        handleGenerationFailure(data.error ?? "Failed to generate image.");
         return;
       }
 
       const firstImage = data.images[0];
       if (!firstImage) {
-        setError("No image was returned.");
+        handleGenerationFailure("No image was returned.");
         return;
       }
 
@@ -104,19 +122,20 @@ export function GeneratePanel({ prompt, rounds, existingImage, onImageGenerated,
 
       setTruncated(Boolean(data.truncated));
       onImageGenerated(generated);
+      onContinue();
     } catch {
-      setError("Failed to generate image.");
+      handleGenerationFailure("Failed to generate image.");
     } finally {
       setIsGenerating(false);
     }
-  }, [isGenerating, onImageGenerated, prompt]);
+  }, [handleGenerationFailure, isGenerating, onContinue, onImageGenerated, prompt]);
 
   const statusMessage =
     generationEnabled === null
       ? "Checking generation availability…"
       : generationEnabled
-        ? "Generate an image from your assembled prompt with FLUX.2 Turbo."
-        : "Image generation is unavailable — add FAL_KEY to enable it.";
+        ? "Generate an image from your assembled prompt, or scrap it for bonus points."
+        : "Image generation is unavailable — scrap your prompt to continue.";
 
   return (
     <div className="space-y-6">
@@ -134,59 +153,52 @@ export function GeneratePanel({ prompt, rounds, existingImage, onImageGenerated,
             </p>
           ) : null}
 
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
-
-          {image && !isGenerating ? (
-            <div className="space-y-3">
-              <div className="overflow-hidden rounded-lg border bg-muted/20">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={image.url}
-                  alt="Generated from your prompt"
-                  className="mx-auto max-h-[min(70vh,640px)] w-full object-contain"
-                  width={image.width}
-                  height={image.height}
-                />
+          <div
+            className={cn(
+              "flex min-h-48 items-center justify-center rounded-lg border border-dashed bg-muted/10",
+              isGenerating && "animate-pulse",
+            )}
+          >
+            {isGenerating ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="size-4 animate-spin" />
+                Generating image…
               </div>
-              <DownloadImageButton url={image.url} filename={getGeneratedImageFilename(lastRoundNumber, image.seed)} />
-            </div>
-          ) : (
-            <div
-              className={cn(
-                "flex min-h-48 items-center justify-center rounded-lg border border-dashed bg-muted/10",
-                isGenerating && "animate-pulse",
-              )}
-            >
-              {isGenerating ? (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin" />
-                  Generating image…
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No image yet.</p>
-              )}
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-muted-foreground">Your image will appear on the overview after generation.</p>
+            )}
+          </div>
 
           <div className="flex flex-wrap gap-3">
-            {generationEnabled ? (
+            {generationEnabled && !image ? (
               <Button type="button" onClick={() => void generateImage()} disabled={!prompt.trim() || isGenerating}>
                 {isGenerating ? (
                   <>
                     <Loader2 className="size-4 animate-spin" />
                     Generating…
                   </>
-                ) : image ? (
-                  "Regenerate"
                 ) : (
                   "Generate image"
                 )}
               </Button>
             ) : null}
-            <Button type="button" variant={generationEnabled ? "outline" : "default"} onClick={onContinue}>
-              Continue to overview
-            </Button>
+            {canScrap && !image ? (
+              <Button
+                type="button"
+                variant={generationEnabled ? "outline" : "default"}
+                onClick={onScrap}
+                disabled={isGenerating}
+              >
+                Scrap prompt (+{scrapBonus} pts)
+              </Button>
+            ) : null}
           </div>
+          {canScrap && !image ? (
+            <p className="text-xs text-muted-foreground">
+              Scrapping skips generation and awards one-third of the round score as bonus points. Your streak resets. If
+              generation fails, you earn double that amount (+{failedGenerationBonus} pts) and continue to the overview.
+            </p>
+          ) : null}
         </CardContent>
       </Card>
       <RunHistory rounds={rounds} defaultExpandedRoundId={lastRoundId} title="This run" />

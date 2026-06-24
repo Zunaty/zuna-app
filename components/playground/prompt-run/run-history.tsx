@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import { formatRoundDuration } from "@/lib/prompt-run/format";
+import { computeRoundBonuses, getPickPointsEarned } from "@/lib/prompt-run/scoring";
 import type { PromptVariable, Rarity, Round } from "@/lib/prompt-run/types";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,9 @@ type RunHistoryProps = {
 };
 
 function PickRow({ variable }: { variable: PromptVariable }) {
+  const earned = getPickPointsEarned(variable);
+  const hasStreakBonus = earned > variable.points;
+
   return (
     <li className="flex items-center justify-between gap-3 rounded-md border bg-muted/20 px-3 py-2 text-sm">
       <div className="min-w-0">
@@ -43,9 +47,53 @@ function PickRow({ variable }: { variable: PromptVariable }) {
         <span className={cn("font-medium uppercase tracking-wide", RARITY_CLASS[variable.rarity])}>
           {RARITY_LABEL[variable.rarity]}
         </span>
-        <span className="font-mono text-muted-foreground">+{variable.points}</span>
+        <span className="font-mono text-muted-foreground">
+          +{earned}
+          {hasStreakBonus ? <span className="text-amber-600 dark:text-amber-400">*</span> : null}
+        </span>
       </div>
     </li>
+  );
+}
+
+function RoundBonusRows({ round }: { round: Round }) {
+  const bonuses =
+    round.roundBonuses ??
+    (round.roundDuration
+      ? computeRoundBonuses(round.roundVariables, round.roundCategories, round.roundDuration)
+      : null);
+
+  if (!bonuses) {
+    return null;
+  }
+
+  const rows = [
+    bonuses.speedBonus > 0 ? { label: "Speed bonus", points: bonuses.speedBonus } : null,
+    bonuses.epicBonus > 0 ? { label: "Epic round bonus", points: bonuses.epicBonus } : null,
+    bonuses.perfectBonus > 0 ? { label: "Perfect round bonus", points: bonuses.perfectBonus } : null,
+    round.scrappedBonusAmount ? { label: "Scrap bonus", points: round.scrappedBonusAmount } : null,
+    round.generationFailureBonusAmount
+      ? { label: "Failed generation bonus", points: round.generationFailureBonusAmount }
+      : null,
+  ].filter((row): row is { label: string; points: number } => row !== null);
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <li className="pt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">Round bonuses</li>
+      {rows.map((row) => (
+        <li
+          key={row.label}
+          className="flex items-center justify-between gap-3 rounded-md border border-dashed bg-muted/10 px-3 py-2 text-sm"
+        >
+          <span className="text-muted-foreground">{row.label}</span>
+          <span className="font-mono text-xs font-medium text-foreground">+{row.points}</span>
+        </li>
+      ))}
+    </>
   );
 }
 
@@ -64,6 +112,7 @@ function RoundHistoryItem({ round, defaultExpanded }: { round: Round; defaultExp
           {expanded ? <ChevronDown className="size-4 shrink-0" /> : <ChevronRight className="size-4 shrink-0" />}
           <span className="font-medium">Round {round.roundNumber}</span>
           {round.scrapped ? <span className="text-xs text-orange-600 dark:text-orange-400">Scrapped</span> : null}
+          {round.generationFailed ? <span className="text-xs text-destructive">Gen failed</span> : null}
         </div>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <span className="font-mono font-medium text-foreground">{round.roundScore} pts</span>
@@ -85,6 +134,7 @@ function RoundHistoryItem({ round, defaultExpanded }: { round: Round; defaultExp
               ))}
             </>
           ) : null}
+          <RoundBonusRows round={round} />
         </ul>
       ) : null}
     </div>

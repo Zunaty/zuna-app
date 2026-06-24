@@ -1,9 +1,5 @@
-import {
-  DEFAULT_GAME,
-  MAX_REROLL_CHARGES,
-  REROLL_CHARGES_PER_ROUND,
-  SPEED_BONUS_THRESHOLD,
-} from "@/lib/prompt-run/constants";
+import { DEFAULT_GAME, MAX_REROLL_CHARGES, REROLL_CHARGES_PER_ROUND } from "@/lib/prompt-run/constants";
+import { finalizeRoundScore, computeFailedGenerationBonus, computeScrapBonus } from "@/lib/prompt-run/scoring";
 import { createId } from "@/lib/prompt-run/round";
 import type { Game, GeneratedImage, Phase, Round, ShopItem } from "@/lib/prompt-run/types";
 
@@ -24,6 +20,7 @@ export type PromptRunAction =
   | { type: "SET_STREAK"; streak: number; streakRecord: number }
   | { type: "REROLL_CONSUME" }
   | { type: "SCRAP_ROUND" }
+  | { type: "GENERATION_FAILED"; message?: string }
   | { type: "SHOP_SET_ITEMS"; items: ShopItem[] }
   | { type: "TOTAL_SCORE_ADJUST"; delta: number }
   | { type: "PHASE_SET"; phase: Phase }
@@ -64,18 +61,24 @@ export function promptRunReducer(state: PromptRunModelState, action: PromptRunAc
       if (state.game.phase !== "round" || !state.round) {
         return state;
       }
-      const isSpeedBonus = action.durationMs / 1000 < SPEED_BONUS_THRESHOLD;
+      const { pickScore, roundBonuses, finalScore } = finalizeRoundScore(action.completedRound, action.durationMs);
+      const completedRound = {
+        ...action.completedRound,
+        pickScore,
+        roundBonuses,
+        roundScore: finalScore,
+      };
       return {
         game: {
           ...state.game,
-          totalScore: state.game.totalScore + action.completedRound.roundScore,
+          totalScore: state.game.totalScore + finalScore,
           completedRounds: state.game.completedRounds + 1,
           rerollCharges: Math.min(
             state.game.rerollCharges + REROLL_CHARGES_PER_ROUND + (action.completedRound.roundBonusRerolls || 0),
             MAX_REROLL_CHARGES,
           ),
-          speedBonusCount: state.game.speedBonusCount + (isSpeedBonus ? 1 : 0),
-          rounds: [...state.game.rounds, action.completedRound],
+          speedBonusCount: state.game.speedBonusCount + (roundBonuses.speedBonus > 0 ? 1 : 0),
+          rounds: [...state.game.rounds, completedRound],
           ...(action.streakUpdate
             ? { streak: action.streakUpdate.streak, streakRecord: action.streakUpdate.streakRecord }
             : {}),
@@ -102,13 +105,45 @@ export function promptRunReducer(state: PromptRunModelState, action: PromptRunAc
       }
       const lastIndex = state.game.rounds.length - 1;
       const lastRound = state.game.rounds[lastIndex];
-      const extraPoints = Math.floor(lastRound.roundScore / 3);
+      if (lastRound.scrapped || lastRound.generationFailed || lastRound.generatedImage) {
+        return state;
+      }
+      const extraPoints = computeScrapBonus(lastRound.roundScore);
       const updatedRounds = [...state.game.rounds];
       updatedRounds[lastIndex] = {
         ...lastRound,
         scrapped: true,
         roundScore: lastRound.roundScore + extraPoints,
         scrappedBonusAmount: extraPoints,
+      };
+      return {
+        ...state,
+        game: {
+          ...state.game,
+          totalScore: state.game.totalScore + extraPoints,
+          rounds: updatedRounds,
+          streak: 0,
+          phase: "overview",
+        },
+      };
+    }
+    case "GENERATION_FAILED": {
+      if (state.game.rounds.length === 0 || state.game.phase !== "generate") {
+        return state;
+      }
+      const lastIndex = state.game.rounds.length - 1;
+      const lastRound = state.game.rounds[lastIndex];
+      if (lastRound.scrapped || lastRound.generationFailed || lastRound.generatedImage) {
+        return state;
+      }
+      const extraPoints = computeFailedGenerationBonus(lastRound.roundScore);
+      const updatedRounds = [...state.game.rounds];
+      updatedRounds[lastIndex] = {
+        ...lastRound,
+        generationFailed: true,
+        generationFailureBonusAmount: extraPoints,
+        generationFailureMessage: action.message ?? null,
+        roundScore: lastRound.roundScore + extraPoints,
       };
       return {
         ...state,

@@ -1,4 +1,4 @@
-import { DEFAULT_CATEGORY_SEQUENCE, DEFAULT_GAME } from "@/lib/prompt-run/constants";
+import { DEFAULT_CATEGORY_SEQUENCE, DEFAULT_GAME, VOLUME_MAX, VOLUME_MIN } from "@/lib/prompt-run/constants";
 import type { PromptRunModelState } from "@/lib/prompt-run/reducer";
 import { createId } from "@/lib/prompt-run/round";
 
@@ -8,6 +8,7 @@ export type PromptRunSettings = {
   categorySequence: readonly string[];
   volume: number;
   isMuted: boolean;
+  hasSeenOnboarding: boolean;
 };
 
 export type PromptRunBestRun = {
@@ -26,6 +27,7 @@ const DEFAULT_SETTINGS: PromptRunSettings = {
   categorySequence: DEFAULT_CATEGORY_SEQUENCE,
   volume: 0.5,
   isMuted: false,
+  hasSeenOnboarding: false,
 };
 
 function defaultPayload(): StoragePayload {
@@ -61,6 +63,7 @@ function readStorage(): StoragePayload {
         ...DEFAULT_SETTINGS,
         ...data.settings,
         categorySequence: data.settings?.categorySequence ?? DEFAULT_CATEGORY_SEQUENCE,
+        volume: Math.min(VOLUME_MAX, Math.max(VOLUME_MIN, data.settings?.volume ?? DEFAULT_SETTINGS.volume)),
       },
       bestRun: data.bestRun ?? null,
       activeRun: data.activeRun ?? null,

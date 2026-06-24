@@ -1,4 +1,10 @@
+"use client";
+
+import { m } from "framer-motion";
+
 import type { PromptVariable, Rarity } from "@/lib/prompt-run/types";
+import { instantTransition, motionTransition } from "@/lib/motion/variants";
+import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 const RARITY_STYLES: Record<Rarity, string> = {
@@ -13,14 +19,22 @@ type PromptCardProps = {
   variable: PromptVariable;
   onSelect: (variable: PromptVariable) => void;
   disabled?: boolean;
+  animationIndex?: number;
 };
 
-export function PromptCard({ variable, onSelect, disabled }: PromptCardProps) {
+export function PromptCard({ variable, onSelect, disabled, animationIndex = 0 }: PromptCardProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <button
+    <m.button
       type="button"
       disabled={disabled}
       onClick={() => onSelect(variable)}
+      initial={reduceMotion ? false : { opacity: 0, y: 12, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={reduceMotion ? instantTransition : { ...motionTransition, delay: animationIndex * 0.05 }}
+      whileHover={reduceMotion || disabled ? undefined : { scale: 1.02 }}
+      whileTap={reduceMotion || disabled ? undefined : { scale: 0.98 }}
       className={cn(
         "flex min-h-28 flex-col justify-between rounded-xl border p-4 text-left transition-colors",
         "hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -31,6 +45,6 @@ export function PromptCard({ variable, onSelect, disabled }: PromptCardProps) {
       <span className="text-xs font-medium uppercase tracking-wider opacity-80">{variable.rarity}</span>
       <span className="text-lg font-semibold capitalize">{variable.name}</span>
       <span className="font-mono text-sm">{variable.points} pts</span>
-    </button>
+    </m.button>
   );
 }

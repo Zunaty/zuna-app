@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `playground`
-Last updated: `2026-06-22`
+Last updated: `2026-06-24` (polish pass)
 
 # Prompt Run — mini-game spec
 
@@ -46,7 +46,7 @@ Linked from `/playground` hub alongside Type Racer.
 3. **Score** — each pick awards points by rarity; streak multipliers apply for consecutive Rare+ picks. Round bonuses for speed, Epic+ sets, or all-Legendary perfect rounds.
 4. **Shop** (round 2+) — spend total score on Rare/Legendary variables or buffs (reroll charges, rarity boost). Refresh costs flat points.
 5. **Generate** — assembled prompt (round variables + shop purchases) is shown; player generates image(s) or scraps the prompt for bonus points.
-6. **Overview** — results, generated images, stats; continue to next round (max 7 per run) or start a new run.
+6. **Overview** — results, generated images, stats; continue to next round (max 3 per run) or start a new run.
 
 ### Phases
 
@@ -237,7 +237,7 @@ Each completed round in `game.rounds[]` stores full `roundVariables` (with `cate
 | --------------------------------- | -------------------------------- | ----------------------------------------------- |
 | Settings (category order, volume) | `localStorage` `zuna-prompt-run` | Already wired                                   |
 | **Active run** (resume)           | Same key, `activeRun`            | Game + in-progress round; restored on page load |
-| Best run score                    | Same key, `bestRun`              | Updated when a 7-round run finishes             |
+| Best run score                    | Same key, `bestRun`              | Updated when a 3-round run finishes             |
 | Completed run archive             | Not yet                          | Art Hero kept `roulette.games[]` in memory + DB |
 
 Guests can **pick up where they left off** in the same browser. Clearing site data loses the run.
@@ -332,15 +332,15 @@ Category: **Playground** / **Prompt Run** in [roadmap achievement table](../../p
 
 ## Rollout
 
-| Step              | Status  | Deliverable                                                   |
-| ----------------- | ------- | ------------------------------------------------------------- |
-| Spec              | Done    | This doc                                                      |
-| Game loop (no AI) | 🚧      | Round drafting + shop at `/playground/prompt-run`; AI pending |
-| Generate API      | Planned | `fal-ai/flux-2/turbo` route, env gate, rate limits            |
-| Polish            | Planned | Motion, audio, onboarding                                     |
-| Persist           | 🚧      | Active run + best score in localStorage; Supabase schema TBD  |
+| Step         | Status | Deliverable                                                  |
+| ------------ | ------ | ------------------------------------------------------------ |
+| Spec         | Done   | This doc                                                     |
+| Game loop    | ✅     | Round drafting + shop at `/playground/prompt-run`            |
+| Generate API | ✅     | `fal-ai/flux-2/turbo` route, env gate, rate limits           |
+| Polish       | 🚧     | Motion, audio, onboarding, live stats, scrap UX              |
+| Persist      | 🚧     | Active run + best score in localStorage; Supabase schema TBD |
 
-Build order: **game loop first** (playable without spend), then wire generation in Phase 6.
+Build order: **game loop + generation** (shipped), then **polish pass**, then Supabase sync in Phase 5.
 
 ## Open decisions
 
