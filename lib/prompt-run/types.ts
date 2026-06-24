@@ -1,5 +1,11 @@
 export type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
 
+export type PickFeedback = {
+  id: string;
+  points: number;
+  rarity: Rarity;
+};
+
 export type Phase = "fresh" | "round" | "generate" | "overview";
 
 export type PromptVariable = {

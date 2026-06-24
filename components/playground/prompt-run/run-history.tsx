@@ -36,22 +36,18 @@ function PickRow({ variable }: { variable: PromptVariable }) {
   const hasStreakBonus = earned > variable.points;
 
   return (
-    <li className="flex items-center justify-between gap-3 rounded-md border bg-muted/20 px-3 py-2 text-sm">
-      <div className="min-w-0">
-        <span className="font-medium capitalize">{variable.name}</span>
-        {variable.categoryName ? (
-          <span className="ml-2 text-xs text-muted-foreground">({variable.categoryName})</span>
-        ) : null}
-      </div>
-      <div className="flex shrink-0 items-center gap-2 text-xs">
-        <span className={cn("font-medium uppercase tracking-wide", RARITY_CLASS[variable.rarity])}>
-          {RARITY_LABEL[variable.rarity]}
-        </span>
-        <span className="font-mono text-muted-foreground">
-          +{earned}
-          {hasStreakBonus ? <span className="text-amber-600 dark:text-amber-400">*</span> : null}
-        </span>
-      </div>
+    <li className="grid items-center gap-x-3 rounded-md border bg-muted/20 px-3 py-2 text-sm [grid-template-columns:minmax(0,1fr)_6.5rem_5.75rem_3.25rem]">
+      <span className="truncate font-medium capitalize">{variable.name}</span>
+      <span className="truncate text-xs text-muted-foreground">
+        {variable.categoryName ? `(${variable.categoryName})` : "\u00a0"}
+      </span>
+      <span className={cn("truncate text-xs font-medium uppercase tracking-wide", RARITY_CLASS[variable.rarity])}>
+        {RARITY_LABEL[variable.rarity]}
+      </span>
+      <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">
+        +{earned}
+        {hasStreakBonus ? <span className="text-amber-600 dark:text-amber-400">*</span> : null}
+      </span>
     </li>
   );
 }

@@ -5,7 +5,7 @@ import { useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
-import { getBestRun } from "@/lib/prompt-run/storage";
+import { getBestRunSnapshot, subscribePromptRunStorage } from "@/lib/prompt-run/storage";
 
 import { GameSettingsBar, OnboardingDialog } from "./onboarding-dialog";
 
@@ -22,8 +22,6 @@ type StartScreenProps = {
   onDismissOnboarding: () => void;
 };
 
-const emptySubscribe = () => () => {};
-
 export function StartScreen({
   onStart,
   settings,
@@ -32,7 +30,7 @@ export function StartScreen({
   onVolumeUp,
   onDismissOnboarding,
 }: StartScreenProps) {
-  const bestRun = useSyncExternalStore(emptySubscribe, getBestRun, () => null);
+  const bestRun = useSyncExternalStore(subscribePromptRunStorage, getBestRunSnapshot, () => null);
   const [showOnboarding, setShowOnboarding] = useState(!settings.hasSeenOnboarding);
 
   const closeOnboarding = () => {

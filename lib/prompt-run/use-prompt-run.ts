@@ -38,7 +38,15 @@ import {
   savePromptRunSettings,
   type PromptRunSettings,
 } from "@/lib/prompt-run/storage";
-import type { Buff, GeneratedImage, PromptVariable, Round, ShopEvent, ShopItem } from "@/lib/prompt-run/types";
+import type {
+  Buff,
+  GeneratedImage,
+  PickFeedback,
+  PromptVariable,
+  Round,
+  ShopEvent,
+  ShopItem,
+} from "@/lib/prompt-run/types";
 
 function createInitialState() {
   return createFreshModelState();
@@ -59,6 +67,7 @@ export function usePromptRun() {
   const { game, round } = model;
   const [settings, setSettings] = useState<PromptRunSettings>(() => getPromptRunSettings());
   const [categorySequence] = useState<readonly string[]>(() => getPromptRunSettings().categorySequence);
+  const [pickFeedback, setPickFeedback] = useState<PickFeedback | null>(null);
   const skipInitialPersistence = useRef(true);
 
   useEffect(() => {
@@ -67,6 +76,20 @@ export function usePromptRun() {
       dispatch({ type: "RESTORE", state: migratePromptRunState(saved) });
     }
   }, []);
+
+  useEffect(() => {
+    if (!pickFeedback) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setPickFeedback(null);
+    }, 700);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [pickFeedback]);
 
   useEffect(() => {
     if (skipInitialPersistence.current) {
@@ -192,6 +215,7 @@ export function usePromptRun() {
 
       const appliedMultiplier = getStreakMultiplier(game.streak);
       const pickScore = computePickScore(selected.points, game.streak);
+      setPickFeedback({ id: createId(), points: pickScore, rarity: selected.rarity });
       const newRoundScore = round.roundScore + pickScore;
       const newStreak = nextStreakAfterPick(selected.rarity, game.streak);
       const newStreakRecord = Math.max(game.streakRecord, game.streak);
@@ -510,6 +534,7 @@ export function usePromptRun() {
     assembledPrompt,
     categorySequence,
     settings,
+    pickFeedback,
     startRun,
     startRound,
     selectVariable,

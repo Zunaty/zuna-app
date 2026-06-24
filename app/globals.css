@@ -76,3 +76,21 @@
 .mapbox-popup-theme .mapboxgl-popup-tip {
   @apply border-t-popover;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .prompt-run-rarity-shimmer {
+    animation: prompt-run-rarity-shimmer 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes prompt-run-rarity-shimmer {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px hsl(var(--primary) / 0.25),
+      0 0 18px 2px hsl(var(--primary) / 0.12);
+  }
+}

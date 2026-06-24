@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 import { SPEED_BONUS_THRESHOLD } from "@/lib/prompt-run/constants";
 import { formatElapsedSeconds } from "@/lib/prompt-run/format";
-import { cn } from "@/lib/utils";
+
+import { RoundStat } from "./round-stat";
 
 type LiveTimerProps = {
   startTime: number;
@@ -28,16 +29,16 @@ export function LiveTimer({ startTime, className }: LiveTimerProps) {
   const speedBonusActive = elapsedSeconds < SPEED_BONUS_THRESHOLD;
 
   return (
-    <div className={cn("text-right", className)}>
-      <p className="text-muted-foreground">Time</p>
-      <p className="font-mono text-lg font-semibold tabular-nums" aria-live="polite">
-        {formatElapsedSeconds(elapsedMs)}
-      </p>
-      {speedBonusActive ? (
-        <p className="text-xs text-amber-600 dark:text-amber-400">Speed bonus window</p>
-      ) : (
-        <p className="text-xs text-muted-foreground">Under {SPEED_BONUS_THRESHOLD}s for bonus</p>
-      )}
-    </div>
+    <RoundStat
+      className={className}
+      label="Time"
+      value={
+        <span className="font-mono tabular-nums" aria-live="polite">
+          {formatElapsedSeconds(elapsedMs)}
+        </span>
+      }
+      hint={speedBonusActive ? "Speed bonus window" : `Under ${SPEED_BONUS_THRESHOLD}s for bonus`}
+      hintClassName={speedBonusActive ? "text-amber-600 dark:text-amber-400" : "text-muted-foreground"}
+    />
   );
 }

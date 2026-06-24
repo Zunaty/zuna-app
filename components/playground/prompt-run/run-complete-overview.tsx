@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { m } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import { assemblePrompt } from "@/lib/prompt-run/assemble-prompt";
 import { getGeneratedImageFilename } from "@/lib/prompt-run/download-image";
 import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
 import type { Game, Round } from "@/lib/prompt-run/types";
+import { fadeInUp, instantTransition, motionTransition, staggerContainer } from "@/lib/motion/variants";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 
 import { DownloadImageButton } from "./download-image-button";
@@ -138,11 +140,18 @@ export function RunCompleteOverview({ game, onNewRun }: RunCompleteOverviewProps
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
+      <m.div
+        className="space-y-4"
+        variants={staggerContainer}
+        initial={reduceMotion ? false : "hidden"}
+        animate="visible"
+      >
         {game.rounds.map((round) => (
-          <RoundSummaryRow key={round.id} round={round} />
+          <m.div key={round.id} variants={fadeInUp} transition={reduceMotion ? instantTransition : motionTransition}>
+            <RoundSummaryRow round={round} />
+          </m.div>
         ))}
-      </div>
+      </m.div>
 
       <RunHistory rounds={game.rounds} title="Pick history" />
 

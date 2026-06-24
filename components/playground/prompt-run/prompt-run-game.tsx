@@ -8,6 +8,7 @@ import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
 import { GeneratePanel } from "./generate-panel";
 import { OnboardingDialog } from "./onboarding-dialog";
 import { OverviewPanel, RoundStage } from "./round-stage";
+import { PhaseMotion } from "./phase-motion";
 import { RunCompleteOverview } from "./run-complete-overview";
 import { StartScreen } from "./start-screen";
 
@@ -17,6 +18,7 @@ export function PromptRunGame() {
     round,
     assembledPrompt,
     settings,
+    pickFeedback,
     startRun,
     startRound,
     selectVariable,
@@ -46,8 +48,13 @@ export function PromptRunGame() {
     resetRun();
   };
 
+  const lastRound = game.rounds[game.rounds.length - 1];
+
+  let phaseKey: string = game.phase;
+  let content = null;
+
   if (game.phase === "fresh") {
-    return (
+    content = (
       <StartScreen
         onStart={startRun}
         settings={settings}
@@ -57,36 +64,29 @@ export function PromptRunGame() {
         onDismissOnboarding={dismissOnboarding}
       />
     );
-  }
-
-  if (game.phase === "round" && round) {
-    return (
-      <>
-        <RoundStage
-          game={game}
-          round={round}
-          volume={settings.volume}
-          isMuted={settings.isMuted}
-          onSelect={selectVariable}
-          onSkip={skipCategory}
-          onReroll={rerollCategory}
-          onPurchaseShopItem={purchaseShopItem}
-          onRefreshShop={refreshShop}
-          canAffordShopItem={canAffordItem}
-          canRefreshShop={canRefreshShop}
-          onToggleMute={toggleMute}
-          onVolumeDown={decreaseVolume}
-          onVolumeUp={increaseVolume}
-          onShowRules={() => setShowRules(true)}
-        />
-        <OnboardingDialog open={showRules} onClose={() => setShowRules(false)} />
-      </>
+  } else if (game.phase === "round" && round) {
+    content = (
+      <RoundStage
+        game={game}
+        round={round}
+        pickFeedback={pickFeedback}
+        volume={settings.volume}
+        isMuted={settings.isMuted}
+        onSelect={selectVariable}
+        onSkip={skipCategory}
+        onReroll={rerollCategory}
+        onPurchaseShopItem={purchaseShopItem}
+        onRefreshShop={refreshShop}
+        canAffordShopItem={canAffordItem}
+        canRefreshShop={canRefreshShop}
+        onToggleMute={toggleMute}
+        onVolumeDown={decreaseVolume}
+        onVolumeUp={increaseVolume}
+        onShowRules={() => setShowRules(true)}
+      />
     );
-  }
-
-  if (game.phase === "generate") {
-    const lastRound = game.rounds[game.rounds.length - 1];
-    return (
+  } else if (game.phase === "generate") {
+    content = (
       <GeneratePanel
         prompt={assembledPrompt}
         rounds={game.rounds}
@@ -98,14 +98,11 @@ export function PromptRunGame() {
         canScrap={canScrap}
       />
     );
-  }
-
-  if (game.phase === "overview" && showRunSummary && game.completedRounds >= MAX_ROUNDS) {
-    return <RunCompleteOverview game={game} onNewRun={handleNewRun} />;
-  }
-
-  if (game.phase === "overview") {
-    return (
+  } else if (game.phase === "overview" && showRunSummary && game.completedRounds >= MAX_ROUNDS) {
+    phaseKey = "run-summary";
+    content = <RunCompleteOverview game={game} onNewRun={handleNewRun} />;
+  } else if (game.phase === "overview") {
+    content = (
       <OverviewPanel
         game={game}
         prompt={assembledPrompt}
@@ -116,5 +113,14 @@ export function PromptRunGame() {
     );
   }
 
-  return null;
+  if (!content) {
+    return null;
+  }
+
+  return (
+    <>
+      <PhaseMotion phaseKey={phaseKey}>{content}</PhaseMotion>
+      {game.phase === "round" ? <OnboardingDialog open={showRules} onClose={() => setShowRules(false)} /> : null}
+    </>
+  );
 }

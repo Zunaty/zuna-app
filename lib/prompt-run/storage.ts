@@ -73,8 +73,40 @@ function readStorage(): StoragePayload {
   }
 }
 
+let cachedStorageRaw: string | null | undefined;
+let cachedBestRunSnapshot: PromptRunBestRun | null = null;
+
 function writeStorage(payload: StoragePayload): void {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  const raw = JSON.stringify(payload);
+  window.localStorage.setItem(STORAGE_KEY, raw);
+  cachedStorageRaw = raw;
+  cachedBestRunSnapshot = payload.bestRun;
+  window.dispatchEvent(new Event("prompt-run-storage-updated"));
+}
+
+export function subscribePromptRunStorage(onStoreChange: () => void): () => void {
+  const handler = () => onStoreChange();
+  window.addEventListener("prompt-run-storage-updated", handler);
+  window.addEventListener("storage", handler);
+  return () => {
+    window.removeEventListener("prompt-run-storage-updated", handler);
+    window.removeEventListener("storage", handler);
+  };
+}
+
+export function getBestRunSnapshot(): PromptRunBestRun | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(STORAGE_KEY);
+  if (raw === cachedStorageRaw) {
+    return cachedBestRunSnapshot;
+  }
+
+  cachedStorageRaw = raw;
+  cachedBestRunSnapshot = readStorage().bestRun;
+  return cachedBestRunSnapshot;
 }
 
 export function getPromptRunSettings(): PromptRunSettings {

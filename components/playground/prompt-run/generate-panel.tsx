@@ -2,11 +2,13 @@
 
 import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { m } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { computeFailedGenerationBonus, computeScrapBonus } from "@/lib/prompt-run/scoring";
 import type { GeneratedImage, Round } from "@/lib/prompt-run/types";
+import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 import { RunHistory } from "./run-history";
@@ -39,6 +41,7 @@ export function GeneratePanel({
   onGenerationFailed,
   canScrap,
 }: GeneratePanelProps) {
+  const reduceMotion = useReducedMotion();
   const lastRoundId = rounds[rounds.length - 1]?.id ?? null;
   const [generationEnabled, setGenerationEnabled] = useState<boolean | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -153,21 +156,35 @@ export function GeneratePanel({
             </p>
           ) : null}
 
-          <div
+          <m.div
             className={cn(
-              "flex min-h-48 items-center justify-center rounded-lg border border-dashed bg-muted/10",
-              isGenerating && "animate-pulse",
+              "relative flex min-h-48 items-center justify-center overflow-hidden rounded-lg border border-dashed bg-muted/10",
             )}
+            animate={
+              isGenerating && !reduceMotion
+                ? {
+                    borderColor: ["hsl(var(--border))", "hsl(var(--primary) / 0.45)", "hsl(var(--border))"],
+                  }
+                : undefined
+            }
+            transition={{ duration: 1.6, repeat: isGenerating ? Infinity : 0, ease: "easeInOut" }}
           >
             {isGenerating ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="size-4 animate-spin" />
-                Generating image…
+              <div className="flex flex-col items-center gap-3 text-sm text-muted-foreground">
+                {!reduceMotion ? (
+                  <m.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
+                  />
+                ) : null}
+                <Loader2 className="relative size-5 animate-spin" />
+                <span className="relative">Generating image…</span>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">Your image will appear on the overview after generation.</p>
             )}
-          </div>
+          </m.div>
 
           <div className="flex flex-wrap gap-3">
             {generationEnabled && !image ? (

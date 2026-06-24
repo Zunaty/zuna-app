@@ -1,11 +1,15 @@
 "use client";
 
 import { RefreshCw, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { m } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SHOP_REFRESH_BASE_COST, SHOP_UNLOCK_ROUND } from "@/lib/prompt-run/constants";
 import type { Game, Round, ShopItem } from "@/lib/prompt-run/types";
+import { springTransition } from "@/lib/motion/variants";
+import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 type ShopPanelProps = {
@@ -105,6 +109,9 @@ function ShopItemCard({
   canAfford: boolean;
   onPurchase: () => void;
 }) {
+  const reduceMotion = useReducedMotion();
+  const [purchasedFlash, setPurchasedFlash] = useState(false);
+
   if (item.isOnCooldown) {
     const roundsLeft = Math.max(0, (item.cooldownEndRound ?? 0) - game.completedRounds);
     return (
@@ -120,17 +127,36 @@ function ShopItemCard({
   const label = item.type === "variable" ? item.variable?.name : item.name;
   const affordable = canAfford && !disabled;
 
+  const handlePurchase = () => {
+    if (!affordable) {
+      return;
+    }
+    onPurchase();
+    if (!reduceMotion) {
+      setPurchasedFlash(true);
+      window.setTimeout(() => setPurchasedFlash(false), 500);
+    }
+  };
+
   return (
-    <div className={cn("flex flex-col rounded-lg border p-4", RARITY_CLASS[item.rarity])}>
+    <m.div
+      className={cn(
+        "flex flex-col rounded-lg border p-4",
+        RARITY_CLASS[item.rarity],
+        purchasedFlash && "ring-2 ring-primary/60",
+      )}
+      animate={purchasedFlash && !reduceMotion ? { scale: [1, 1.04, 1] } : { scale: 1 }}
+      transition={springTransition}
+    >
       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{item.rarity}</p>
       <p className="mt-2 flex-1 text-sm font-medium capitalize">{label}</p>
       {item.description ? <p className="mt-1 text-xs text-muted-foreground">{item.description}</p> : null}
       <div className="mt-4 flex items-center justify-between gap-2">
         <span className="font-mono text-sm font-semibold">{item.price}</span>
-        <Button type="button" size="sm" disabled={!affordable} onClick={onPurchase}>
+        <Button type="button" size="sm" disabled={!affordable} onClick={handlePurchase}>
           {affordable ? (item.type === "variable" ? "Buy" : "Buy buff") : "Can't afford"}
         </Button>
       </div>
-    </div>
+    </m.div>
   );
 }

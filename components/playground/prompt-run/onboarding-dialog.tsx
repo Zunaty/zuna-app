@@ -219,6 +219,8 @@ type GameSettingsBarProps = {
   onVolumeUp: () => void;
   onToggleMute: () => void;
   onShowRules: () => void;
+  layout?: "inline" | "stacked";
+  className?: string;
 };
 
 export function GameSettingsBar({
@@ -228,15 +230,23 @@ export function GameSettingsBar({
   onVolumeUp,
   onToggleMute,
   onShowRules,
+  layout = "inline",
+  className,
 }: GameSettingsBarProps) {
   const [volumeOpen, setVolumeOpen] = useState(false);
 
   return (
     <>
-      <div className="flex items-center gap-1">
+      <div
+        className={cn(
+          "shrink-0",
+          layout === "stacked" ? "flex flex-col items-stretch gap-0.5" : "flex items-center gap-1",
+          className,
+        )}
+      >
         <Button type="button" variant="ghost" size="sm" onClick={onShowRules} aria-label="How to play">
           <HelpCircle className="size-4" />
-          <span className="sr-only sm:not-sr-only sm:ml-1.5">Rules</span>
+          <span className={cn(layout === "stacked" ? "ml-1.5" : "sr-only sm:not-sr-only sm:ml-1.5")}>Rules</span>
         </Button>
         <Button type="button" variant="ghost" size="sm" onClick={() => setVolumeOpen(true)} aria-label="Sound settings">
           {isMuted || volume <= 0 ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
