@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-22`
+Last updated: `2026-06-29`
 
 # Architecture overview
 
@@ -12,7 +12,7 @@ The `zuna-app` repository hosts **Victor Perez's public portfolio** — an inter
 
 ```
 Portfolio     →  who you are, projects, resume, contact
-Playground    →  games (Prompt Run, future mini-games)
+Playground    →  games (Type Racer, Prompt Run)
 Explore       →  API-driven demos (Pokédex, Star Wars, Mapbox geocoding)
 Lab           →  AI chat (later)
 Account       →  Supabase auth, saved progress, achievements
@@ -40,21 +40,21 @@ Account       →  Supabase auth, saved progress, achievements
 
 ## Stack
 
-| Layer     | Choice                                                             |
-| --------- | ------------------------------------------------------------------ |
-| Framework | Next.js 16, App Router                                             |
-| Language  | TypeScript 5, strict                                               |
-| UI        | Tailwind + shadcn/ui + lucide                                      |
-| Theme     | `next-themes`                                                      |
-| Motion    | Framer Motion — active                                             |
-| Particles | tsParticles — planned (hero, bursts)                               |
-| 3D        | Three.js + R3F — planned (Phase 4+)                                |
-| Auth + DB | Supabase (`@supabase/ssr`) — Phase 2                               |
-| AI        | Vercel AI SDK (chat); fal.ai FLUX.2 Turbo for Prompt Run — Phase 6 |
-| Maps      | Mapbox GL — planned (About aviation map, Explore geocoding)        |
-| Quality   | ESLint 9, Prettier, Husky, Vitest when needed                      |
+| Layer     | Choice                                                                       |
+| --------- | ---------------------------------------------------------------------------- |
+| Framework | Next.js 16, App Router                                                       |
+| Language  | TypeScript 5, strict                                                         |
+| UI        | Tailwind + shadcn/ui + lucide                                                |
+| Theme     | `next-themes`                                                                |
+| Motion    | Framer Motion — active                                                       |
+| Particles | tsParticles — planned (hero, bursts)                                         |
+| 3D        | Three.js + R3F — planned (Phase 4+)                                          |
+| Auth + DB | Supabase (`@supabase/ssr`) — Phase 2                                         |
+| AI        | Vercel AI SDK (chat — planned); fal.ai FLUX.2 Turbo for Prompt Run — shipped |
+| Maps      | Mapbox GL — aviation map on `/about`, geocoding on `/explore/geo`            |
+| Quality   | ESLint 9, Prettier, Husky, Vitest when needed                                |
 
-See [motion-and-3d.md](../improvements/active/motion-and-3d.md) for integration ideas and phasing. See [mapbox.md](../improvements/active/mapbox.md) for Mapbox specs.
+See [motion-and-3d.md](../improvements/active/motion-and-3d.md) for integration ideas and phasing. See [mapbox.md](../improvements/archive/2026/mapbox.md) for Mapbox specs (shipped).
 
 ## Auth
 

@@ -1,6 +1,8 @@
-Status: `active`
+> **Archived 2026-06-29** — Both features shipped. See [backlog](../../../product/backlog.md).
+
+Status: `archived`
 Scope: `portfolio` + `explore`
-Last updated: `2026-06-18`
+Last updated: `2026-06-29`
 
 # Mapbox — aviation map & geocoding explore
 
@@ -8,18 +10,18 @@ Two small Mapbox integrations: a **personal flight-history map** on About, and a
 
 ## Why Mapbox here
 
-- **About map** — ties Westminster / IFR background to something visual and personal; not a generic “pin on Contact.”
+- **About map** — ties Westminster / IFR background to something visual and personal; not a generic "pin on Contact."
 - **Explore demo** — same pattern as Pokédex and Star Wars: external API, polished UI, recruiter-visible code.
 - **Incremental** — flight routes are data you add over time; no need to catalog every leg before shipping v1.
 
 ## Features
 
-| Feature             | Zone      | Route                    | Status  |
-| ------------------- | --------- | ------------------------ | ------- |
-| Aviation flight map | Portfolio | `/about` (section embed) | Planned |
-| Geocoding fly-to    | Explore   | `/explore/geo`           | Planned |
+| Feature             | Zone      | Route                    | Status |
+| ------------------- | --------- | ------------------------ | ------ |
+| Aviation flight map | Portfolio | `/about` (section embed) | ✅     |
+| Geocoding fly-to    | Explore   | `/explore/geo`           | ✅     |
 
-See [backlog](../../product/backlog.md) for row-level status.
+See [backlog](../../../product/backlog.md) for row-level status.
 
 ---
 
@@ -35,7 +37,7 @@ Routes are **curated data**, not live ADS-B or logbook import — you add legs s
 
 - New section on `/about`, after the bio paragraphs and before **Technical focus** (or directly under the Westminster / aviation education bullet).
 - Fixed-height card (~280–360px), rounded border, matches existing card styling.
-- Optional one-line caption: e.g. “Most of my PIC time radiated out of Salt Lake — IFR training and cross-countries around Utah.”
+- Optional one-line caption: e.g. "Most of my PIC time radiated out of Salt Lake — IFR training and cross-countries around Utah."
 
 ### Seed routes (v1)
 
@@ -94,7 +96,7 @@ type FlightRoute = {
 
 Renderer expands `legs` into consecutive curved segments (A→B, B→C, …). Closing back to KSLC is explicit in the array, not implicit.
 
-### File layout (when built)
+### File layout
 
 ```text
 lib/data/flight-routes.ts          # waypoints + routes — grow over time
@@ -113,7 +115,7 @@ app/about/page.tsx                 # embed AviationFlightMap section
 
 ### Concept
 
-Search for a place → server calls **Mapbox Geocoding API** → map flies (or jumps) camera to the result. Same “API playground” framing as Pokédex and Star Wars.
+Search for a place → server calls **Mapbox Geocoding API** → map flies (or jumps) camera to the result. Same "API playground" framing as Pokédex and Star Wars.
 
 ### Route
 
@@ -136,9 +138,9 @@ Linked from `/explore` hub as a third zone card.
 - Debounced search; clear button; recent searches in `sessionStorage` (optional v2).
 - **Reduced motion** — `jumpTo` instead of `flyTo`.
 - Loading spinner on input trailing edge.
-- Example placeholder: “Try: Salt Lake City, Nephi UT, St. George”.
+- Example placeholder: "Try: Salt Lake City, Nephi UT, St. George".
 
-### File layout (when built)
+### File layout
 
 ```text
 app/explore/geo/page.tsx
@@ -151,7 +153,7 @@ components/maps/mapbox-provider.tsx  # shared with aviation map
 
 ## Shared infrastructure
 
-### Dependencies (when built)
+### Dependencies
 
 - `mapbox-gl` + `react-map-gl` (or `mapbox-gl` only if keeping bundle smaller)
 - `@turf/great-circle` or `@turf/helpers` — curved aviation legs
@@ -175,10 +177,10 @@ Mapbox allows separate tokens per use; restrict by URL on the public token.
 
 ### Build order
 
-1. **Shared map shell** + env wiring + theme styles.
-2. **Aviation map** on About (static data only).
-3. **Explore geocoding** (API route + search UI).
-4. **Explore hub card** + architecture/backlog ✅ when both ship.
+1. **Shared map shell** + env wiring + theme styles. ✅
+2. **Aviation map** on About (static data only). ✅
+3. **Explore geocoding** (API route + search UI). ✅
+4. **Explore hub card** + architecture/backlog ✅ ✅
 
 ---
 
@@ -197,7 +199,7 @@ Compound routes are just longer `legs` arrays — the renderer connects each con
 
 ## References
 
-- [product/backlog.md](../../product/backlog.md) — feature rows
-- [architecture/overview.md](../../architecture/overview.md) — routes and stack
+- [product/backlog.md](../../../product/backlog.md) — feature rows
+- [architecture/overview.md](../../../architecture/overview.md) — routes and stack
 - Mapbox GL JS docs — styles, GeoJSON sources, `flyTo` / `jumpTo`
 - Mapbox Geocoding API — forward geocoding, `limit=1`

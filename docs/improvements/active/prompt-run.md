@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `playground`
-Last updated: `2026-06-24` (polish pass)
+Last updated: `2026-06-29`
 
 # Prompt Run — mini-game spec
 
@@ -225,20 +225,20 @@ Ported from Art Hero `RouletteHistory.tsx` / `History.tsx` — simplified for po
 | ------------------------ | ----------------------------------------------------------------------------------------- |
 | **During round**         | `CurrentRoundPicks` — picks so far with rarity + category                                 |
 | **Generate / Overview**  | `RunHistory` — expandable list of completed rounds, each with all picks, scores, duration |
-| **Future: start screen** | Archive of past completed runs (localStorage → Supabase)                                  |
+| **Future: start screen** | Ideas — completed-run archive (localStorage → Supabase)                                   |
 
 Each completed round in `game.rounds[]` stores full `roundVariables` (with `categoryName` on pick). Shop picks land in `shopVariables` when the shop ships.
 
 ## Persistence
 
-### Phase 1 — guest (implemented / in progress)
+### Phase 1 — guest ✅ shipped
 
-| Data                              | Storage                          | Notes                                           |
-| --------------------------------- | -------------------------------- | ----------------------------------------------- |
-| Settings (category order, volume) | `localStorage` `zuna-prompt-run` | Already wired                                   |
-| **Active run** (resume)           | Same key, `activeRun`            | Game + in-progress round; restored on page load |
-| Best run score                    | Same key, `bestRun`              | Updated when a 3-round run finishes             |
-| Completed run archive             | Not yet                          | Art Hero kept `roulette.games[]` in memory + DB |
+| Data                              | Storage                          | Notes                                                        |
+| --------------------------------- | -------------------------------- | ------------------------------------------------------------ |
+| Settings (category order, volume) | `localStorage` `zuna-prompt-run` | Wired; category order is storage-only (no UI editor yet)     |
+| **Active run** (resume)           | Same key, `activeRun`            | Game + in-progress round; restored on page load              |
+| Best run score                    | Same key, `bestRun`              | Updated when a 3-round run finishes                          |
+| Completed run archive             | Not yet                          | Optional follow-up — see [backlog](../../product/backlog.md) |
 
 Guests can **pick up where they left off** in the same browser. Clearing site data loses the run.
 
@@ -332,25 +332,27 @@ Category: **Playground** / **Prompt Run** in [roadmap achievement table](../../p
 
 ## Rollout
 
-| Step         | Status | Deliverable                                                  |
-| ------------ | ------ | ------------------------------------------------------------ |
-| Spec         | Done   | This doc                                                     |
-| Game loop    | ✅     | Round drafting + shop at `/playground/prompt-run`            |
-| Generate API | ✅     | `fal-ai/flux-2/turbo` route, env gate, rate limits           |
-| Polish       | 🚧     | Motion, audio, onboarding, live stats, scrap UX              |
-| Persist      | 🚧     | Active run + best score in localStorage; Supabase schema TBD |
+| Step          | Status  | Deliverable                                                             |
+| ------------- | ------- | ----------------------------------------------------------------------- |
+| Spec          | Done    | This doc                                                                |
+| Game loop     | ✅      | Round drafting + shop at `/playground/prompt-run`                       |
+| Generate API  | ✅      | `fal-ai/flux-2/turbo` route, env gate, rate limits                      |
+| Polish        | ✅      | Motion, audio, onboarding, live stats, scrap UX                         |
+| Guest persist | ✅      | Active run + best score + settings in localStorage                      |
+| Run archive   | Ideas   | Completed-run history on start screen                                   |
+| Supabase sync | Planned | Phase 5 — schema in [Phase 2](#phase-2--supabase-planned-phase-5) below |
 
-Build order: **game loop + generation** (shipped), then **polish pass**, then Supabase sync in Phase 5.
+Build order: **game loop + generation + polish + guest persist** (shipped), then optional run archive, then Supabase sync in Phase 5.
 
 ## Open decisions
 
-| Question               | Lean                                                    |
-| ---------------------- | ------------------------------------------------------- |
-| Default `image_size`   | `square_hd` in UI; expose aspect picker later           |
-| Images per request     | 1 for v1 (cost control)                                 |
-| Variable data source   | Static JSON banks in repo (no admin UI)                 |
-| Category customization | localStorage sequence editor (port from Art Hero)       |
-| Guest generate limits  | Strict server rate limit; localStorage is advisory only |
+| Question               | Lean                                                                |
+| ---------------------- | ------------------------------------------------------------------- |
+| Default `image_size`   | `square_hd` in UI; expose aspect picker later                       |
+| Images per request     | 1 for v1 (cost control)                                             |
+| Variable data source   | Static JSON banks in repo (no admin UI)                             |
+| Category customization | localStorage sequence (storage wired; UI editor optional follow-up) |
+| Guest generate limits  | Strict server rate limit; localStorage is advisory only             |
 
 ## Related
 

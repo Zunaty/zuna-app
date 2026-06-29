@@ -1,12 +1,14 @@
-Status: `active`
+> **Archived 2026-06-29** — Polish pass shipped. See [backlog](../../../product/backlog.md).
+
+Status: `archived`
 Scope: `playground`
-Last updated: `2026-06-22`
+Last updated: `2026-06-29`
 
 # Type Racer — words mode polish
 
 Polish pass for the shipped **30s / 60s words** modes before sentence and paragraph modes. Goal: feel closer to competitive typing sites (Monkeytype-style) without new game modes or persistence work.
 
-Parent spec: [type-racer.md](./type-racer.md) · Route: `/playground/type-racer`
+Parent spec: [type-racer.md](../../active/type-racer.md) · Route: `/playground/type-racer`
 
 ## Why this pass
 
@@ -22,14 +24,14 @@ This pass keeps scope on **words-30** and **words-60** only.
 
 ## Out of scope (later)
 
-| Item                           | Doc / phase                                          |
-| ------------------------------ | ---------------------------------------------------- |
-| Sentence mode                  | [type-racer.md](./type-racer.md) — Polish rollout    |
-| Paragraph mode                 | [type-racer.md](./type-racer.md) — Polish rollout    |
-| Strict mode (stop on error)    | [type-racer.md](./type-racer.md) — Open decisions    |
-| Case-insensitive word matching | Optional; defer unless it feels wrong in playtesting |
-| Supabase score sync            | [backlog](../../product/backlog.md) — Persist        |
-| Achievements                   | [type-racer.md](./type-racer.md) — Achievements      |
+| Item                           | Doc / phase                                                |
+| ------------------------------ | ---------------------------------------------------------- |
+| Sentence mode                  | [type-racer.md](../../active/type-racer.md) — shipped      |
+| Paragraph mode                 | [type-racer.md](../../active/type-racer.md) — shipped      |
+| Strict mode (stop on error)    | [type-racer.md](../../active/type-racer.md) — shipped      |
+| Case-insensitive word matching | Optional; defer unless it feels wrong in playtesting       |
+| Supabase score sync            | [backlog](../../../product/backlog.md) — Persist           |
+| Achievements                   | [type-racer.md](../../active/type-racer.md) — Achievements |
 
 ---
 
@@ -108,7 +110,7 @@ During `phase === "countdown"`, pressing **Enter** immediately transitions to th
 | Correct character   | Brief green pulse on the typed char                    | Instant color only (current) |
 | Incorrect character | Brief red shake on the **word** containing the mistake | Instant color only (current) |
 
-Use existing Framer Motion patterns from [motion-and-3d.md](./motion-and-3d.md): `useReducedMotion`, `springTransition` / `instantTransition`.
+Use existing Framer Motion patterns from [motion-and-3d.md](../../active/motion-and-3d.md): `useReducedMotion`, `springTransition` / `instantTransition`.
 
 ### Implementation notes
 
@@ -167,20 +169,18 @@ File: `lib/type-racer/scoring.test.ts` (or project test convention).
 | Step                     | Status | Deliverable          |
 | ------------------------ | ------ | -------------------- |
 | Spec                     | Done   | This doc             |
-| Timer on first keystroke | Done   | Reducer + hook       |
-| Live WPM / accuracy      | Done   | Header stats         |
-| Skip countdown (Enter)   | Done   | Key handler          |
-| Char / word motion       | Done   | `prompt-display.tsx` |
-| Restart shortcut         | Done   | Key handler          |
-| Copy fixes               | Done   | Results + hints      |
-| Scoring tests            | Done   | Vitest               |
-
-Mark rows ✅ in this doc and update [backlog](../../product/backlog.md) when the pass ships.
+| Timer on first keystroke | ✅     | Reducer + hook       |
+| Live WPM / accuracy      | ✅     | Header stats         |
+| Skip countdown (Enter)   | ✅     | Key handler          |
+| Char / word motion       | ✅     | `prompt-display.tsx` |
+| Restart shortcut         | ✅     | Key handler          |
+| Copy fixes               | ✅     | Results + hints      |
+| Scoring tests            | ✅     | Vitest               |
 
 ---
 
 ## Related
 
-- [type-racer.md](./type-racer.md) — full game spec, modes, scoring formulas
-- [motion-and-3d.md](./motion-and-3d.md) — Framer Motion conventions
-- [product/backlog.md](../../product/backlog.md) — playground wishlist
+- [type-racer.md](../../active/type-racer.md) — full game spec, modes, scoring formulas
+- [motion-and-3d.md](../../active/motion-and-3d.md) — Framer Motion conventions
+- [product/backlog.md](../../../product/backlog.md) — playground wishlist

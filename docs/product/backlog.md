@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-06-22` (prompt run rename)
+Last updated: `2026-06-29`
 
 # Feature backlog
 
@@ -10,35 +10,36 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Playground — games
 
-| Item                        | Status | Route / notes                                                                                                       |
-| --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
-| **Type Racer**              | ✅     | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)                 |
-| Type Racer — words polish   | ✅     | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/active/type-racer-polish.md)              |
-| Type Racer — sentence mode  | ✅     | Curated one-liners                                                                                                  |
-| Type Racer — paragraph mode | ✅     | Short passages, 120s cap                                                                                            |
-| **Prompt Run**              | 🚧     | `/playground/prompt-run` — rounds, shop, generate; polish in progress; [spec](../improvements/active/prompt-run.md) |
-| Prompt Run — AI images      | ✅     | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                      |
-| Additional mini-games       | Ideas  | TBD — backlog as ideas land                                                                                         |
+| Item                        | Status | Route / notes                                                                                                  |
+| --------------------------- | ------ | -------------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅     | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)            |
+| Type Racer — words polish   | ✅     | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/archive/2026/type-racer-polish.md)   |
+| Type Racer — sentence mode  | ✅     | Curated one-liners                                                                                             |
+| Type Racer — paragraph mode | ✅     | Short passages, 120s cap                                                                                       |
+| **Prompt Run**              | ✅     | `/playground/prompt-run` — rounds, shop, generate, motion, audio; [spec](../improvements/active/prompt-run.md) |
+| Prompt Run — AI images      | ✅     | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                 |
+| Prompt Run — run archive    | Ideas  | Completed-run history on start screen (localStorage); guest persist otherwise shipped                          |
+| Additional mini-games       | Ideas  | TBD — backlog as ideas land                                                                                    |
 
 ## Playground — platform
 
-| Item                          | Status  | Notes                                                      |
-| ----------------------------- | ------- | ---------------------------------------------------------- |
-| Playground hub                | ✅      | `/playground` — card grid linking to each game             |
-| Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run active run + best score |
-| Saved scores to Supabase      | Planned | Profile stats, optional leaderboard                        |
-| Shared achievements           | Planned | Cross-game; never gates portfolio content                  |
-| Game audio                    | Partial | Prompt Run rarity sounds + mute toggle                     |
+| Item                          | Status  | Notes                                                                      |
+| ----------------------------- | ------- | -------------------------------------------------------------------------- |
+| Playground hub                | ✅      | `/playground` — card grid linking to each game                             |
+| Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run settings, active run resume, best score |
+| Saved scores to Supabase      | Planned | Profile stats, optional leaderboard                                        |
+| Shared achievements           | Planned | Cross-game; never gates portfolio content                                  |
+| Game audio                    | ✅      | Prompt Run rarity sounds + mute/volume settings                            |
 
 ## Explore
 
-| Item                                         | Status  | Notes                                                                                    |
-| -------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| Pokédex — list, detail, filters              | ✅      | PokéAPI                                                                                  |
-| Pokédex — collection (favorite, caught, TCG) | ✅      | Guest favorites + auth sync                                                              |
-| Star Wars browse                             | ✅      | SWAPI                                                                                    |
-| Explore polish / motion                      | ✅      | Page enter, grid stagger, toggles on explore routes                                      |
-| **Geocoding fly-to**                         | Planned | `/explore/geo` — Mapbox Geocoding search + map; [spec](../improvements/active/mapbox.md) |
+| Item                                         | Status | Notes                                                                                          |
+| -------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| Pokédex — list, detail, filters              | ✅     | PokéAPI                                                                                        |
+| Pokédex — collection (favorite, caught, TCG) | ✅     | Guest favorites + auth sync                                                                    |
+| Star Wars browse                             | ✅     | SWAPI                                                                                          |
+| Explore polish / motion                      | ✅     | Page enter, grid stagger, toggles on explore routes                                            |
+| **Geocoding fly-to**                         | ✅     | `/explore/geo` — Mapbox Geocoding search + map; [spec](../improvements/archive/2026/mapbox.md) |
 
 ## Lab
 
@@ -48,12 +49,12 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Portfolio
 
-| Item                                                | Status  | Notes                                                                                                             |
-| --------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| Core pages (home, about, projects, resume, contact) | ✅      |                                                                                                                   |
-| Project case studies                                | Ideas   | Deeper per-project pages if desired                                                                               |
-| OG / SEO pass                                       | Partial | Metadata on main routes                                                                                           |
-| **Aviation flight map**                             | Planned | `/about` — KSLC hub, curved routes to Nephi, Fillmore, St. George, etc.; [spec](../improvements/active/mapbox.md) |
+| Item                                                | Status  | Notes                                                                              |
+| --------------------------------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| Core pages (home, about, projects, resume, contact) | ✅      |                                                                                    |
+| Project case studies                                | Ideas   | Deeper per-project pages if desired                                                |
+| OG / SEO pass                                       | Partial | Root `opengraph-image.tsx` + per-route metadata; no per-route OG images yet        |
+| **Aviation flight map**                             | ✅      | `/about` — KSLC hub, curved routes; [spec](../improvements/archive/2026/mapbox.md) |
 
 ## Motion & 3D
 
