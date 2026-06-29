@@ -1,5 +1,6 @@
-import type { TypeRacerMode } from "@/lib/type-racer/constants";
-import { roundAccuracy, roundWpm, type TypeRacerStats } from "@/lib/type-racer/scoring";
+import { TYPE_RACER_MODE_LABEL, TYPE_RACER_MODES, type TypeRacerMode } from "@/lib/type-racer/constants";
+import type { TypeRacerStats } from "@/lib/type-racer/scoring";
+import { roundAccuracy, roundWpm } from "@/lib/type-racer/scoring";
 
 const STORAGE_KEY = "zuna-type-racer-best";
 
@@ -62,4 +63,24 @@ export function saveBestScoreIfBetter(mode: TypeRacerMode, stats: TypeRacerStats
   };
   writeBestScores(next);
   return true;
+}
+
+export function getBestScoreHighlight(): string | null {
+  const scores = readBestScores();
+  let bestWpm = -1;
+  let bestMode: TypeRacerMode | null = null;
+
+  for (const mode of TYPE_RACER_MODES) {
+    const score = scores[mode];
+    if (score && score.wpm > bestWpm) {
+      bestWpm = score.wpm;
+      bestMode = mode;
+    }
+  }
+
+  if (!bestMode || bestWpm < 0) {
+    return null;
+  }
+
+  return `Personal best: ${bestWpm} WPM · ${TYPE_RACER_MODE_LABEL[bestMode]}`;
 }

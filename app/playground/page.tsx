@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
+import { PlaygroundHubGames } from "@/components/playground/playground-hub-games";
 import { PageEnter } from "@/components/motion/page-enter";
-import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
+import { StaggerChildren } from "@/components/motion/stagger-children";
 import { PageShell } from "@/components/layout/page-shell";
 import { site } from "@/lib/data/site";
 
@@ -23,22 +23,7 @@ export default function PlaygroundPage() {
         }}
       >
         <StaggerChildren className="grid gap-6 md:grid-cols-2" staggerKey="playground-games">
-          <StaggerItem>
-            <PlaygroundGameCard
-              title="Type Racer"
-              description="Timed typing tests — random words, sentences, or paragraphs with WPM and accuracy scoring."
-              href="/playground/type-racer"
-              status="live"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PlaygroundGameCard
-              title="Prompt Run"
-              description="Roguelike prompt builder — draft categories, shop for buffs, then generate art from your run."
-              href="/playground/prompt-run"
-              status="live"
-            />
-          </StaggerItem>
+          <PlaygroundHubGames />
         </StaggerChildren>
       </PageEnter>
     </PageShell>

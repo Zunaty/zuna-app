@@ -8,7 +8,7 @@ import {
   isPromptRunImageSize,
   normalizePrompt,
 } from "@/lib/prompt-run/generation";
-import { checkGenerationRateLimit } from "@/lib/prompt-run/rate-limit";
+import { buildGenerationRateLimitKey, checkGenerationRateLimit } from "@/lib/prompt-run/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
 function getClientIp(request: NextRequest): string {
@@ -67,9 +67,9 @@ export async function POST(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const rateLimitKey = user?.id ?? `guest:${getClientIp(request)}`;
+  const rateLimitKey = buildGenerationRateLimitKey(user?.id, getClientIp(request));
   const dailyLimit = user ? AUTH_GENERATION_DAILY_LIMIT : GUEST_GENERATION_DAILY_LIMIT;
-  const rateLimit = checkGenerationRateLimit(rateLimitKey, dailyLimit);
+  const rateLimit = await checkGenerationRateLimit(rateLimitKey, dailyLimit);
 
   if (!rateLimit.allowed) {
     return NextResponse.json(

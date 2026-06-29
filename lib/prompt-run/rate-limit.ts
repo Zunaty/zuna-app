@@ -1,3 +1,7 @@
+import { createHash } from "node:crypto";
+
+import { canUseSupabaseRateLimit, checkSupabaseGenerationRateLimit } from "@/lib/prompt-run/rate-limit-supabase";
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 type Bucket = {
@@ -14,7 +18,19 @@ export type RateLimitResult = {
   resetAt: number;
 };
 
-export function checkGenerationRateLimit(key: string, limit: number): RateLimitResult {
+export function hashGuestRateLimitIp(ip: string): string {
+  const salt = process.env.RATE_LIMIT_SALT ?? "zuna-prompt-run";
+  return createHash("sha256").update(`${salt}:${ip}`).digest("hex").slice(0, 32);
+}
+
+export function buildGenerationRateLimitKey(userId: string | null | undefined, ip: string): string {
+  if (userId) {
+    return userId;
+  }
+  return `guest:${hashGuestRateLimitIp(ip)}`;
+}
+
+export function checkInMemoryGenerationRateLimit(key: string, limit: number): RateLimitResult {
   const now = Date.now();
   const existing = buckets.get(key);
 
@@ -35,6 +51,18 @@ export function checkGenerationRateLimit(key: string, limit: number): RateLimitR
     limit,
     resetAt: existing.resetAt,
   };
+}
+
+export async function checkGenerationRateLimit(key: string, limit: number): Promise<RateLimitResult> {
+  if (canUseSupabaseRateLimit()) {
+    try {
+      return await checkSupabaseGenerationRateLimit(key, limit);
+    } catch (error) {
+      console.error("[prompt-run] Supabase rate limit failed; using in-memory fallback", error);
+    }
+  }
+
+  return checkInMemoryGenerationRateLimit(key, limit);
 }
 
 export function resetGenerationRateLimits(): void {

@@ -99,11 +99,49 @@ export type Database = {
         };
         Relationships: [];
       };
+      rate_limit_buckets: {
+        Row: {
+          bucket_key: string;
+          count: number;
+          reset_at: string;
+          scope: string;
+          updated_at: string;
+        };
+        Insert: {
+          bucket_key: string;
+          count?: number;
+          reset_at: string;
+          scope: string;
+          updated_at?: string;
+        };
+        Update: {
+          bucket_key?: string;
+          count?: number;
+          reset_at?: string;
+          scope?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
+      consume_rate_limit: {
+        Args: {
+          p_bucket_key: string;
+          p_limit: number;
+          p_scope: string;
+          p_window_seconds: number;
+        };
+        Returns: {
+          allowed: boolean;
+          limit_val: number;
+          remaining: number;
+          reset_at: string;
+        }[];
+      };
       delete_own_account: { Args: never; Returns: undefined };
     };
     Enums: {

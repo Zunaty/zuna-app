@@ -145,6 +145,15 @@ export function saveBestRunIfBetter(totalScore: number, completedRounds: number)
   return true;
 }
 
+export function getBestRunHighlight(): string | null {
+  const best = getBestRun();
+  if (!best) {
+    return null;
+  }
+
+  return `Personal best: ${best.totalScore.toLocaleString()} pts · ${best.completedRounds} rounds`;
+}
+
 export function getActiveRun(): PromptRunModelState | null {
   const active = readStorage().activeRun;
   if (!active || active.game.phase === "fresh") {

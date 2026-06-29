@@ -11,6 +11,7 @@ type PlaygroundGameCardProps = {
   href: string;
   status: "live" | "coming-soon";
   eyebrow?: string;
+  localStat?: string | null;
 };
 
 export function PlaygroundGameCard({
@@ -19,6 +20,7 @@ export function PlaygroundGameCard({
   href,
   status,
   eyebrow = "Mini-game",
+  localStat,
 }: PlaygroundGameCardProps) {
   const isLive = status === "live";
 
@@ -37,6 +39,7 @@ export function PlaygroundGameCard({
           </p>
           <CardTitle className="text-xl">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
+          {localStat ? <p className="text-sm font-medium text-primary/90">{localStat}</p> : null}
         </CardHeader>
         <CardContent className="mt-auto">
           {isLive ? (
