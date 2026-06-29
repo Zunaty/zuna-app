@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import { getModeDurationMs, TYPE_RACER_COUNTDOWN_START, type TypeRacerMode } from "@/lib/type-racer/constants";
 import { getMatchOptions, isStrictInputValid, promptsEqual } from "@/lib/type-racer/matching";
@@ -211,12 +211,30 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
   }
 }
 
-export function useTypeRacer(initialMode: TypeRacerMode = "words-60") {
+export type UseTypeRacerOptions = {
+  onPersonalBest?: (mode: TypeRacerMode, score: TypeRacerBestScore) => void;
+};
+
+export function useTypeRacer(initialMode: TypeRacerMode = "words-60", options?: UseTypeRacerOptions) {
   const [state, dispatch] = useReducer(reducer, initialMode, createInitialState);
+  const onPersonalBestRef = useRef(options?.onPersonalBest);
+  const prevPhaseRef = useRef<TypeRacerPhase>("idle");
+
+  useEffect(() => {
+    onPersonalBestRef.current = options?.onPersonalBest;
+  }, [options?.onPersonalBest]);
 
   useEffect(() => {
     dispatch({ type: "SET_MODE", mode: initialMode });
   }, [initialMode]);
+
+  useEffect(() => {
+    if (prevPhaseRef.current !== "finished" && state.phase === "finished" && state.isPersonalBest && state.bestScore) {
+      onPersonalBestRef.current?.(state.mode, state.bestScore);
+    }
+
+    prevPhaseRef.current = state.phase;
+  }, [state.phase, state.isPersonalBest, state.bestScore, state.mode]);
 
   useEffect(() => {
     if (state.phase !== "countdown") {

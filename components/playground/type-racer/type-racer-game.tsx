@@ -3,6 +3,8 @@
 import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
+
 import { CompetitiveSettings } from "@/components/playground/type-racer/competitive-settings";
 import { LiveStats } from "@/components/playground/type-racer/live-stats";
 import { ModePicker } from "@/components/playground/type-racer/mode-picker";
@@ -17,8 +19,11 @@ import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { useTypeRacer } from "@/lib/type-racer/use-type-racer";
 
 export function TypeRacerGame() {
+  const { persistTypeRacerBest } = usePlaygroundScoreContext();
   const { state, liveStats, matchOptions, setMode, setStrictMode, start, skipCountdown, setInput, reset } =
-    useTypeRacer();
+    useTypeRacer("words-60", {
+      onPersonalBest: (mode, score) => persistTypeRacerBest(mode, score),
+    });
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const lastTabAtRef = useRef(0);
   const keystrokeFxTimeoutRef = useRef<number | null>(null);

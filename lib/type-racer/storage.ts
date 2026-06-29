@@ -1,8 +1,11 @@
-import { TYPE_RACER_MODE_LABEL, TYPE_RACER_MODES, type TypeRacerMode } from "@/lib/type-racer/constants";
+import { formatTypeRacerHighlight } from "@/lib/playground/highlights";
+import { mergeTypeRacerScores } from "@/lib/playground/merge-scores";
+import type { TypeRacerMode } from "@/lib/type-racer/constants";
 import type { TypeRacerStats } from "@/lib/type-racer/scoring";
 import { roundAccuracy, roundWpm } from "@/lib/type-racer/scoring";
 
 const STORAGE_KEY = "zuna-type-racer-best";
+export const TYPE_RACER_STORAGE_EVENT = "type-racer-storage-updated";
 
 export type TypeRacerBestScore = {
   wpm: number;
@@ -36,6 +39,17 @@ function readBestScores(): TypeRacerBestScores {
 
 function writeBestScores(scores: TypeRacerBestScores): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+  window.dispatchEvent(new Event(TYPE_RACER_STORAGE_EVENT));
+}
+
+export function getAllBestScores(): TypeRacerBestScores {
+  return readBestScores();
+}
+
+export function mergeBestScoresIntoLocal(remote: TypeRacerBestScores): TypeRacerBestScores {
+  const merged = mergeTypeRacerScores(readBestScores(), remote);
+  writeBestScores(merged);
+  return merged;
 }
 
 export function getBestScore(mode: TypeRacerMode): TypeRacerBestScore | null {
@@ -65,22 +79,7 @@ export function saveBestScoreIfBetter(mode: TypeRacerMode, stats: TypeRacerStats
   return true;
 }
 
-export function getBestScoreHighlight(): string | null {
-  const scores = readBestScores();
-  let bestWpm = -1;
-  let bestMode: TypeRacerMode | null = null;
-
-  for (const mode of TYPE_RACER_MODES) {
-    const score = scores[mode];
-    if (score && score.wpm > bestWpm) {
-      bestWpm = score.wpm;
-      bestMode = mode;
-    }
-  }
-
-  if (!bestMode || bestWpm < 0) {
-    return null;
-  }
-
-  return `Personal best: ${bestWpm} WPM · ${TYPE_RACER_MODE_LABEL[bestMode]}`;
+export function getBestScoreHighlight(cloudScores?: TypeRacerBestScores): string | null {
+  const scores = cloudScores ? mergeTypeRacerScores(getAllBestScores(), cloudScores) : getAllBestScores();
+  return formatTypeRacerHighlight(scores);
 }

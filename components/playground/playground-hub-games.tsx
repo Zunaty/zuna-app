@@ -2,36 +2,40 @@
 
 import { useSyncExternalStore } from "react";
 
+import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
 import { StaggerItem } from "@/components/motion/stagger-children";
 import { getBestRunHighlight, subscribePromptRunStorage } from "@/lib/prompt-run/storage";
-import { getBestScoreHighlight } from "@/lib/type-racer/storage";
+import { getBestScoreHighlight, TYPE_RACER_STORAGE_EVENT } from "@/lib/type-racer/storage";
 
 function subscribeTypeRacerStorage(onStoreChange: () => void): () => void {
-  const handler = (event: StorageEvent) => {
-    if (event.key === "zuna-type-racer-best") {
-      onStoreChange();
-    }
-  };
-
+  const handler = () => onStoreChange();
+  window.addEventListener(TYPE_RACER_STORAGE_EVENT, handler);
   window.addEventListener("storage", handler);
-  return () => window.removeEventListener("storage", handler);
-}
-
-function getTypeRacerHighlightSnapshot(): string | null {
-  return getBestScoreHighlight();
-}
-
-function getPromptRunHighlightSnapshot(): string | null {
-  return getBestRunHighlight();
+  return () => {
+    window.removeEventListener(TYPE_RACER_STORAGE_EVENT, handler);
+    window.removeEventListener("storage", handler);
+  };
 }
 
 function useTypeRacerHighlight(): string | null {
-  return useSyncExternalStore(subscribeTypeRacerStorage, getTypeRacerHighlightSnapshot, () => null);
+  const { cloudScores } = usePlaygroundScoreContext();
+
+  return useSyncExternalStore(
+    subscribeTypeRacerStorage,
+    () => getBestScoreHighlight(cloudScores.typeRacer),
+    () => null,
+  );
 }
 
 function usePromptRunHighlight(): string | null {
-  return useSyncExternalStore(subscribePromptRunStorage, getPromptRunHighlightSnapshot, () => null);
+  const { cloudScores } = usePlaygroundScoreContext();
+
+  return useSyncExternalStore(
+    subscribePromptRunStorage,
+    () => getBestRunHighlight(cloudScores.promptRun),
+    () => null,
+  );
 }
 
 export function PlaygroundHubGames() {

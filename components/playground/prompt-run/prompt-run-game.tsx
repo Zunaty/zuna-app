@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 import { usePromptRun } from "@/lib/prompt-run/use-prompt-run";
 import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
 
@@ -13,6 +14,7 @@ import { RunCompleteOverview } from "./run-complete-overview";
 import { StartScreen } from "./start-screen";
 
 export function PromptRunGame() {
+  const { persistPromptRunBest } = usePlaygroundScoreContext();
   const {
     game,
     round,
@@ -38,7 +40,9 @@ export function PromptRunGame() {
     decreaseVolume,
     increaseVolume,
     dismissOnboarding,
-  } = usePromptRun();
+  } = usePromptRun({
+    onBestRunSaved: (best) => persistPromptRunBest(best),
+  });
 
   const [showRules, setShowRules] = useState(false);
   const [showRunSummary, setShowRunSummary] = useState(false);

@@ -99,6 +99,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      prompt_run_best_runs: {
+        Row: {
+          achieved_at: string;
+          completed_rounds: number;
+          total_score: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          achieved_at?: string;
+          completed_rounds: number;
+          total_score: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          achieved_at?: string;
+          completed_rounds?: number;
+          total_score?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       rate_limit_buckets: {
         Row: {
           bucket_key: string;
@@ -120,6 +144,36 @@ export type Database = {
           reset_at?: string;
           scope?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      type_racer_best_scores: {
+        Row: {
+          achieved_at: string;
+          accuracy: number;
+          id: string;
+          mode: string;
+          updated_at: string;
+          user_id: string;
+          wpm: number;
+        };
+        Insert: {
+          achieved_at?: string;
+          accuracy: number;
+          id?: string;
+          mode: string;
+          updated_at?: string;
+          user_id: string;
+          wpm: number;
+        };
+        Update: {
+          achieved_at?: string;
+          accuracy?: number;
+          id?: string;
+          mode?: string;
+          updated_at?: string;
+          user_id?: string;
+          wpm?: number;
         };
         Relationships: [];
       };

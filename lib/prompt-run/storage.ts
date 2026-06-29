@@ -1,8 +1,11 @@
 import { DEFAULT_CATEGORY_SEQUENCE, DEFAULT_GAME, VOLUME_MAX, VOLUME_MIN } from "@/lib/prompt-run/constants";
+import { formatPromptRunHighlight } from "@/lib/playground/highlights";
+import { mergePromptRunBest } from "@/lib/playground/merge-scores";
 import type { PromptRunModelState } from "@/lib/prompt-run/reducer";
 import { createId } from "@/lib/prompt-run/round";
 
 const STORAGE_KEY = "zuna-prompt-run";
+export const PROMPT_RUN_STORAGE_EVENT = "prompt-run-storage-updated";
 
 export type PromptRunSettings = {
   categorySequence: readonly string[];
@@ -81,15 +84,15 @@ function writeStorage(payload: StoragePayload): void {
   window.localStorage.setItem(STORAGE_KEY, raw);
   cachedStorageRaw = raw;
   cachedBestRunSnapshot = payload.bestRun;
-  window.dispatchEvent(new Event("prompt-run-storage-updated"));
+  window.dispatchEvent(new Event(PROMPT_RUN_STORAGE_EVENT));
 }
 
 export function subscribePromptRunStorage(onStoreChange: () => void): () => void {
   const handler = () => onStoreChange();
-  window.addEventListener("prompt-run-storage-updated", handler);
+  window.addEventListener(PROMPT_RUN_STORAGE_EVENT, handler);
   window.addEventListener("storage", handler);
   return () => {
-    window.removeEventListener("prompt-run-storage-updated", handler);
+    window.removeEventListener(PROMPT_RUN_STORAGE_EVENT, handler);
     window.removeEventListener("storage", handler);
   };
 }
@@ -145,13 +148,20 @@ export function saveBestRunIfBetter(totalScore: number, completedRounds: number)
   return true;
 }
 
-export function getBestRunHighlight(): string | null {
-  const best = getBestRun();
-  if (!best) {
-    return null;
+export function mergeBestRunIntoLocal(remote: PromptRunBestRun): PromptRunBestRun {
+  const merged = mergePromptRunBest(getBestRun(), remote);
+  if (!merged) {
+    return remote;
   }
 
-  return `Personal best: ${best.totalScore.toLocaleString()} pts · ${best.completedRounds} rounds`;
+  const current = readStorage();
+  writeStorage({ ...current, bestRun: merged });
+  return merged;
+}
+
+export function getBestRunHighlight(cloudBest?: PromptRunBestRun | null): string | null {
+  const best = cloudBest ? mergePromptRunBest(getBestRun(), cloudBest) : getBestRun();
+  return formatPromptRunHighlight(best);
 }
 
 export function getActiveRun(): PromptRunModelState | null {

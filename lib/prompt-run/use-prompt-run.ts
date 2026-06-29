@@ -32,10 +32,12 @@ import {
   clearActiveRun,
   createFreshModelState,
   getActiveRun,
+  getBestRun,
   getPromptRunSettings,
   saveActiveRun,
   saveBestRunIfBetter,
   savePromptRunSettings,
+  type PromptRunBestRun,
   type PromptRunSettings,
 } from "@/lib/prompt-run/storage";
 import type {
@@ -62,7 +64,17 @@ function expireBuffs(buffs: Buff[], completedRounds: number): Buff[] {
   });
 }
 
-export function usePromptRun() {
+export type UsePromptRunOptions = {
+  onBestRunSaved?: (best: PromptRunBestRun) => void;
+};
+
+export function usePromptRun(options?: UsePromptRunOptions) {
+  const onBestRunSavedRef = useRef(options?.onBestRunSaved);
+
+  useEffect(() => {
+    onBestRunSavedRef.current = options?.onBestRunSaved;
+  }, [options?.onBestRunSaved]);
+
   const [model, dispatch] = useReducer(promptRunReducer, undefined, createInitialState);
   const { game, round } = model;
   const [settings, setSettings] = useState<PromptRunSettings>(() => getPromptRunSettings());
@@ -103,7 +115,13 @@ export function usePromptRun() {
     }
 
     if (game.completedRounds >= MAX_ROUNDS && game.phase === "overview") {
-      saveBestRunIfBetter(game.totalScore, game.completedRounds);
+      const improved = saveBestRunIfBetter(game.totalScore, game.completedRounds);
+      if (improved) {
+        const best = getBestRun();
+        if (best) {
+          onBestRunSavedRef.current?.(best);
+        }
+      }
       clearActiveRun();
       return;
     }
