@@ -1,13 +1,18 @@
 import {
+  CircleDot,
   Compass,
   Crown,
   FileText,
   Flame,
   FolderOpen,
   Gamepad2,
+  Heart,
   ImageIcon,
   Keyboard,
+  Library,
   Mail,
+  Map as MapIcon,
+  MapPin,
   Medal,
   Plane,
   ScrollText,
@@ -30,6 +35,11 @@ export const ACHIEVEMENT_IDS = [
   "explore-grand-tour",
   "skills-filter",
   "skills-shuffle",
+  "pokedex-first-favorite",
+  "pokedex-first-catch",
+  "pokedex-collector",
+  "geo-first-flight",
+  "explore-field-trip",
   "type-first-run",
   "type-60-wpm",
   "type-perfect",
@@ -64,6 +74,8 @@ export type AchievementDefinition = {
   /** When set, this achievement unlocks automatically once all listed ids are unlocked. */
   requiredIds?: AchievementId[];
 };
+
+export const POKEDEX_COLLECTOR_TARGET = 10;
 
 export const ACHIEVEMENTS: Record<AchievementId, AchievementDefinition> = {
   "meta-sign-up": {
@@ -130,6 +142,47 @@ export const ACHIEVEMENTS: Record<AchievementId, AchievementDefinition> = {
     description: "Shuffle the skills grid at least once.",
     points: 10,
     icon: Shuffle,
+  },
+  "pokedex-first-favorite": {
+    id: "pokedex-first-favorite",
+    category: "explorer",
+    title: "Play favorites",
+    description: "Favorite a Pokémon in the Pokédex.",
+    points: 10,
+    icon: Heart,
+  },
+  "pokedex-first-catch": {
+    id: "pokedex-first-catch",
+    category: "explorer",
+    title: "Gotta start somewhere",
+    description: "Mark a Pokémon as caught in game.",
+    points: 10,
+    icon: CircleDot,
+  },
+  "pokedex-collector": {
+    id: "pokedex-collector",
+    category: "explorer",
+    title: "Collector",
+    description: `Add ${POKEDEX_COLLECTOR_TARGET} Pokémon to your collection.`,
+    points: 25,
+    icon: Library,
+  },
+  "geo-first-flight": {
+    id: "geo-first-flight",
+    category: "explorer",
+    title: "First flight",
+    description: "Search for a place and fly there on the map.",
+    points: 10,
+    icon: MapPin,
+  },
+  "explore-field-trip": {
+    id: "explore-field-trip",
+    category: "explorer",
+    title: "Field trip",
+    description: "Try both the Pokédex and the geocoding map.",
+    points: 15,
+    icon: MapIcon,
+    requiredIds: ["pokedex-first-favorite", "geo-first-flight"],
   },
   "type-first-run": {
     id: "type-first-run",

@@ -4,6 +4,7 @@ import { Loader2, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import mapboxgl, { type GeoJSONSource, type Map } from "mapbox-gl";
 
+import { useAchievements } from "@/components/achievements/achievement-provider";
 import { MapboxMapCanvas, moveMapToResult } from "@/components/maps/use-mapbox-instance";
 import { MapboxProvider } from "@/components/maps/mapbox-provider";
 import { Input } from "@/components/ui/input";
@@ -55,6 +56,7 @@ function upsertMarker(map: Map, result: GeocodeResult): void {
 }
 
 export function GeoSearchMap() {
+  const { unlock } = useAchievements();
   const reduceMotion = useReducedMotion();
   const mapRef = useRef<Map | null>(null);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
@@ -66,55 +68,59 @@ export function GeoSearchMap() {
   const [message, setMessage] = useState<string | null>(null);
   const [result, setResult] = useState<GeocodeResult | null>(null);
 
-  const runSearch = useCallback(async (value: string) => {
-    const trimmed = value.trim();
+  const runSearch = useCallback(
+    async (value: string) => {
+      const trimmed = value.trim();
 
-    if (!trimmed) {
+      if (!trimmed) {
+        setMessage(null);
+        setResult(null);
+        resultRef.current = null;
+        return;
+      }
+
+      setLoading(true);
       setMessage(null);
-      setResult(null);
-      resultRef.current = null;
-      return;
-    }
 
-    setLoading(true);
-    setMessage(null);
+      try {
+        const response = await fetch(`/api/explore/geocode?q=${encodeURIComponent(trimmed)}`);
+        const data = (await response.json()) as GeocodeResponse;
 
-    try {
-      const response = await fetch(`/api/explore/geocode?q=${encodeURIComponent(trimmed)}`);
-      const data = (await response.json()) as GeocodeResponse;
+        if (!response.ok) {
+          setMessage("error" in data ? data.error : "Geocoding failed.");
+          setResult(null);
+          resultRef.current = null;
+          return;
+        }
 
-      if (!response.ok) {
-        setMessage("error" in data ? data.error : "Geocoding failed.");
+        if ("message" in data && data.result === null) {
+          setMessage(data.message);
+          setResult(null);
+          resultRef.current = null;
+          return;
+        }
+
+        if (!("result" in data) || !data.result) {
+          setMessage("No matching places found.");
+          setResult(null);
+          resultRef.current = null;
+          return;
+        }
+
+        setResult(data.result);
+        resultRef.current = data.result;
+        setMessage(null);
+        unlock("geo-first-flight");
+      } catch {
+        setMessage("Could not reach the geocoding service.");
         setResult(null);
         resultRef.current = null;
-        return;
+      } finally {
+        setLoading(false);
       }
-
-      if ("message" in data && data.result === null) {
-        setMessage(data.message);
-        setResult(null);
-        resultRef.current = null;
-        return;
-      }
-
-      if (!("result" in data) || !data.result) {
-        setMessage("No matching places found.");
-        setResult(null);
-        resultRef.current = null;
-        return;
-      }
-
-      setResult(data.result);
-      resultRef.current = data.result;
-      setMessage(null);
-    } catch {
-      setMessage("Could not reach the geocoding service.");
-      setResult(null);
-      resultRef.current = null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [unlock],
+  );
 
   useEffect(() => {
     if (debounceRef.current) {

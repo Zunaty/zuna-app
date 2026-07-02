@@ -69,13 +69,13 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Account & meta
 
-| Item                         | Status  | Notes                                                                            |
-| ---------------------------- | ------- | -------------------------------------------------------------------------------- |
-| Auth + profiles              | ✅      | Supabase                                                                         |
-| Achievement definitions + UI | ✅      | `lib/achievements/` catalog, unlock toasts, `/profile` stats + grid              |
-| Portfolio explorer unlocks   | ✅      | Page visits (About/Projects/Resume/Contact), grand tour, skills filter + shuffle |
-| Explore-zone achievements    | Planned | Pokédex catches, Star Wars browsing, geo — wire into existing catalog            |
-| Return visits / streaks      | Ideas   | Meta achievements                                                                |
+| Item                         | Status | Notes                                                                                                     |
+| ---------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| Auth + profiles              | ✅     | Supabase                                                                                                  |
+| Achievement definitions + UI | ✅     | `lib/achievements/` catalog, unlock toasts, `/profile` stats + grid                                       |
+| Portfolio explorer unlocks   | ✅     | Page visits (About/Projects/Resume/Contact), grand tour, skills filter + shuffle                          |
+| Explore-zone achievements    | ✅     | Pokédex favorite/catch/collector + geo fly-to, field trip combo (Star Wars skipped — zone may be removed) |
+| Return visits / streaks      | Ideas  | Meta achievements                                                                                         |
 
 ## Launch polish
 

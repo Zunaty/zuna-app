@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 
 import { updatePokemonCollection } from "@/app/explore/pokemon/actions";
+import { useAchievements } from "@/components/achievements/achievement-provider";
 import { useAuthUser } from "@/lib/auth/use-auth-user";
 import type { PokemonCollectionEntry } from "@/lib/pokemon/collection";
 import { POKEMON_FAVORITES_STORAGE_KEY } from "@/lib/pokemon/favorites";
@@ -24,6 +25,7 @@ export function usePokemonCollectionToggle({
   onUpdate,
 }: UsePokemonCollectionToggleOptions) {
   const { isAuthenticated, isLoading } = useAuthUser();
+  const { unlock } = useAchievements();
   const localFavorites = usePokemonFavorites();
   const [isPending, startTransition] = useTransition();
 
@@ -41,6 +43,10 @@ export function usePokemonCollectionToggle({
     const next = exists
       ? localFavorites.filter((favorite) => favorite.id !== pokemonId)
       : [...localFavorites, { id: pokemonId, name: displayName }];
+
+    if (!exists) {
+      unlock("pokedex-first-favorite");
+    }
 
     localStorage.setItem(POKEMON_FAVORITES_STORAGE_KEY, JSON.stringify(next));
     window.dispatchEvent(new Event("pokemon-favorites-updated"));
@@ -71,6 +77,14 @@ export function usePokemonCollectionToggle({
     }
 
     const optimisticEntry = buildNextEntry(field);
+
+    if (field === "isFavorite" && optimisticEntry?.isFavorite) {
+      unlock("pokedex-first-favorite");
+    }
+    if (field === "caughtInGame" && optimisticEntry?.caughtInGame) {
+      unlock("pokedex-first-catch");
+    }
+
     onUpdate?.(optimisticEntry);
 
     startTransition(async () => {

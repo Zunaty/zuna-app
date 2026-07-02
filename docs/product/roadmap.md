@@ -45,7 +45,7 @@ Public portfolio with an optional game-layer meta-progression system (achievemen
 
 - [x] Save high scores to Supabase (per-mode / per-game bests; full run history later)
 - [x] Profile stats and scores on `/profile` (leaderboard still optional / backlog)
-- [x] Achievement system — code catalog + `user_achievements` sync, unlock toasts, wired to Playground, portfolio Explorer (page visits, skills grid, grand tour), and meta (Explore-zone triggers later)
+- [x] Achievement system — code catalog + `user_achievements` sync, unlock toasts, wired to Playground, portfolio Explorer (page visits, skills grid, grand tour), Explore zone (Pokédex, geo), and meta combos
 
 ## Phase 6 — AI features
 

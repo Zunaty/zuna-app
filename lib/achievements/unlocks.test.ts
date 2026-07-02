@@ -106,9 +106,14 @@ describe("resolveDerivedUnlocks", () => {
       }
     }
 
+    const derivedIds = ACHIEVEMENT_LIST.filter((definition) => definition.requiredIds)
+      .map((definition) => definition.id)
+      .sort();
+
     const { unlocks, added } = resolveDerivedUnlocks(baseUnlocks);
 
-    expect([...added].sort()).toEqual(["completionist", "explore-grand-tour", "playground-sampler"]);
+    expect(derivedIds).toContain("completionist");
+    expect([...added].sort()).toEqual(derivedIds);
     expect(getUnlockedIds(unlocks).length).toBe(ACHIEVEMENT_LIST.length);
   });
 });
