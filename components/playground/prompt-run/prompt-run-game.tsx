@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { useAchievements } from "@/components/achievements/achievement-provider";
 import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 import { usePromptRun } from "@/lib/prompt-run/use-prompt-run";
-import { MAX_ROUNDS } from "@/lib/prompt-run/constants";
+import { MAX_ROUNDS, STREAK_THRESHOLDS } from "@/lib/prompt-run/constants";
+import { getBestRun } from "@/lib/prompt-run/storage";
+import type { GeneratedImage } from "@/lib/prompt-run/types";
 
 import { GeneratePanel } from "./generate-panel";
 import { OnboardingDialog } from "./onboarding-dialog";
@@ -14,7 +17,19 @@ import { RunCompleteOverview } from "./run-complete-overview";
 import { StartScreen } from "./start-screen";
 
 export function PromptRunGame() {
-  const { persistPromptRunBest } = usePlaygroundScoreContext();
+  const { unlock } = useAchievements();
+  const { cloudScores, persistPromptRunBest } = usePlaygroundScoreContext();
+
+  // "New record" requires a previous best to beat, so track whether one
+  // existed before the current save (local or cloud).
+  const hadBestRunRef = useRef(false);
+
+  useEffect(() => {
+    if (getBestRun() !== null || cloudScores.promptRun !== null) {
+      hadBestRunRef.current = true;
+    }
+  }, [cloudScores.promptRun]);
+
   const {
     game,
     round,
@@ -41,11 +56,40 @@ export function PromptRunGame() {
     increaseVolume,
     dismissOnboarding,
   } = usePromptRun({
-    onBestRunSaved: (best) => persistPromptRunBest(best),
+    onBestRunSaved: (best) => {
+      if (hadBestRunRef.current) {
+        unlock("prompt-run-high-score");
+      }
+      hadBestRunRef.current = true;
+      persistPromptRunBest(best);
+    },
   });
 
   const [showRules, setShowRules] = useState(false);
   const [showRunSummary, setShowRunSummary] = useState(false);
+
+  useEffect(() => {
+    if (game.completedRounds >= 1) {
+      unlock("prompt-run-first-round");
+    }
+  }, [game.completedRounds, unlock]);
+
+  useEffect(() => {
+    if (game.streakRecord >= STREAK_THRESHOLDS.LEGENDARY) {
+      unlock("prompt-run-streak-7");
+    }
+  }, [game.streakRecord, unlock]);
+
+  useEffect(() => {
+    if (game.rounds.some((completed) => (completed.roundBonuses?.perfectBonus ?? 0) > 0)) {
+      unlock("prompt-run-perfect");
+    }
+  }, [game.rounds, unlock]);
+
+  const handleImageGenerated = (image: GeneratedImage) => {
+    unlock("prompt-run-generate");
+    setGeneratedImage(image);
+  };
 
   const handleNewRun = () => {
     setShowRunSummary(false);
@@ -95,7 +139,7 @@ export function PromptRunGame() {
         prompt={assembledPrompt}
         rounds={game.rounds}
         existingImage={lastRound?.generatedImage}
-        onImageGenerated={setGeneratedImage}
+        onImageGenerated={handleImageGenerated}
         onContinue={continueToOverview}
         onScrap={scrapRound}
         onGenerationFailed={failGeneration}

@@ -28,7 +28,7 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 | Playground hub                | ✅      | `/playground` — card grid linking to each game                             |
 | Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run settings, active run resume, best score |
 | Saved scores to Supabase      | Partial | Type Racer per-mode bests + Prompt Run best run; merge on sign-in          |
-| Shared achievements           | Planned | Cross-game; never gates portfolio content                                  |
+| Shared achievements           | ✅      | Guest unlocks in localStorage; merge + `user_achievements` sync on sign-in |
 | Game audio                    | ✅      | Prompt Run rarity sounds + mute/volume settings                            |
 
 ## Explore
@@ -69,11 +69,13 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Account & meta
 
-| Item                         | Status  | Notes                    |
-| ---------------------------- | ------- | ------------------------ |
-| Auth + profiles              | ✅      | Supabase                 |
-| Achievement definitions + UI | Planned | Optional meta-game layer |
-| Return visits / streaks      | Ideas   | Meta achievements        |
+| Item                         | Status  | Notes                                                                            |
+| ---------------------------- | ------- | -------------------------------------------------------------------------------- |
+| Auth + profiles              | ✅      | Supabase                                                                         |
+| Achievement definitions + UI | ✅      | `lib/achievements/` catalog, unlock toasts, `/profile` stats + grid              |
+| Portfolio explorer unlocks   | ✅      | Page visits (About/Projects/Resume/Contact), grand tour, skills filter + shuffle |
+| Explore-zone achievements    | Planned | Pokédex catches, Star Wars browsing, geo — wire into existing catalog            |
+| Return visits / streaks      | Ideas   | Meta achievements                                                                |
 
 ## Launch polish
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { AchievementPageVisit } from "@/components/achievements/achievement-page-visit";
 import { AviationFlightMapSection } from "@/components/maps/aviation-flight-map-section";
 import { PageEnter } from "@/components/motion/page-enter";
 import { SectionHeadingMotion } from "@/components/motion/section-heading-motion";
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PageShell narrow>
+      <AchievementPageVisit id="explore-about" />
       <PageEnter
         header={{
           eyebrow: "About",

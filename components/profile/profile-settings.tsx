@@ -19,8 +19,6 @@ type ProfileSettingsProps = {
   memberSince: string;
   initialDisplayName: string;
   initialAvatarUrl: string | null;
-  level: number;
-  points: number;
 };
 
 const initialActionState: ProfileActionState = {};
@@ -31,8 +29,6 @@ export function ProfileSettings({
   memberSince,
   initialDisplayName,
   initialAvatarUrl,
-  level,
-  points,
 }: ProfileSettingsProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -172,30 +168,19 @@ export function ProfileSettings({
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="font-semibold">Level & points</h2>
-          <p className="mt-4 text-3xl font-bold text-primary">Level {level}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{points} points</p>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Achievements and point earning roll out with the playground — your account is ready.
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="font-semibold">Account</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div>
-              <dt className="text-muted-foreground">Email</dt>
-              <dd className="font-medium">{email}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Member since</dt>
-              <dd className="font-medium">{memberSince}</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
+      <section className="rounded-xl border border-border bg-card p-6">
+        <h2 className="font-semibold">Account</h2>
+        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-muted-foreground">Email</dt>
+            <dd className="font-medium">{email}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Member since</dt>
+            <dd className="font-medium">{memberSince}</dd>
+          </div>
+        </dl>
+      </section>
 
       <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-semibold">Profile</h2>

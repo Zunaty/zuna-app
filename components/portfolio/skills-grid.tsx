@@ -4,6 +4,7 @@ import { LayoutGroup, m } from "framer-motion";
 import { ArrowDownAZ, Shuffle } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { useAchievements } from "@/components/achievements/achievement-provider";
 import { SkillIcon } from "@/components/portfolio/skill-icon";
 import { Button } from "@/components/ui/button";
 import { skillGroups } from "@/lib/data/skills";
@@ -94,6 +95,7 @@ type ShuffleState = {
 };
 
 export function SkillsGrid({ staggerKey = "skills-grid", groups = skillGroups }: SkillsGridProps) {
+  const { unlock } = useAchievements();
   const reduceMotion = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const groupsKey = useMemo(() => getGroupsKey(groups), [groups]);
@@ -104,10 +106,12 @@ export function SkillsGrid({ staggerKey = "skills-grid", groups = skillGroups }:
   const orderedSkills = isShuffled ? shuffleState.order : sortedSkills;
 
   const handleFilterClick = (title: string) => {
+    unlock("skills-filter");
     setActiveCategory((current) => (current === title ? null : title));
   };
 
   const handleShuffle = () => {
+    unlock("skills-shuffle");
     setShuffleState((current) => ({
       groupsKey,
       order: shuffleSkills(current?.groupsKey === groupsKey ? current.order : sortedSkills),

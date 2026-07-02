@@ -43,9 +43,9 @@ Public portfolio with an optional game-layer meta-progression system (achievemen
 
 ## Phase 5 — Persistence & achievements
 
-- [ ] Save game history and high scores to Supabase
-- [ ] Profile stats and optional leaderboard
-- [ ] Achievement system wired across zones
+- [x] Save high scores to Supabase (per-mode / per-game bests; full run history later)
+- [x] Profile stats and scores on `/profile` (leaderboard still optional / backlog)
+- [x] Achievement system — code catalog + `user_achievements` sync, unlock toasts, wired to Playground, portfolio Explorer (page visits, skills grid, grand tour), and meta (Explore-zone triggers later)
 
 ## Phase 6 — AI features
 
@@ -68,7 +68,7 @@ Runs across the whole site — optional meta-game, never gates core portfolio co
 | Meta                | Sign up, return visits, complete profile             |
 | Secret              | Hidden easter eggs                                   |
 
-**Data model (Phase 2+):** `profiles`, `achievements`, `user_achievements`, optional `user_stats`.
+**Data model:** `profiles` (points, level), `user_achievements` (unlock state). Definitions live in code — `lib/achievements/definitions.ts` — so no `achievements` table is needed.
 
 Guests unlock locally; signing in syncs progress.
 

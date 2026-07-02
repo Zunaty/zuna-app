@@ -318,7 +318,9 @@ type PromptRunState = {
 
 Reducer + Vitest tests mirror [Type Racer](./type-racer.md) pattern.
 
-## Achievements (later)
+## Achievements ✅ shipped
+
+Wired in `components/playground/prompt-run/prompt-run-game.tsx`; definitions in `lib/achievements/definitions.ts`.
 
 | Id                       | Trigger                       |
 | ------------------------ | ----------------------------- |

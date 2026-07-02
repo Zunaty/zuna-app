@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
+import { AchievementProvider } from "@/components/achievements/achievement-provider";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -49,11 +50,13 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen font-sans`}>
         <ThemeProvider initialTheme={initialTheme}>
           <MotionProvider>
-            <div className="flex min-h-screen flex-col">
-              <SiteHeader />
-              <main className="flex-1">{children}</main>
-              <SiteFooter />
-            </div>
+            <AchievementProvider>
+              <div className="flex min-h-screen flex-col">
+                <SiteHeader />
+                <main className="flex-1">{children}</main>
+                <SiteFooter />
+              </div>
+            </AchievementProvider>
           </MotionProvider>
         </ThemeProvider>
         <SpeedInsights />

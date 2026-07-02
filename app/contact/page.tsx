@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { AchievementPageVisit } from "@/components/achievements/achievement-page-visit";
 import { HoverLift } from "@/components/motion/hover-lift";
 import { PageEnter } from "@/components/motion/page-enter";
 import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <PageShell narrow>
+      <AchievementPageVisit id="explore-contact" />
       <PageEnter
         header={{
           eyebrow: "Contact",

@@ -104,7 +104,9 @@ type TypeRacerState = {
 
 Reducer + Vitest tests mirror Prompt Run pattern — see [prompt-run.md](./prompt-run.md).
 
-## Achievements (later)
+## Achievements ✅ shipped
+
+Wired in `components/playground/type-racer/type-racer-game.tsx`; definitions in `lib/achievements/definitions.ts`.
 
 | Id               | Trigger                           |
 | ---------------- | --------------------------------- |

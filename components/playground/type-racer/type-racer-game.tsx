@@ -3,6 +3,7 @@
 import { m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useAchievements } from "@/components/achievements/achievement-provider";
 import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 
 import { CompetitiveSettings } from "@/components/playground/type-racer/competitive-settings";
@@ -12,13 +13,14 @@ import { PromptDisplay, type KeystrokeFx } from "@/components/playground/type-ra
 import { ResultsPanel } from "@/components/playground/type-racer/results-panel";
 import { Button } from "@/components/ui/button";
 import { isCountdownMode, TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
-import { charsMatch } from "@/lib/type-racer/matching";
+import { charsMatch, promptsEqual } from "@/lib/type-racer/matching";
 import { formatElapsedSeconds } from "@/lib/type-racer/scoring";
 import { instantTransition, springTransition } from "@/lib/motion/variants";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import { useTypeRacer } from "@/lib/type-racer/use-type-racer";
 
 export function TypeRacerGame() {
+  const { unlock } = useAchievements();
   const { persistTypeRacerBest } = usePlaygroundScoreContext();
   const { state, liveStats, matchOptions, setMode, setStrictMode, start, skipCountdown, setInput, reset } =
     useTypeRacer("words-60", {
@@ -39,6 +41,28 @@ export function TypeRacerGame() {
   useEffect(() => {
     focusInput();
   }, [focusInput, state.phase]);
+
+  useEffect(() => {
+    if (state.phase !== "finished" || !state.stats) {
+      return;
+    }
+
+    unlock("type-first-run");
+
+    if ((state.mode === "words-30" || state.mode === "words-60") && state.stats.wpm >= 60) {
+      unlock("type-60-wpm");
+    }
+
+    if (state.mode === "sentence" && state.stats.accuracy >= 100) {
+      unlock("type-perfect");
+    }
+
+    // Paragraph mode ends either by completing the prompt or hitting the time
+    // cap — only a completed prompt counts as a marathon finish.
+    if (state.mode === "paragraph" && promptsEqual(state.prompt, state.input, matchOptions)) {
+      unlock("type-marathon");
+    }
+  }, [matchOptions, state.input, state.mode, state.phase, state.prompt, state.stats, unlock]);
 
   useEffect(() => {
     return () => {

@@ -6,13 +6,21 @@ import { redirect } from "next/navigation";
 
 import { ProfileSettings } from "@/components/profile/profile-settings";
 
+import { ProfileStats } from "@/components/profile/profile-stats";
+
 import { PageEnter } from "@/components/motion/page-enter";
 
 import { PageShell } from "@/components/layout/page-shell";
 
 import { Button } from "@/components/ui/button";
 
+import { isAchievementId } from "@/lib/achievements/definitions";
+
+import type { UnlockedAchievements } from "@/lib/achievements/unlocks";
+
 import { site } from "@/lib/data/site";
+
+import { getUserPlaygroundScores } from "@/lib/playground/server-scores";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -35,7 +43,19 @@ export default async function ProfilePage() {
     redirect("/auth/login?next=/profile");
   }
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const [{ data: profile }, { scores }, { data: achievementRows }] = await Promise.all([
+    supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
+    getUserPlaygroundScores(),
+    supabase.from("user_achievements").select("achievement_id, unlocked_at").eq("user_id", user.id),
+  ]);
+
+  const serverUnlocks: UnlockedAchievements = {};
+
+  for (const row of achievementRows ?? []) {
+    if (isAchievementId(row.achievement_id)) {
+      serverUnlocks[row.achievement_id] = row.unlocked_at;
+    }
+  }
 
   const displayName = profile?.display_name ?? user.user_metadata.display_name ?? user.email?.split("@")[0] ?? "Player";
 
@@ -57,18 +77,20 @@ export default async function ProfilePage() {
 
           title: displayName,
 
-          description: "Your hub for saved progress, scores, and achievements as the playground grows.",
+          description: "Your stats, scores, and achievements across the site.",
         }}
       >
-        <ProfileSettings
-          userId={user.id}
-          email={user.email ?? "—"}
-          memberSince={memberSince}
-          initialDisplayName={displayName}
-          initialAvatarUrl={profile?.avatar_url ?? null}
-          level={profile?.level ?? 1}
-          points={profile?.points ?? 0}
-        />
+        <div className="space-y-6">
+          <ProfileStats serverUnlocks={serverUnlocks} typeRacer={scores.typeRacer} promptRun={scores.promptRun} />
+
+          <ProfileSettings
+            userId={user.id}
+            email={user.email ?? "—"}
+            memberSince={memberSince}
+            initialDisplayName={displayName}
+            initialAvatarUrl={profile?.avatar_url ?? null}
+          />
+        </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button variant="outline" asChild>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AchievementPageVisit } from "@/components/achievements/achievement-page-visit";
 import { PageEnter } from "@/components/motion/page-enter";
 import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-children";
 import { PageShell } from "@/components/layout/page-shell";
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 export default function ResumePage() {
   return (
     <PageShell narrow>
+      <AchievementPageVisit id="explore-resume" />
       <PageEnter header={{ eyebrow: "Resume", title: site.name, description: `${site.title} · ${site.location}` }}>
         <div className="mb-8 flex flex-wrap gap-3">
           <Button asChild>
