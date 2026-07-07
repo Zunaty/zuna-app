@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ComingSoonZones, FeaturedProjects, HomeHero, HomeSkills } from "@/components/portfolio/home-sections";
+import { FeaturedProjects, HomeHero, HomeSkills, ZoneHighlights } from "@/components/portfolio/home-sections";
 import { PageShell } from "@/components/layout/page-shell";
 import { site } from "@/lib/data/site";
 
@@ -19,7 +19,7 @@ export default function HomePage() {
       <HomeHero />
       <FeaturedProjects />
       <HomeSkills />
-      <ComingSoonZones />
+      <ZoneHighlights />
     </PageShell>
   );
 }

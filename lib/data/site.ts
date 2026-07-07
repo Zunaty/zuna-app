@@ -12,7 +12,7 @@ export const site = {
   displayName: "Victor",
   middleName,
   title: "Full Stack Engineer",
-  tagline: "I build fast, polished web experiences — and sneak in a little game design along the way.",
+  tagline: "I build fast, polished products for the web — and sneak in a little game design along the way.",
   email: "Zunaty@gmail.com",
   location: "United States",
 } as const;

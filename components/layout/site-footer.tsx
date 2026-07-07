@@ -59,7 +59,7 @@ export function SiteFooter() {
           <p>
             © {year} {site.name}. Built with Next.js.
           </p>
-          <p>Type Racer & Prompt Run live — achievements on the way.</p>
+          <p>Games, demos, and achievements — no account required.</p>
         </div>
       </div>
     </footer>

@@ -16,7 +16,8 @@ export default function SignUpPage() {
         header={{
           eyebrow: "Account",
           title: "Create an account",
-          description: "The portfolio is fully open without signing in. An account lets you save progress later.",
+          description:
+            "The portfolio is fully open without signing in. An account syncs your scores, favorites, and achievements.",
         }}
       >
         <SignUpForm />

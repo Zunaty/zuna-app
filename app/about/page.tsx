@@ -38,8 +38,8 @@ export default function AboutPage() {
             Prettier, CI, docs) so teams can move fast without accumulating debt.
           </p>
           <p>
-            This site will grow into more than a resume: mini-games, API explorations, AI demos, and a light achievement
-            system that rewards curiosity. The portfolio pages come first; the playground follows.
+            This site is more than a resume: mini-games, API explorations, AI demos, and a light achievement system that
+            rewards curiosity. Poke around — the playground is open, and everything works without an account.
           </p>
         </div>
 

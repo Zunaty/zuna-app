@@ -38,7 +38,7 @@ export function HomeHeroMotion() {
           transition={transition}
         >
           Hi, I&apos;m {site.displayName}.{" "}
-          <span className="text-muted-foreground">I build web products people enjoy using.</span>
+          <span className="text-muted-foreground">I craft web experiences worth exploring.</span>
         </m.h1>
         <m.p className="mt-6 text-lg text-muted-foreground" variants={fadeInUp} transition={transition}>
           {site.tagline}

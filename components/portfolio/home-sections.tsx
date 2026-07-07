@@ -42,7 +42,7 @@ export function HomeSkills() {
   );
 }
 
-export function ComingSoonZones() {
+export function ZoneHighlights() {
   return (
     <section>
       <SectionHeadingMotion

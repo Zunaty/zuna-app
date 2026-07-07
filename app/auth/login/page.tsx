@@ -17,7 +17,7 @@ export default function LoginPage() {
         header={{
           eyebrow: "Account",
           title: "Welcome back",
-          description: "Sign in to sync scores, favorites, and achievements when those features launch.",
+          description: "Sign in to sync your scores, favorites, and achievements across devices.",
         }}
       >
         <Suspense fallback={<div className="h-64 animate-pulse rounded-xl bg-muted" aria-hidden />}>
