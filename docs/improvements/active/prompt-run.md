@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `playground`
-Last updated: `2026-06-29`
+Last updated: `2026-07-06`
 
 # Prompt Run — mini-game spec
 
@@ -195,7 +195,7 @@ Portfolio traffic must stay predictable:
 | Max prompt length                        | 500 chars (truncate with warning)          |
 | Generation disabled without `FAL_KEY`    | Show prompt + “generation unavailable” CTA |
 
-Log generation count server-side for cost monitoring. Phase 6 in [roadmap](../../product/roadmap.md).
+Log generation count server-side for cost monitoring. Shipped — see [roadmap](../../product/roadmap.md).
 
 ### v1 scope vs Art Hero
 
@@ -231,7 +231,7 @@ Each completed round in `game.rounds[]` stores full `roundVariables` (with `cate
 
 ## Persistence
 
-### Phase 1 — guest ✅ shipped
+### Stage 1 — guest ✅ shipped
 
 | Data                              | Storage                          | Notes                                                        |
 | --------------------------------- | -------------------------------- | ------------------------------------------------------------ |
@@ -242,9 +242,9 @@ Each completed round in `game.rounds[]` stores full `roundVariables` (with `cate
 
 Guests can **pick up where they left off** in the same browser. Clearing site data loses the run.
 
-### Phase 2 — Supabase (planned, Phase 5+)
+### Stage 2 — Supabase full run history (planned)
 
-Requires schema design before AI images ship at scale. Suggested tables (draft):
+Best run score already syncs to Supabase for signed-in users. Full run history needs schema design first. Suggested tables (draft):
 
 ```text
 prompt_run_games      — one row per finished (or abandoned) run; user_id, total_score, completed_rounds, started_at, finished_at
@@ -334,17 +334,17 @@ Category: **Playground** / **Prompt Run** in [roadmap achievement table](../../p
 
 ## Rollout
 
-| Step          | Status  | Deliverable                                                             |
-| ------------- | ------- | ----------------------------------------------------------------------- |
-| Spec          | Done    | This doc                                                                |
-| Game loop     | ✅      | Round drafting + shop at `/playground/prompt-run`                       |
-| Generate API  | ✅      | `fal-ai/flux-2/turbo` route, env gate, rate limits                      |
-| Polish        | ✅      | Motion, audio, onboarding, live stats, scrap UX                         |
-| Guest persist | ✅      | Active run + best score + settings in localStorage                      |
-| Run archive   | Ideas   | Completed-run history on start screen                                   |
-| Supabase sync | Planned | Phase 5 — schema in [Phase 2](#phase-2--supabase-planned-phase-5) below |
+| Step          | Status  | Deliverable                                                                                          |
+| ------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| Spec          | Done    | This doc                                                                                             |
+| Game loop     | ✅      | Round drafting + shop at `/playground/prompt-run`                                                    |
+| Generate API  | ✅      | `fal-ai/flux-2/turbo` route, env gate, rate limits                                                   |
+| Polish        | ✅      | Motion, audio, onboarding, live stats, scrap UX                                                      |
+| Guest persist | ✅      | Active run + best score + settings in localStorage                                                   |
+| Run archive   | Ideas   | Completed-run history on start screen                                                                |
+| Supabase sync | Partial | Best run synced; full history schema in [Stage 2](#stage-2--supabase-full-run-history-planned) above |
 
-Build order: **game loop + generation + polish + guest persist** (shipped), then optional run archive, then Supabase sync in Phase 5.
+Build order: **game loop + generation + polish + guest persist + best-run sync** (shipped), then optional run archive and full run-history sync.
 
 ## Open decisions
 
@@ -359,7 +359,7 @@ Build order: **game loop + generation + polish + guest persist** (shipped), then
 ## Related
 
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist
-- [product/roadmap.md](../../product/roadmap.md) — Phase 6 AI features
+- [product/roadmap.md](../../product/roadmap.md) — prioritized platform work
 - [type-racer.md](./type-racer.md) — sibling playground spec
 - [motion-and-3d.md](./motion-and-3d.md) — Framer Motion plans
 - [FLUX.2 [turbo] on fal.ai](https://fal.ai/models/fal-ai/flux-2/turbo) — chosen T2I model ($0.008/MP)

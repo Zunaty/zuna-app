@@ -1,25 +1,25 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-06-29`
+Last updated: `2026-07-06`
 
 # Feature backlog
 
-Things the app should do or hold — **not tied to roadmap phases**. Pick items as capacity allows; update status here when something ships.
+Things the app should do or hold — the **product wishlist**, with no ordering. Pick items as capacity allows; update status here when something ships.
 
-For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadmap.md).
+For prioritized platform work (launch polish, shared patterns, next game), see [roadmap.md](./roadmap.md).
 
 ## Playground — games
 
-| Item                        | Status | Route / notes                                                                                                  |
-| --------------------------- | ------ | -------------------------------------------------------------------------------------------------------------- |
-| **Type Racer**              | ✅     | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)            |
-| Type Racer — words polish   | ✅     | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/archive/2026/type-racer-polish.md)   |
-| Type Racer — sentence mode  | ✅     | Curated one-liners                                                                                             |
-| Type Racer — paragraph mode | ✅     | Short passages, 120s cap                                                                                       |
-| **Prompt Run**              | ✅     | `/playground/prompt-run` — rounds, shop, generate, motion, audio; [spec](../improvements/active/prompt-run.md) |
-| Prompt Run — AI images      | ✅     | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                 |
-| Prompt Run — run archive    | Ideas  | Completed-run history on start screen (localStorage); guest persist otherwise shipped                          |
-| Additional mini-games       | Ideas  | TBD — backlog as ideas land                                                                                    |
+| Item                        | Status  | Route / notes                                                                                                  |
+| --------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)            |
+| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/archive/2026/type-racer-polish.md)   |
+| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                             |
+| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                       |
+| **Prompt Run**              | ✅      | `/playground/prompt-run` — rounds, shop, generate, motion, audio; [spec](../improvements/active/prompt-run.md) |
+| Prompt Run — AI images      | ✅      | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                 |
+| Prompt Run — run archive    | Ideas   | Completed-run history on start screen (localStorage); guest persist otherwise shipped                          |
+| **Next mini-game**          | Planned | TBD — pick and spec; roadmap priority #3. Candidate ideas land here                                            |
 
 ## Playground — platform
 
@@ -43,9 +43,9 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## Lab
 
-| Item    | Status  | Notes                                 |
-| ------- | ------- | ------------------------------------- |
-| AI chat | Planned | `/chat` — streaming UI + server route |
+| Item    | Status   | Notes                                                      |
+| ------- | -------- | ---------------------------------------------------------- |
+| AI chat | Deferred | `/chat` — streaming UI + server route; revisit post-launch |
 
 ## Portfolio
 
@@ -88,7 +88,7 @@ For infrastructure milestones (auth, explore, launch), see [roadmap.md](./roadma
 
 ## How to use this doc
 
-- **Status:** ✅ shipped · 🚧 in progress · Planned · Ideas
-- Add rows freely; no need to assign a phase.
+- **Status:** ✅ shipped · 🚧 in progress · Planned · Deferred · Ideas
+- Add rows freely; no ordering needed.
 - When a spec in `docs/improvements/active/` ships, move it to `archive/` and mark the row ✅ here.
-- Roadmap phases stay for **sequenced platform work**; this list is the **product wishlist**.
+- The roadmap holds the **prioritized platform list**; this doc is the **product wishlist**.

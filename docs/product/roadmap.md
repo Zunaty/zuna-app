@@ -1,60 +1,52 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-29`
+Last updated: `2026-07-06`
 
 # Product roadmap
 
-Infrastructure and platform milestones for the portfolio site. **Features and games** live in the [backlog](./backlog.md) — not every item needs a phase number.
+Priority-ordered platform work for the portfolio site. Work top-down; reorder freely as priorities change. **Features and games** live in the [backlog](./backlog.md).
 
 Public portfolio with an optional game-layer meta-progression system (achievements, points, return visits).
 
-## Phase 0 — Foundation ✅ complete
+## Up next (in priority order)
 
-- [x] Next.js 16 App Router scaffold
-- [x] TypeScript strict, ESLint, Prettier, Husky
-- [x] shadcn/ui base + `next-themes`
-- [x] `AGENTS.md`, `docs/`, `.github/` CI
-- [x] Verify lint, typecheck, format, and build pass locally
+### 1. Launch polish
 
-## Phase 1 — Portfolio shell ✅ complete
+The portfolio's core job is to impress visitors — get it live and fast before adding more features.
 
-- [x] Landing, About, Projects, Resume, Contact
-- [x] New visual design (ground-up, not old Hero)
-- [x] SEO metadata and OG images
+- [ ] Performance audit — Lighthouse on key routes (Mapbox pages, Pokédex, Prompt Run likely heaviest)
+- [ ] Accessibility audit — keyboard nav, contrast, `prefers-reduced-motion` for Framer Motion surfaces
+- [ ] Per-route OG images (root `opengraph-image.tsx` exists; per-route missing)
+- [ ] Custom domain
+- [ ] Analytics review (Vercel Analytics + Speed Insights already wired)
 
-## Phase 2 — Supabase auth + profile ✅ complete
+### 2. Playground shared patterns
 
-- [x] Supabase project, `lib/supabase/*`, `proxy.ts`
-- [x] Login, sign-up, callback
-- [x] Profiles table + guest vs authenticated UX
-- [x] Run `yarn supabase:link` then `yarn supabase:db-push` if `profiles` is not on the remote yet
+Pay down before the next game ships — two games already diverge slightly.
 
-## Phase 3 — Explore zone ✅ complete
+- [ ] Guest localStorage conventions (shared helpers, consistent keys/merge-on-sign-in)
+- [ ] Shared game layout
+- [ ] Vitest coverage for pure game logic
 
-- [x] Pokédex (PokéAPI) — list, detail, collection
-- [x] Star Wars (SWAPI) — browse franchise content
-- [x] Geocoding fly-to (`/explore/geo`) — Mapbox search + map
-- [x] Explore polish — page enter, grid stagger, toggles on explore routes
+### 3. New mini-game
 
-## Phase 4 — Playground foundation
+- [ ] Pick and spec the next game (see [backlog — Playground](./backlog.md#playground--games) ideas)
+- [ ] Build on the shared patterns above (guest persist, Supabase bests, achievements)
 
-- [x] Playground hub and shippable games — Type Racer + Prompt Run at `/playground`
-- [ ] Shared patterns: guest localStorage conventions, game layout, Vitest for pure game logic
+## Deferred
 
-## Phase 5 — Persistence & achievements
+- **AI chat (`/chat`)** — streaming chat UI and server route. Deliberately deferred: adds ongoing API cost and moderation surface. Revisit after launch.
+- **Star Wars zone decision** — keep or remove; decide before deep launch-polish work on those pages.
 
-- [x] Save high scores to Supabase (per-mode / per-game bests; full run history later)
-- [x] Profile stats and scores on `/profile` (leaderboard still optional / backlog)
-- [x] Achievement system — code catalog + `user_achievements` sync, unlock toasts, wired to Playground, portfolio Explorer (page visits, skills grid, grand tour), Explore zone (Pokédex, geo), and meta combos
+## Shipped ✅
 
-## Phase 6 — AI features
-
-- [x] Prompt Run image generation — [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) (`fal-ai/flux-2/turbo`, $0.008/MP); env-gated, rate-limited; [spec](../improvements/active/prompt-run.md)
-- [ ] Streaming chat UI and server route (`/chat`)
-
-## Phase 7 — Polish + launch
-
-- [ ] Performance, a11y, analytics, custom domain
+- **Foundation** — Next.js 16 App Router, TypeScript strict, ESLint/Prettier/Husky, shadcn/ui + `next-themes`, CI
+- **Portfolio shell** — Landing, About, Projects, Resume, Contact; ground-up visual design; SEO metadata and OG images (root)
+- **Supabase auth + profile** — `lib/supabase/*`, login/sign-up/callback, profiles table, guest vs authenticated UX
+- **Explore zone** — Pokédex (PokéAPI) with collection, Star Wars (SWAPI), geocoding fly-to (`/explore/geo`), motion polish
+- **Playground foundation** — hub at `/playground`, Type Racer, Prompt Run
+- **Persistence & achievements** — Supabase high scores (per-mode/per-game bests), `/profile` stats and scores, achievement system (code catalog + `user_achievements` sync, unlock toasts, wired across Playground, portfolio Explorer, Explore zone, and meta combos)
+- **Prompt Run AI images** — [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) (`fal-ai/flux-2/turbo`, $0.008/MP); env-gated, rate-limited; [spec](../improvements/active/prompt-run.md)
 
 ## Achievement system (cross-cutting)
 
@@ -74,5 +66,5 @@ Guests unlock locally; signing in syncs progress.
 
 ## Related
 
-- [backlog.md](./backlog.md) — games, features, polish (no phase assignment)
+- [backlog.md](./backlog.md) — games, features, polish (no priority assignment)
 - [improvements/active/](../improvements/active/) — detailed specs for in-flight work

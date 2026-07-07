@@ -119,15 +119,15 @@ Category: **Playground** / **Type Racer** in cross-cutting achievement table.
 
 ## Rollout
 
-| Step         | Status  | Deliverable                                                                                         |
-| ------------ | ------- | --------------------------------------------------------------------------------------------------- |
-| Spec         | Done    | This doc                                                                                            |
-| MVP          | Done    | Words 30s/60s, local high score, basic UI                                                           |
-| Words polish | Done    | [type-racer-polish.md](../archive/2026/type-racer-polish.md) — live stats, timer, motion, shortcuts |
-| Modes+meta   | Done    | Sentence/paragraph modes, strict mode, case rules                                                   |
-| Persist      | Planned | Supabase `user_stats` / leaderboard optional                                                        |
+| Step         | Status | Deliverable                                                                                         |
+| ------------ | ------ | --------------------------------------------------------------------------------------------------- |
+| Spec         | Done   | This doc                                                                                            |
+| MVP          | Done   | Words 30s/60s, local high score, basic UI                                                           |
+| Words polish | Done   | [type-racer-polish.md](../archive/2026/type-racer-polish.md) — live stats, timer, motion, shortcuts |
+| Modes+meta   | Done   | Sentence/paragraph modes, strict mode, case rules                                                   |
+| Persist      | Done   | Per-mode bests sync to Supabase; leaderboard still optional (backlog)                               |
 
-Ship order is flexible — see [backlog](../../product/backlog.md), not roadmap phases.
+Ship order is flexible — see [backlog](../../product/backlog.md) and [roadmap](../../product/roadmap.md) priorities.
 
 ## Open decisions
 
@@ -143,4 +143,4 @@ Ship order is flexible — see [backlog](../../product/backlog.md), not roadmap 
 - [type-racer-polish.md](../archive/2026/type-racer-polish.md) — words mode polish pass (shipped)
 - [motion-and-3d.md](./motion-and-3d.md) — Framer Motion conventions
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist
-- [product/roadmap.md](../../product/roadmap.md) — platform phases
+- [product/roadmap.md](../../product/roadmap.md) — prioritized platform work

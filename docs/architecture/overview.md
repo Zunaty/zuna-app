@@ -40,19 +40,19 @@ Account       →  Supabase auth, saved progress, achievements
 
 ## Stack
 
-| Layer     | Choice                                                                       |
-| --------- | ---------------------------------------------------------------------------- |
-| Framework | Next.js 16, App Router                                                       |
-| Language  | TypeScript 5, strict                                                         |
-| UI        | Tailwind + shadcn/ui + lucide                                                |
-| Theme     | `next-themes`                                                                |
-| Motion    | Framer Motion — active                                                       |
-| Particles | tsParticles — planned (hero, bursts)                                         |
-| 3D        | Three.js + R3F — planned (Phase 4+)                                          |
-| Auth + DB | Supabase (`@supabase/ssr`) — Phase 2                                         |
-| AI        | Vercel AI SDK (chat — planned); fal.ai FLUX.2 Turbo for Prompt Run — shipped |
-| Maps      | Mapbox GL — aviation map on `/about`, geocoding on `/explore/geo`            |
-| Quality   | ESLint 9, Prettier, Husky, Vitest when needed                                |
+| Layer     | Choice                                                                        |
+| --------- | ----------------------------------------------------------------------------- |
+| Framework | Next.js 16, App Router                                                        |
+| Language  | TypeScript 5, strict                                                          |
+| UI        | Tailwind + shadcn/ui + lucide                                                 |
+| Theme     | `next-themes`                                                                 |
+| Motion    | Framer Motion — active                                                        |
+| Particles | tsParticles — planned (hero, bursts)                                          |
+| 3D        | Three.js + R3F — ideas only (if a game needs it)                              |
+| Auth + DB | Supabase (`@supabase/ssr`) — shipped                                          |
+| AI        | Vercel AI SDK (chat — deferred); fal.ai FLUX.2 Turbo for Prompt Run — shipped |
+| Maps      | Mapbox GL — aviation map on `/about`, geocoding on `/explore/geo`             |
+| Quality   | ESLint 9, Prettier, Husky, Vitest when needed                                 |
 
 See [motion-and-3d.md](../improvements/active/motion-and-3d.md) for integration ideas and phasing. See [mapbox.md](../improvements/archive/2026/mapbox.md) for Mapbox specs (shipped).
 

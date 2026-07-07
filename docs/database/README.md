@@ -49,4 +49,4 @@ Most solo work can use the hosted dev project + `db push` without running Docker
 ## Related
 
 - CLI reference: [supabase/README.md](../../supabase/README.md)
-- Auth & profiles: Phase 2 in [product/roadmap.md](../product/roadmap.md)
+- Auth & profiles: shipped — see [product/roadmap.md](../product/roadmap.md)

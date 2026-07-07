@@ -14,7 +14,7 @@ Personal portfolio site (repo: `zuna-app`). User-facing branding is **Victor Per
 
 - Next.js 16 App Router, React 19, TypeScript (strict)
 - Tailwind CSS 3 + shadcn/ui + `next-themes`
-- Supabase for auth and data (Phase 2+)
+- Supabase for auth and data
 - Yarn for package management
 
 ## Conventions
@@ -34,9 +34,9 @@ Personal portfolio site (repo: `zuna-app`). User-facing branding is **Victor Per
 - `docs/` — roadmap, architecture, active improvements
 - `supabase/migrations/` — versioned SQL; push with `yarn supabase:db-push` after `yarn supabase:link`
 
-## Phases
+## Roadmap
 
-See `docs/product/roadmap.md` for the full plan. Do not skip ahead without user approval.
+See `docs/product/roadmap.md` for the prioritized plan. Do not start lower-priority or deferred items without user approval.
 
 ## Git commits
 

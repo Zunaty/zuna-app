@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-06-22`
+Last updated: `2026-07-06`
 
 # Motion & 3D — Framer Motion, tsParticles, Three.js
 
@@ -30,7 +30,7 @@ Ideas and conventions for **Framer Motion**, **tsParticles**, and **Three.js** (
 framer-motion          — UI animation (installed)
 @tsparticles/react     — React wrapper (planned)
 @tsparticles/slim      — Core + common presets; tree-shake extra plugins as needed
-three                  — WebGL engine (planned Phase 4+)
+three                  — WebGL engine (only if a game needs 3D)
 @react-three/fiber     — React renderer for Three.js
 @react-three/drei      — helpers (OrbitControls, Environment, etc.)
 ```
@@ -57,7 +57,7 @@ components/three/
   canvas-shell.tsx        # dynamic import boundary, resize, fallback
   scenes/
     hero-ambient.tsx      # Home hero background
-    prompt-run-stage.tsx  # Prompt Run — optional 3D backdrop (Phase 4)
+    prompt-run-stage.tsx  # Prompt Run — optional 3D backdrop (idea)
     achievement-burst.tsx # Unlock celebration (cross-cutting)
 
 lib/motion/
@@ -71,41 +71,41 @@ Keep scene components small. Heavy logic (game state, API) stays in `lib/` — T
 
 ### Framer Motion — high value, lower risk
 
-| Area                   | Idea                                                  | Phase        | Notes                                             |
-| ---------------------- | ----------------------------------------------------- | ------------ | ------------------------------------------------- |
-| **Home hero**          | Staggered headline + CTA entrance                     | 1 polish / 9 | Subtle; 300–500ms total                           |
-| **Project cards**      | Hover lift + shared layout on case study nav          | 1 polish     | Already has CSS hover; motion adds enter stagger  |
-| **Explore grid**       | Stagger on filter change / infinite scroll batch      | 3            | `AnimatePresence` + `layout` for card reflow      |
-| **Pokémon detail**     | Shared element transition from list card → detail art | 3            | `layoutId` on artwork; fallback if reduced motion |
-| **Collection toggles** | Spring on favorite/caught/card toggle                 | 3            | Small delight; keep snappy                        |
-| **Route transitions**  | Soft fade/slide between major zones                   | 9            | Template-level; test with App Router layouts      |
-| **Prompt Run**         | Card reveal, rarity flash, shop item pop              | 4            | Core game feel — motion is essential here         |
-| **Achievements**       | Toast slide-in, badge scale pop                       | 4–5          | Cross-cutting; pair with optional 3D burst        |
-| **Profile stats**      | Count-up or bar fill on first view                    | 5            | `useInView` + motion values                       |
+| Area                   | Idea                                                  | Status  | Notes                                             |
+| ---------------------- | ----------------------------------------------------- | ------- | ------------------------------------------------- |
+| **Home hero**          | Staggered headline + CTA entrance                     | Shipped | Subtle; 300–500ms total                           |
+| **Project cards**      | Hover lift + shared layout on case study nav          | Shipped | Enter stagger on featured projects                |
+| **Explore grid**       | Stagger on filter change / infinite scroll batch      | Shipped | `AnimatePresence` + `layout` for card reflow      |
+| **Pokémon detail**     | Shared element transition from list card → detail art | Ideas   | `layoutId` on artwork; fallback if reduced motion |
+| **Collection toggles** | Spring on favorite/caught/card toggle                 | Shipped | Small delight; keep snappy                        |
+| **Route transitions**  | Soft fade/slide between major zones                   | Ideas   | Template-level; revisit at launch polish          |
+| **Prompt Run**         | Card reveal, rarity flash, shop item pop              | Shipped | Core game feel — motion is essential here         |
+| **Achievements**       | Toast slide-in, badge scale pop                       | Shipped | Cross-cutting; optional particle burst still open |
+| **Profile stats**      | Count-up or bar fill on first view                    | Ideas   | `useInView` + motion values                       |
 
 ### Three.js — signature moments only
 
-| Area                   | Idea                                           | Phase        | Notes                                                                                      |
-| ---------------------- | ---------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------ |
-| **Home hero**          | Soft particle field or abstract gradient mesh  | 1 polish / 9 | **tsParticles first** — slow drift, muted colors; pointer-none; keep CSS gradient fallback |
-| **Explore hub**        | None required                                  | —            | CSS is enough for zone cards                                                               |
-| **Pokémon detail**     | Optional holographic card frame around artwork | 3+           | Nice-to-have; 2D UI must remain primary                                                    |
-| **Prompt Run**         | Optional 3D stage backdrop (cards stay 2D)     | 4            | Nice-to-have; 2D card UI is primary                                                        |
-| **Achievement unlock** | Short particle burst (1–2s) then unmount       | 4–5          | **tsParticles** — trigger once; don’t loop                                                 |
-| **Playground landing** | Teaser loop or ambient particles               | 4            | Marketing for the zone                                                                     |
-| **Star Wars**          | Hyperspace streak transition (detail enter)    | 3            | **tsParticles** streak preset; fun easter egg; skip if perf budget tight                   |
+| Area                   | Idea                                           | Status  | Notes                                                                                      |
+| ---------------------- | ---------------------------------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| **Home hero**          | Soft particle field or abstract gradient mesh  | Planned | **tsParticles first** — slow drift, muted colors; pointer-none; keep CSS gradient fallback |
+| **Explore hub**        | None required                                  | —       | CSS is enough for zone cards                                                               |
+| **Pokémon detail**     | Optional holographic card frame around artwork | Ideas   | Nice-to-have; 2D UI must remain primary                                                    |
+| **Prompt Run**         | Optional 3D stage backdrop (cards stay 2D)     | Ideas   | Nice-to-have; 2D card UI is primary                                                        |
+| **Achievement unlock** | Short particle burst (1–2s) then unmount       | Planned | **tsParticles** — trigger once; don’t loop                                                 |
+| **Playground landing** | Teaser loop or ambient particles               | Ideas   | Marketing for the zone                                                                     |
+| **Star Wars**          | Hyperspace streak transition (detail enter)    | Ideas   | **tsParticles** streak preset; skip if zone is removed or perf budget tight                |
 
-## Phasing recommendation
+## Sequencing recommendation
 
 ```text
-Now (Phase 3)     → Document only (this file). Ship Pokédex UX first.
-Phase 3 polish    → Framer Motion: grid stagger, toggle springs, optional layoutId on detail
-Phase 4           → Framer Motion: Prompt Run game loop; optional Three.js stage backdrop
-Phase 5           → Achievement celebrations (motion + optional 3D burst)
-Phase 9           → Home hero tsParticles ambient (or Three.js if 3D), route transitions, perf pass
+Shipped        → Framer Motion foundation, page enter, grid staggers, toggle springs,
+                 Prompt Run game feel, achievement toasts
+Next (polish)  → Home hero tsParticles ambient, achievement unlock burst
+Launch polish  → Route transitions, prefers-reduced-motion audit, perf pass
+Ideas          → Three.js scenes — only if a game clearly benefits from 3D
 ```
 
-Do **not** block Phase 3 API/collection work on motion. Add motion when the feature UX is stable.
+Add motion when the feature UX is stable — never block feature work on motion.
 
 ## Next.js integration patterns
 
@@ -197,14 +197,14 @@ Run Lighthouse on `/` and `/explore/pokemon` before and after each motion/3D mil
 
 Track choices here as we implement:
 
-| Question               | Options                                                 | Lean                                                                                          |
-| ---------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template at launch polish                                         |
-| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped                                             |
-| Prompt Run 3D backdrop | Skip vs optional ambient scene                          | **2D cards first** — 3D only if it adds clear value                                           |
-| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time                                                          |
-| Hero particles         | tsParticles vs Three.js gradient mesh                   | **tsParticles** — lighter for 2D ambient; Three.js if we need depth                           |
-| Package install timing | Phase 3 polish vs later                                 | **Framer Motion installed**; tsParticles at hero polish; Three.js only if Prompt Run needs 3D |
+| Question               | Options                                                 | Lean                                                                                      |
+| ---------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Page transitions       | Next.js `template.tsx` vs view-specific wrappers        | Start view-specific; global template at launch polish                                     |
+| Motion provider scope  | Root layout vs zone layouts (`/playground`, `/explore`) | Root for shared presets; heavy scenes zone-scoped                                         |
+| Prompt Run 3D backdrop | Skip vs optional ambient scene                          | **2D cards first** — 3D only if it adds clear value                                       |
+| Pokémon detail 3D      | Holographic shader vs stay 2D                           | 2D first; 3D frame as polish if time                                                      |
+| Hero particles         | tsParticles vs Three.js gradient mesh                   | **tsParticles** — lighter for 2D ambient; Three.js if we need depth                       |
+| Package install timing | Now vs later                                            | **Framer Motion installed**; tsParticles at hero polish; Three.js only if a game needs 3D |
 
 ## First implementation checklist
 
@@ -216,11 +216,11 @@ Track choices here as we implement:
 - [ ] Document bundle impact in PR description
 - [ ] `yarn add @tsparticles/react @tsparticles/slim @tsparticles/engine`
 - [ ] Add `ParticlesShell` + `hero-ambient` preset (home hero pilot)
-- [ ] Phase 4: `yarn add three @react-three/fiber @react-three/drei @types/three`
+- [ ] If a game needs 3D: `yarn add three @react-three/fiber @react-three/drei @types/three`
 - [ ] Add `CanvasShell` + first scene (Prompt Run backdrop or hero — pick one)
 - [ ] CI still passes lint, typecheck, build
 
 ## Related docs
 
-- [product/roadmap.md](../../product/roadmap.md) — phase order
+- [product/roadmap.md](../../product/roadmap.md) — priority order
 - [architecture/overview.md](../../architecture/overview.md) — stack and routes

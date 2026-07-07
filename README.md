@@ -2,7 +2,7 @@
 
 Public portfolio and interactive playground by [Victor Perez](https://github.com/Zunaty).
 
-More than a static resume — a place to explore projects, play small games, browse API-driven demos, and (eventually) earn achievements as you poke around. Built to showcase modern full-stack patterns recruiters can actually inspect in the open.
+More than a static resume — a place to explore projects, play small games, browse API-driven demos, and earn achievements as you poke around. Built to showcase modern full-stack patterns recruiters can actually inspect in the open.
 
 ## Live demo
 
@@ -10,22 +10,25 @@ _Coming soon._
 
 ## What’s here
 
-| Zone           | Description                        | Status                             |
-| -------------- | ---------------------------------- | ---------------------------------- |
-| **Portfolio**  | About, projects, resume, contact   | Live                               |
-| **Playground** | Prompt Run, mini-games, scores     | Phase 4+                           |
-| **Explore**    | Pokédex, Star Wars, API demos      | Planned                            |
-| **Account**    | Auth, saved progress, achievements | Live (profile); achievements later |
+| Zone           | Description                          | Status |
+| -------------- | ------------------------------------ | ------ |
+| **Portfolio**  | About, projects, resume, contact     | Live   |
+| **Playground** | Type Racer, Prompt Run, scores       | Live   |
+| **Explore**    | Pokédex, Star Wars, geocoding fly-to | Live   |
+| **Account**    | Auth, saved progress, achievements   | Live   |
 
-See [docs/product/roadmap.md](./docs/product/roadmap.md) for the full phased plan.
+See [docs/product/roadmap.md](./docs/product/roadmap.md) for the prioritized plan.
 
 ## Stack
 
 - **Framework** — [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/)
 - **Language** — TypeScript (strict)
 - **Styling** — [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), [next-themes](https://github.com/pacocoursey/next-themes)
-- **Auth & data** — Supabase (Phase 2+)
-- **Tooling** — ESLint, Prettier, Husky, GitHub Actions CI
+- **Auth & data** — Supabase
+- **Motion** — [Framer Motion](https://motion.dev/)
+- **Maps** — [Mapbox GL](https://www.mapbox.com/) (aviation map, geocoding fly-to)
+- **AI** — [fal.ai](https://fal.ai/) FLUX.2 Turbo (Prompt Run image generation)
+- **Tooling** — ESLint, Prettier, Husky, Vitest, GitHub Actions CI
 
 ## Getting started
 
@@ -35,7 +38,7 @@ See [docs/product/roadmap.md](./docs/product/roadmap.md) for the full phased pla
 # Install dependencies
 yarn install
 
-# Copy env template (optional for Phase 0)
+# Copy env template
 cp .env.example .env.local
 
 # Start dev server
@@ -49,8 +52,16 @@ Open [http://localhost:3000](http://localhost:3000).
 | Variable                               | Required   | Description                                                       |
 | -------------------------------------- | ---------- | ----------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL`                 | No         | Canonical site URL for metadata and OAuth (defaults to localhost) |
-| `NEXT_PUBLIC_SUPABASE_URL`             | Phase 2+   | Supabase project URL                                              |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Yes (auth) | Supabase project URL                                              |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes (auth) | Publishable/anon key from Supabase API settings                   |
+| `SUPABASE_SERVICE_ROLE_KEY`            | No         | Server-only — durable rate limits and admin tasks                 |
+| `RATE_LIMIT_SALT`                      | No         | Optional salt for hashing guest rate-limit keys                   |
+| `FAL_KEY`                              | No         | fal.ai key — enables Prompt Run image generation                  |
+| `PROMPT_RUN_GENERATION_ENABLED`        | No         | Feature gate for Prompt Run generation (`true`/`false`)           |
+| `NEXT_PUBLIC_MAPBOX_TOKEN`             | No         | Client map rendering (aviation map, `/explore/geo`)               |
+| `MAPBOX_ACCESS_TOKEN`                  | No         | Server-side geocoding route                                       |
+
+Features gated by optional variables degrade gracefully — maps and image generation simply don't render without their keys. See [.env.example](./.env.example) for the full template.
 
 ## Scripts
 
@@ -61,6 +72,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `yarn start`        | Serve production build        |
 | `yarn lint`         | Run ESLint                    |
 | `yarn typecheck`    | Run TypeScript compiler check |
+| `yarn test`         | Run Vitest unit tests         |
 | `yarn format`       | Format with Prettier          |
 | `yarn format:check` | Check formatting              |
 
