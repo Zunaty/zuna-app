@@ -33,9 +33,9 @@ Pay down before the next game ships — two games already diverge slightly.
 Picked and specced: **Breakout** first (validates the shared canvas engine), then **Lunar Lander** (flagship, Earth-to-Moon mission).
 
 - [x] Pick and spec the next game — [breakout.md](../improvements/active/breakout.md), [lunar-lander.md](../improvements/active/lunar-lander.md)
-- [ ] Breakout — shared `lib/game-canvas/` engine + Classic core + juice + Roguelite draft mode
+- [x] Breakout — shared `lib/game-canvas/` engine + Classic core + juice + Roguelite draft mode (needs `yarn supabase:db-push` for the `breakout_best_scores` table)
 - [ ] Lunar Lander — descent MVP first, then full three-phase mission
-- [ ] Build on the shared patterns above (guest persist, Supabase bests, achievements)
+- [x] Build on the shared patterns above (guest persist, Supabase bests, achievements)
 
 ## Deferred
 

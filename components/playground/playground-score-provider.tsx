@@ -2,6 +2,8 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
+import type { BreakoutMode } from "@/lib/breakout/constants";
+import type { BreakoutBestScore } from "@/lib/breakout/scoring";
 import type { PlaygroundCloudScores } from "@/lib/playground/merge-scores";
 import { usePlaygroundCloudSync } from "@/lib/playground/use-playground-cloud-sync";
 import type { PromptRunBestRun } from "@/lib/prompt-run/storage";
@@ -13,6 +15,7 @@ type PlaygroundScoreContextValue = {
   cloudScores: PlaygroundCloudScores;
   persistTypeRacerBest: (mode: TypeRacerMode, score: TypeRacerBestScore) => void;
   persistPromptRunBest: (best: PromptRunBestRun) => void;
+  persistBreakoutBest: (mode: BreakoutMode, score: BreakoutBestScore) => void;
 };
 
 const PlaygroundScoreContext = createContext<PlaygroundScoreContextValue | null>(null);
@@ -24,14 +27,14 @@ type PlaygroundScoreProviderProps = {
 };
 
 export function PlaygroundScoreProvider({ isAuthenticated, serverScores, children }: PlaygroundScoreProviderProps) {
-  const { cloudScores, persistTypeRacerBest, persistPromptRunBest } = usePlaygroundCloudSync({
+  const { cloudScores, persistTypeRacerBest, persistPromptRunBest, persistBreakoutBest } = usePlaygroundCloudSync({
     isAuthenticated,
     serverScores,
   });
 
   return (
     <PlaygroundScoreContext.Provider
-      value={{ isAuthenticated, cloudScores, persistTypeRacerBest, persistPromptRunBest }}
+      value={{ isAuthenticated, cloudScores, persistTypeRacerBest, persistPromptRunBest, persistBreakoutBest }}
     >
       {children}
     </PlaygroundScoreContext.Provider>
@@ -43,9 +46,10 @@ export function usePlaygroundScoreContext(): PlaygroundScoreContextValue {
   if (!context) {
     return {
       isAuthenticated: false,
-      cloudScores: { typeRacer: {}, promptRun: null },
+      cloudScores: { typeRacer: {}, promptRun: null, breakout: {} },
       persistTypeRacerBest: () => undefined,
       persistPromptRunBest: () => undefined,
+      persistBreakoutBest: () => undefined,
     };
   }
 

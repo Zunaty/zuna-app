@@ -33,6 +33,36 @@ export type Database = {
   };
   public: {
     Tables: {
+      breakout_best_scores: {
+        Row: {
+          achieved_at: string;
+          id: string;
+          level: number;
+          mode: string;
+          score: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          achieved_at?: string;
+          id?: string;
+          level: number;
+          mode: string;
+          score: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          achieved_at?: string;
+          id?: string;
+          level?: number;
+          mode?: string;
+          score?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       pokemon_collection: {
         Row: {
           caught_in_game: boolean;

@@ -4,9 +4,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   syncPlaygroundScoresFromLocal,
+  upsertBreakoutBestScore,
   upsertPromptRunBestRun,
   upsertTypeRacerBestScore,
 } from "@/app/playground/actions";
+import type { BreakoutMode } from "@/lib/breakout/constants";
+import type { BreakoutBestScore } from "@/lib/breakout/scoring";
+import {
+  getAllBestScores as getBreakoutBestScores,
+  mergeBestScoresIntoLocal as mergeBreakoutBestScoresIntoLocal,
+} from "@/lib/breakout/storage";
 import { mergePlaygroundCloudScores, type PlaygroundCloudScores } from "@/lib/playground/merge-scores";
 import { getAllBestScores, mergeBestScoresIntoLocal } from "@/lib/type-racer/storage";
 import { getBestRun, mergeBestRunIntoLocal, type PromptRunBestRun } from "@/lib/prompt-run/storage";
@@ -30,6 +37,7 @@ export function usePlaygroundCloudSync({ isAuthenticated, serverScores }: UsePla
     const local: PlaygroundCloudScores = {
       typeRacer: getAllBestScores(),
       promptRun: getBestRun(),
+      breakout: getBreakoutBestScores(),
     };
 
     void syncPlaygroundScoresFromLocal(local).then((result) => {
@@ -41,6 +49,7 @@ export function usePlaygroundCloudSync({ isAuthenticated, serverScores }: UsePla
         if (merged.promptRun) {
           mergeBestRunIntoLocal(merged.promptRun);
         }
+        mergeBreakoutBestScoresIntoLocal(merged.breakout);
         setCloudScores(merged);
         return;
       }
@@ -49,6 +58,7 @@ export function usePlaygroundCloudSync({ isAuthenticated, serverScores }: UsePla
       if (result.scores.promptRun) {
         mergeBestRunIntoLocal(result.scores.promptRun);
       }
+      mergeBreakoutBestScoresIntoLocal(result.scores.breakout);
       setCloudScores(result.scores);
     });
   }, [isAuthenticated, serverScores]);
@@ -86,5 +96,23 @@ export function usePlaygroundCloudSync({ isAuthenticated, serverScores }: UsePla
     [isAuthenticated],
   );
 
-  return { cloudScores, persistTypeRacerBest, persistPromptRunBest };
+  const persistBreakoutBest = useCallback(
+    (mode: BreakoutMode, score: BreakoutBestScore) => {
+      if (!isAuthenticated) {
+        return;
+      }
+
+      void upsertBreakoutBestScore(mode, score).then((result) => {
+        if (!result.error) {
+          setCloudScores((current) => ({
+            ...current,
+            breakout: { ...current.breakout, [mode]: score },
+          }));
+        }
+      });
+    },
+    [isAuthenticated],
+  );
+
+  return { cloudScores, persistTypeRacerBest, persistPromptRunBest, persistBreakoutBest };
 }

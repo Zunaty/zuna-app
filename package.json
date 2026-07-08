@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "node scripts/run-vitest.mjs run",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "prepare": "husky",
@@ -65,6 +65,6 @@
     "tailwindcss": "^3.4.18",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5",
-    "vitest": "^4.1.9"
+    "vitest": "4.1.10"
   }
 }

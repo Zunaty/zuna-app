@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
 import { StaggerItem } from "@/components/motion/stagger-children";
+import { getBestScoreHighlight as getBreakoutHighlight, subscribeBreakoutStorage } from "@/lib/breakout/storage";
 import { getBestRunHighlight, subscribePromptRunStorage } from "@/lib/prompt-run/storage";
 import { getBestScoreHighlight, TYPE_RACER_STORAGE_EVENT } from "@/lib/type-racer/storage";
 
@@ -38,9 +39,20 @@ function usePromptRunHighlight(): string | null {
   );
 }
 
+function useBreakoutHighlight(): string | null {
+  const { cloudScores } = usePlaygroundScoreContext();
+
+  return useSyncExternalStore(
+    subscribeBreakoutStorage,
+    () => getBreakoutHighlight(cloudScores.breakout),
+    () => null,
+  );
+}
+
 export function PlaygroundHubGames() {
   const typeRacerStat = useTypeRacerHighlight();
   const promptRunStat = usePromptRunHighlight();
+  const breakoutStat = useBreakoutHighlight();
 
   return (
     <>
@@ -60,6 +72,15 @@ export function PlaygroundHubGames() {
           href="/playground/prompt-run"
           status="live"
           localStat={promptRunStat}
+        />
+      </StaggerItem>
+      <StaggerItem>
+        <PlaygroundGameCard
+          title="Breakout"
+          description="Retro brick breaker on canvas — classic levels, or draft boons and curses in Roguelite mode."
+          href="/playground/breakout"
+          status="live"
+          localStat={breakoutStat}
         />
       </StaggerItem>
     </>

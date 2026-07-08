@@ -1,4 +1,6 @@
 import {
+  Award,
+  Blocks,
   CircleDot,
   Compass,
   Crown,
@@ -9,6 +11,7 @@ import {
   Heart,
   ImageIcon,
   Keyboard,
+  Layers,
   Library,
   Mail,
   Map as MapIcon,
@@ -16,13 +19,17 @@ import {
   Medal,
   Plane,
   ScrollText,
+  ShieldCheck,
   Shuffle,
+  Skull,
   SlidersHorizontal,
   Sparkles,
+  Star,
   Target,
   Timer,
   Trophy,
   UserCheck,
+  Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -49,19 +56,27 @@ export const ACHIEVEMENT_IDS = [
   "prompt-run-streak-7",
   "prompt-run-generate",
   "prompt-run-high-score",
+  "breakout-first-clear",
+  "breakout-classic",
+  "breakout-no-miss",
+  "breakout-combo-5",
+  "breakout-run-deep",
+  "breakout-cursed",
+  "breakout-high-score",
   "playground-sampler",
   "completionist",
 ] as const;
 
 export type AchievementId = (typeof ACHIEVEMENT_IDS)[number];
 
-export type AchievementCategory = "meta" | "explorer" | "type-racer" | "prompt-run";
+export type AchievementCategory = "meta" | "explorer" | "type-racer" | "prompt-run" | "breakout";
 
 export const ACHIEVEMENT_CATEGORY_LABEL: Record<AchievementCategory, string> = {
   meta: "Meta",
   explorer: "Explorer",
   "type-racer": "Type Racer",
   "prompt-run": "Prompt Run",
+  breakout: "Breakout",
 };
 
 export type AchievementDefinition = {
@@ -255,6 +270,62 @@ export const ACHIEVEMENTS: Record<AchievementId, AchievementDefinition> = {
     description: "Beat your personal best run score.",
     points: 15,
     icon: Medal,
+  },
+  "breakout-first-clear": {
+    id: "breakout-first-clear",
+    category: "breakout",
+    title: "Demolition begins",
+    description: "Clear your first Breakout level in any mode.",
+    points: 10,
+    icon: Blocks,
+  },
+  "breakout-classic": {
+    id: "breakout-classic",
+    category: "breakout",
+    title: "Old school",
+    description: "Clear all five Classic levels in a single run.",
+    points: 30,
+    icon: Award,
+  },
+  "breakout-no-miss": {
+    id: "breakout-no-miss",
+    category: "breakout",
+    title: "Safe hands",
+    description: "Clear a level without losing a life.",
+    points: 15,
+    icon: ShieldCheck,
+  },
+  "breakout-combo-5": {
+    id: "breakout-combo-5",
+    category: "breakout",
+    title: "Chain reaction",
+    description: "Break 5 or more bricks in a single volley.",
+    points: 20,
+    icon: Zap,
+  },
+  "breakout-run-deep": {
+    id: "breakout-run-deep",
+    category: "breakout",
+    title: "Deep run",
+    description: "Reach level 10 in a Roguelite run.",
+    points: 30,
+    icon: Layers,
+  },
+  "breakout-cursed": {
+    id: "breakout-cursed",
+    category: "breakout",
+    title: "Pain enthusiast",
+    description: "Clear a level while holding 3 or more curses.",
+    points: 25,
+    icon: Skull,
+  },
+  "breakout-high-score": {
+    id: "breakout-high-score",
+    category: "breakout",
+    title: "Brick by brick",
+    description: "Beat your personal best Breakout score.",
+    points: 15,
+    icon: Star,
   },
   "playground-sampler": {
     id: "playground-sampler",

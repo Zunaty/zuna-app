@@ -11,6 +11,8 @@ import {
 } from "@/lib/achievements/definitions";
 import { getLevelProgress, getTotalPoints } from "@/lib/achievements/points";
 import { getUnlockedIds, mergeUnlocks, type UnlockedAchievements } from "@/lib/achievements/unlocks";
+import { BREAKOUT_MODES, BREAKOUT_MODE_LABEL } from "@/lib/breakout/constants";
+import type { BreakoutBestScores } from "@/lib/breakout/storage";
 import type { PromptRunBestRun } from "@/lib/prompt-run/storage";
 import { TYPE_RACER_MODES, TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
 import type { TypeRacerBestScores } from "@/lib/type-racer/storage";
@@ -19,6 +21,7 @@ type ProfileStatsProps = {
   serverUnlocks: UnlockedAchievements;
   typeRacer: TypeRacerBestScores;
   promptRun: PromptRunBestRun | null;
+  breakout: BreakoutBestScores;
 };
 
 function formatDate(iso: string): string {
@@ -30,7 +33,7 @@ function formatDate(iso: string): string {
   });
 }
 
-export function ProfileStats({ serverUnlocks, typeRacer, promptRun }: ProfileStatsProps) {
+export function ProfileStats({ serverUnlocks, typeRacer, promptRun, breakout }: ProfileStatsProps) {
   const { unlocked } = useAchievements();
 
   const unlocks = useMemo(() => mergeUnlocks(serverUnlocks, unlocked), [serverUnlocks, unlocked]);
@@ -112,6 +115,27 @@ export function ProfileStats({ serverUnlocks, typeRacer, promptRun }: ProfileSta
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">No completed runs yet — finish a run to set a best.</p>
           )}
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-6">
+          <h2 className="font-semibold">Breakout</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Personal bests per mode.</p>
+          <dl className="mt-4 space-y-3 text-sm">
+            {BREAKOUT_MODES.map((mode) => {
+              const score = breakout[mode];
+
+              return (
+                <div key={mode} className="flex items-baseline justify-between gap-3">
+                  <dt className="text-muted-foreground">{BREAKOUT_MODE_LABEL[mode]}</dt>
+                  <dd className="text-right font-mono font-medium tabular-nums">
+                    {score
+                      ? `${score.score.toLocaleString("en-US")} pts · ${score.level} ${score.level === 1 ? "level" : "levels"}`
+                      : "—"}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
         </div>
       </section>
 

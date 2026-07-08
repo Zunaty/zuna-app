@@ -81,7 +81,12 @@ export default async function ProfilePage() {
         }}
       >
         <div className="space-y-6">
-          <ProfileStats serverUnlocks={serverUnlocks} typeRacer={scores.typeRacer} promptRun={scores.promptRun} />
+          <ProfileStats
+            serverUnlocks={serverUnlocks}
+            typeRacer={scores.typeRacer}
+            promptRun={scores.promptRun}
+            breakout={scores.breakout}
+          />
 
           <ProfileSettings
             userId={user.id}

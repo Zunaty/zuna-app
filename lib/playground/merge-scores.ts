@@ -1,3 +1,6 @@
+import { BREAKOUT_MODES } from "@/lib/breakout/constants";
+import { isBreakoutScoreBetter } from "@/lib/breakout/scoring";
+import type { BreakoutBestScores } from "@/lib/breakout/storage";
 import type { PromptRunBestRun } from "@/lib/prompt-run/storage";
 import { TYPE_RACER_MODES } from "@/lib/type-racer/constants";
 import type { TypeRacerBestScore, TypeRacerBestScores } from "@/lib/type-racer/storage";
@@ -5,6 +8,7 @@ import type { TypeRacerBestScore, TypeRacerBestScores } from "@/lib/type-racer/s
 export type PlaygroundCloudScores = {
   typeRacer: TypeRacerBestScores;
   promptRun: PromptRunBestRun | null;
+  breakout: BreakoutBestScores;
 };
 
 export function isTypeRacerScoreBetter(candidate: TypeRacerBestScore, current: TypeRacerBestScore): boolean {
@@ -57,6 +61,25 @@ export function mergePromptRunBest(
   return isPromptRunBestBetter(remote, local) ? remote : local;
 }
 
+export function mergeBreakoutScores(local: BreakoutBestScores, remote: BreakoutBestScores): BreakoutBestScores {
+  const merged: BreakoutBestScores = { ...local };
+
+  for (const mode of BREAKOUT_MODES) {
+    const remoteScore = remote[mode];
+    const localScore = local[mode];
+
+    if (!remoteScore) {
+      continue;
+    }
+
+    if (!localScore || isBreakoutScoreBetter(remoteScore, localScore)) {
+      merged[mode] = remoteScore;
+    }
+  }
+
+  return merged;
+}
+
 export function mergePlaygroundCloudScores(
   local: PlaygroundCloudScores,
   remote: PlaygroundCloudScores,
@@ -64,5 +87,6 @@ export function mergePlaygroundCloudScores(
   return {
     typeRacer: mergeTypeRacerScores(local.typeRacer, remote.typeRacer),
     promptRun: mergePromptRunBest(local.promptRun, remote.promptRun),
+    breakout: mergeBreakoutScores(local.breakout, remote.breakout),
   };
 }
