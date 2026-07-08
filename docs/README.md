@@ -18,6 +18,8 @@ Canonical project docs for zuna-app.
 | [improvements/active/motion-and-3d.md](./improvements/active/motion-and-3d.md) | Framer Motion + Three.js ideas and plan |
 | [improvements/active/type-racer.md](./improvements/active/type-racer.md)       | Type Racer mini-game spec               |
 | [improvements/active/prompt-run.md](./improvements/active/prompt-run.md)       | Prompt Run mini-game spec               |
+| [improvements/active/breakout.md](./improvements/active/breakout.md)           | Breakout mini-game spec (ships first)   |
+| [improvements/active/lunar-lander.md](./improvements/active/lunar-lander.md)   | Lunar Lander mini-game spec (flagship)  |
 
 ## Archived improvements (2026)
 

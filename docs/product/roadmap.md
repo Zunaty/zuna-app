@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-07-06`
+Last updated: `2026-07-08`
 
 # Product roadmap
 
@@ -28,9 +28,13 @@ Pay down before the next game ships — two games already diverge slightly.
 - [ ] Shared game layout
 - [ ] Vitest coverage for pure game logic
 
-### 3. New mini-game
+### 3. New mini-games — canvas pair
 
-- [ ] Pick and spec the next game (see [backlog — Playground](./backlog.md#playground--games) ideas)
+Picked and specced: **Breakout** first (validates the shared canvas engine), then **Lunar Lander** (flagship, Earth-to-Moon mission).
+
+- [x] Pick and spec the next game — [breakout.md](../improvements/active/breakout.md), [lunar-lander.md](../improvements/active/lunar-lander.md)
+- [ ] Breakout — shared `lib/game-canvas/` engine + Classic core + juice + Roguelite draft mode
+- [ ] Lunar Lander — descent MVP first, then full three-phase mission
 - [ ] Build on the shared patterns above (guest persist, Supabase bests, achievements)
 
 ## Deferred
