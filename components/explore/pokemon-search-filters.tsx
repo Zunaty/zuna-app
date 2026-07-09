@@ -1,7 +1,8 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -65,19 +66,11 @@ export function PokemonSearchFilters({ view, filters, onChange }: PokemonSearchF
         {view === "browse" ? (
           <div className="w-full space-y-2 lg:w-48">
             <Label htmlFor="pokemon-type">Type</Label>
-            <select
+            <PokemonTypeSelect
               id="pokemon-type"
               value={filters.type}
-              onChange={(event) => onChange({ ...filters, type: event.target.value })}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              <option value="">All types</option>
-              {POKEMON_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {formatPokemonName(type)}
-                </option>
-              ))}
-            </select>
+              onChange={(type) => onChange({ ...filters, type })}
+            />
           </div>
         ) : null}
       </div>
@@ -147,6 +140,93 @@ export function PokemonSearchFilters({ view, filters, onChange }: PokemonSearchF
           </Link>{" "}
           to track in-game catches and TCG cards across devices.
         </p>
+      ) : null}
+    </div>
+  );
+}
+
+function PokemonTypeSelect({ id, value, onChange }: { id: string; value: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const options = useMemo(
+    () => [
+      { value: "", label: "All types" },
+      ...POKEMON_TYPES.map((type) => ({ value: type, label: formatPokemonName(type) })),
+    ],
+    [],
+  );
+
+  const selectedLabel = options.find((option) => option.value === value)?.label ?? "All types";
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(event: PointerEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        id={id}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className={cn(
+          "flex h-9 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-sm",
+          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+        )}
+      >
+        <span className="truncate">{selectedLabel}</span>
+        <ChevronDown
+          className={cn("size-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
+        />
+      </button>
+
+      {open ? (
+        <ul
+          role="listbox"
+          aria-labelledby={id}
+          className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-md"
+        >
+          {options.map((option) => (
+            <li key={option.value || "all"} role="presentation">
+              <button
+                type="button"
+                role="option"
+                aria-selected={value === option.value}
+                onClick={() => {
+                  onChange(option.value);
+                  setOpen(false);
+                }}
+                className={cn(
+                  "flex w-full px-3 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground",
+                  value === option.value && "bg-accent/50 font-medium",
+                )}
+              >
+                {option.label}
+              </button>
+            </li>
+          ))}
+        </ul>
       ) : null}
     </div>
   );
