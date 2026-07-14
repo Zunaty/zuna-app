@@ -8,11 +8,11 @@ Ideas and conventions for **Framer Motion**, **tsParticles**, and **Three.js** (
 
 ## Why these libraries
 
-| Library            | Role on this site                                                                                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Framer Motion**  | UI motion — page transitions, list stagger, micro-interactions, game feedback (Prompt Run card reveals, achievement toasts). Complements Tailwind + `tailwindcss-animate` for declarative, orchestrated animation.  |
-| **tsParticles**    | Lightweight canvas particle effects — hero ambient fields, one-shot celebration bursts, zone-themed backgrounds (e.g. Star Wars hyperspace). Prefer over Three.js when the effect is 2D particles, not 3D geometry. |
-| **Three.js (R3F)** | Signature moments that need real 3D — optional Prompt Run stage backdrop, holographic card frames, mesh-based scenes. Used sparingly so the portfolio stays fast and accessible.                                    |
+| Library            | Role on this site                                                                                                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Framer Motion**  | UI motion — page transitions, list stagger, micro-interactions, game feedback (Prompt Run card reveals, achievement toasts). Complements Tailwind + `tailwindcss-animate` for declarative, orchestrated animation. |
+| **tsParticles**    | Lightweight canvas particle effects — hero ambient fields, one-shot celebration bursts, zone-themed backgrounds. Prefer over Three.js when the effect is 2D particles, not 3D geometry.                            |
+| **Three.js (R3F)** | Signature moments that need real 3D — optional Prompt Run stage backdrop, holographic card frames, mesh-based scenes. Used sparingly so the portfolio stays fast and accessible.                                   |
 
 **Portfolio angle:** Recruiters see polished interaction design _and_ WebGL literacy in one repo — without turning every page into a GPU demo.
 
@@ -51,7 +51,6 @@ components/particles/
   presets/
     hero-ambient.ts       # Home hero — slow drift, muted palette
     achievement-burst.ts  # One-shot confetti / sparkles
-    hyperspace.ts         # Star Wars detail enter (optional)
 
 components/three/
   canvas-shell.tsx        # dynamic import boundary, resize, fallback
@@ -93,7 +92,6 @@ Keep scene components small. Heavy logic (game state, API) stays in `lib/` — T
 | **Prompt Run**         | Optional 3D stage backdrop (cards stay 2D)     | Ideas   | Nice-to-have; 2D card UI is primary                                                        |
 | **Achievement unlock** | Short particle burst (1–2s) then unmount       | Planned | **tsParticles** — trigger once; don’t loop                                                 |
 | **Playground landing** | Teaser loop or ambient particles               | Ideas   | Marketing for the zone                                                                     |
-| **Star Wars**          | Hyperspace streak transition (detail enter)    | Ideas   | **tsParticles** streak preset; skip if zone is removed or perf budget tight                |
 
 ## Sequencing recommendation
 
@@ -145,7 +143,7 @@ const Particles = dynamic(() => import("@tsparticles/react").then((m) => m.Parti
 - One particle layer per route; don’t stack multiple canvases.
 - Presets live in `components/particles/presets/` as plain config objects, not inline JSX blobs.
 
-**Candidate surfaces:** home hero background, achievement unlock burst, Star Wars detail enter, playground hub teaser.
+**Candidate surfaces:** home hero background, achievement unlock burst, playground hub teaser.
 
 ### Three.js (React Three Fiber)
 

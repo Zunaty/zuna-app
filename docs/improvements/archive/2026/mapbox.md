@@ -11,7 +11,7 @@ Two small Mapbox integrations: a **personal flight-history map** on About, and a
 ## Why Mapbox here
 
 - **About map** — ties Westminster / IFR background to something visual and personal; not a generic "pin on Contact."
-- **Explore demo** — same pattern as Pokédex and Star Wars: external API, polished UI, recruiter-visible code.
+- **Explore demo** — same pattern as Pokédex: external API, polished UI, recruiter-visible code.
 - **Incremental** — flight routes are data you add over time; no need to catalog every leg before shipping v1.
 
 ## Features
@@ -115,7 +115,7 @@ app/about/page.tsx                 # embed AviationFlightMap section
 
 ### Concept
 
-Search for a place → server calls **Mapbox Geocoding API** → map flies (or jumps) camera to the result. Same "API playground" framing as Pokédex and Star Wars.
+Search for a place → server calls **Mapbox Geocoding API** → map flies (or jumps) camera to the result. Same "API playground" framing as Pokédex.
 
 ### Route
 

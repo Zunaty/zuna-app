@@ -10,12 +10,12 @@ _Coming soon._
 
 ## What’s here
 
-| Zone           | Description                          | Status |
-| -------------- | ------------------------------------ | ------ |
-| **Portfolio**  | About, projects, resume, contact     | Live   |
-| **Playground** | Type Racer, Prompt Run, scores       | Live   |
-| **Explore**    | Pokédex, Star Wars, geocoding fly-to | Live   |
-| **Account**    | Auth, saved progress, achievements   | Live   |
+| Zone           | Description                        | Status |
+| -------------- | ---------------------------------- | ------ |
+| **Portfolio**  | About, projects, resume, contact   | Live   |
+| **Playground** | Type Racer, Prompt Run, scores     | Live   |
+| **Explore**    | Pokédex, geocoding fly-to          | Live   |
+| **Account**    | Auth, saved progress, achievements | Live   |
 
 See [docs/product/roadmap.md](./docs/product/roadmap.md) for the prioritized plan.
 

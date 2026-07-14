@@ -8,7 +8,7 @@ import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: "Explore",
-  description: `API-driven demos on ${site.name}'s portfolio — browse Pokémon, Star Wars, and Mapbox geocoding.`,
+  description: `API-driven demos on ${site.name}'s portfolio — browse Pokémon and Mapbox geocoding.`,
 };
 
 export default function ExplorePage() {
@@ -28,14 +28,6 @@ export default function ExplorePage() {
               title="Pokédex"
               description="Paginated creature list, detail pages with stats and types, and browser-saved favorites."
               href="/explore/pokemon"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <ExploreZoneCard
-              eyebrow="SWAPI"
-              title="Star Wars"
-              description="Browse films, characters, planets, species, starships, and vehicles from the franchise."
-              href="/explore/star-wars"
             />
           </StaggerItem>
           <StaggerItem>

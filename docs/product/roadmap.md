@@ -40,14 +40,13 @@ Picked and specced: **Breakout** first (validates the shared canvas engine), the
 ## Deferred
 
 - **AI chat (`/chat`)** — streaming chat UI and server route. Deliberately deferred: adds ongoing API cost and moderation surface. Revisit after launch.
-- **Star Wars zone decision** — keep or remove; decide before deep launch-polish work on those pages.
 
 ## Shipped ✅
 
 - **Foundation** — Next.js 16 App Router, TypeScript strict, ESLint/Prettier/Husky, shadcn/ui + `next-themes`, CI
 - **Portfolio shell** — Landing, About, Projects, Resume, Contact; ground-up visual design; SEO metadata and OG images (root)
 - **Supabase auth + profile** — `lib/supabase/*`, login/sign-up/callback, profiles table, guest vs authenticated UX
-- **Explore zone** — Pokédex (PokéAPI) with collection, Star Wars (SWAPI), geocoding fly-to (`/explore/geo`), motion polish
+- **Explore zone** — Pokédex (PokéAPI) with collection, geocoding fly-to (`/explore/geo`), motion polish
 - **Playground foundation** — hub at `/playground`, Type Racer, Prompt Run
 - **Persistence & achievements** — Supabase high scores (per-mode/per-game bests), `/profile` stats and scores, achievement system (code catalog + `user_achievements` sync, unlock toasts, wired across Playground, portfolio Explorer, Explore zone, and meta combos)
 - **Prompt Run AI images** — [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) (`fal-ai/flux-2/turbo`, $0.008/MP); env-gated, rate-limited; [spec](../improvements/active/prompt-run.md)
@@ -56,13 +55,13 @@ Picked and specced: **Breakout** first (validates the shared canvas engine), the
 
 Runs across the whole site — optional meta-game, never gates core portfolio content. Full item list: [backlog — Account & meta](./backlog.md#account--meta).
 
-| Category            | Examples                                             |
-| ------------------- | ---------------------------------------------------- |
-| Explorer            | Visit all sections, open all project case studies    |
-| Pokédex / Star Wars | Catch milestones, favorites                          |
-| Playground          | Game milestones (Type Racer WPM, Prompt Run streaks) |
-| Meta                | Sign up, return visits, complete profile             |
-| Secret              | Hidden easter eggs                                   |
+| Category   | Examples                                             |
+| ---------- | ---------------------------------------------------- |
+| Explorer   | Visit all sections, open all project case studies    |
+| Pokédex    | Catch milestones, favorites                          |
+| Playground | Game milestones (Type Racer WPM, Prompt Run streaks) |
+| Meta       | Sign up, return visits, complete profile             |
+| Secret     | Hidden easter eggs                                   |
 
 **Data model:** `profiles` (points, level), `user_achievements` (unlock state). Definitions live in code — `lib/achievements/definitions.ts` — so no `achievements` table is needed.
 

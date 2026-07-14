@@ -38,7 +38,6 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 | -------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------- |
 | Pokédex — list, detail, filters              | ✅     | PokéAPI                                                                                        |
 | Pokédex — collection (favorite, caught, TCG) | ✅     | Guest favorites + auth sync                                                                    |
-| Star Wars browse                             | ✅     | SWAPI                                                                                          |
 | Explore polish / motion                      | ✅     | Page enter, grid stagger, toggles on explore routes                                            |
 | **Geocoding fly-to**                         | ✅     | `/explore/geo` — Mapbox Geocoding search + map; [spec](../improvements/archive/2026/mapbox.md) |
 
@@ -59,24 +58,24 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 
 ## Motion & 3D
 
-| Item                         | Status  | Notes                                                                                                                      |
-| ---------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Framer Motion foundation     | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md)                                                                |
-| Home / Pokédex motion polish | Partial | Hero stagger, grid, toggles                                                                                                |
-| Page transitions             | Ideas   | Global or zone-scoped                                                                                                      |
-| **tsParticles**              | Planned | Hero ambient field, achievement bursts, Star Wars hyperspace — [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
-| Three.js — hero ambient      | Ideas   | Lazy WebGL background (or defer if tsParticles covers hero)                                                                |
-| Three.js — Prompt Run scene  | Ideas   | Optional 3D category stage when game ships                                                                                 |
+| Item                         | Status  | Notes                                                                                                |
+| ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| Framer Motion foundation     | ✅      | [motion-and-3d.md](../improvements/active/motion-and-3d.md)                                          |
+| Home / Pokédex motion polish | Partial | Hero stagger, grid, toggles                                                                          |
+| Page transitions             | Ideas   | Global or zone-scoped                                                                                |
+| **tsParticles**              | Planned | Hero ambient field, achievement bursts — [motion-and-3d.md](../improvements/active/motion-and-3d.md) |
+| Three.js — hero ambient      | Ideas   | Lazy WebGL background (or defer if tsParticles covers hero)                                          |
+| Three.js — Prompt Run scene  | Ideas   | Optional 3D category stage when game ships                                                           |
 
 ## Account & meta
 
-| Item                         | Status | Notes                                                                                                     |
-| ---------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
-| Auth + profiles              | ✅     | Supabase                                                                                                  |
-| Achievement definitions + UI | ✅     | `lib/achievements/` catalog, unlock toasts, `/profile` stats + grid                                       |
-| Portfolio explorer unlocks   | ✅     | Page visits (About/Projects/Resume/Contact), grand tour, skills filter + shuffle                          |
-| Explore-zone achievements    | ✅     | Pokédex favorite/catch/collector + geo fly-to, field trip combo (Star Wars skipped — zone may be removed) |
-| Return visits / streaks      | Ideas  | Meta achievements                                                                                         |
+| Item                         | Status | Notes                                                                            |
+| ---------------------------- | ------ | -------------------------------------------------------------------------------- |
+| Auth + profiles              | ✅     | Supabase                                                                         |
+| Achievement definitions + UI | ✅     | `lib/achievements/` catalog, unlock toasts, `/profile` stats + grid              |
+| Portfolio explorer unlocks   | ✅     | Page visits (About/Projects/Resume/Contact), grand tour, skills filter + shuffle |
+| Explore-zone achievements    | ✅     | Pokédex favorite/catch/collector + geo fly-to, field trip combo                  |
+| Return visits / streaks      | Ideas  | Meta achievements                                                                |
 
 ## Launch polish
 

@@ -13,7 +13,7 @@ The `zuna-app` repository hosts **Victor Perez's public portfolio** — an inter
 ```
 Portfolio     →  who you are, projects, resume, contact
 Playground    →  games (Type Racer, Prompt Run)
-Explore       →  API-driven demos (Pokédex, Star Wars, Mapbox geocoding)
+Explore       →  API-driven demos (Pokédex, Mapbox geocoding)
 Lab           →  AI chat (later)
 Account       →  Supabase auth, saved progress, achievements
 ```
@@ -30,7 +30,6 @@ Account       →  Supabase auth, saved progress, achievements
 /playground/type-racer
 /playground/prompt-run
 /explore/pokemon
-/explore/star-wars
 /explore/geo
 /chat
 /auth/login

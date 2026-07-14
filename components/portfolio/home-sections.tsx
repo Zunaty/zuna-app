@@ -54,7 +54,7 @@ export function ZoneHighlights() {
           <div className="h-full rounded-xl border border-border bg-card p-6 shadow-sm">
             <p className="text-xs font-medium uppercase tracking-wider text-primary">Live now</p>
             <h3 className="mt-2 font-semibold">Explore</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Pokédex, Star Wars, and more API-driven demos.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Pokédex, geocoding, and more API-driven demos.</p>
             <Button variant="outline" size="sm" className="mt-4" asChild>
               <Link href="/explore">Browse Explore</Link>
             </Button>
