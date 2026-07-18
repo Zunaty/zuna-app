@@ -41,6 +41,7 @@ export function ModeSelect({ bests, onStart }: ModeSelectProps) {
             <button
               key={mode}
               type="button"
+              autoFocus={mode === "classic"}
               onClick={() => onStart(mode)}
               className="rounded-xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >

@@ -1,6 +1,6 @@
-export const playgroundOgSize = { width: 1200, height: 630 };
-export const playgroundOgContentType = "image/png";
+import { ogBackground, ogContentType, ogFont, ogSize } from "@/lib/og/shared";
 
-export const playgroundOgBackground = "linear-gradient(135deg, #0f0a1a 0%, #1a1033 45%, #2d1b69 100%)";
-
-export const playgroundOgFont = "system-ui, sans-serif";
+export const playgroundOgSize = ogSize;
+export const playgroundOgContentType = ogContentType;
+export const playgroundOgBackground = ogBackground;
+export const playgroundOgFont = ogFont;

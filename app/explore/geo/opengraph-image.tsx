@@ -5,13 +5,18 @@ import { OgCard } from "@/lib/og/og-card";
 import { ogContentType, ogSize } from "@/lib/og/shared";
 
 export const runtime = "edge";
-export const alt = `${site.name} — ${site.title}`;
+export const alt = `Geocoding — ${site.name}`;
 export const size = ogSize;
 export const contentType = ogContentType;
 
-export default function OpenGraphImage() {
+export default function GeoOpenGraphImage() {
   return new ImageResponse(
-    <OgCard eyebrow="Portfolio" title={site.name} subtitle={site.title} description={site.tagline} />,
+    <OgCard
+      eyebrow="Explore · Mapbox"
+      title="Geocoding"
+      description="Search a place and watch the map fly to the result — Mapbox geocoding demo."
+      titleSize={64}
+    />,
     { ...size },
   );
 }

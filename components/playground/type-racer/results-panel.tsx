@@ -61,7 +61,9 @@ export function ResultsPanel({ mode, stats, isPersonalBest, bestScore, onRetry }
         ))}
       </StaggerChildren>
 
-      <Button onClick={onRetry}>Try again</Button>
+      <Button autoFocus onClick={onRetry}>
+        Try again
+      </Button>
     </div>
   );
 }

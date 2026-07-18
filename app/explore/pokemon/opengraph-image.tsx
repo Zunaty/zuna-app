@@ -5,13 +5,17 @@ import { OgCard } from "@/lib/og/og-card";
 import { ogContentType, ogSize } from "@/lib/og/shared";
 
 export const runtime = "edge";
-export const alt = `${site.name} — ${site.title}`;
+export const alt = `Pokédex — ${site.name}`;
 export const size = ogSize;
 export const contentType = ogContentType;
 
-export default function OpenGraphImage() {
+export default function PokemonOpenGraphImage() {
   return new ImageResponse(
-    <OgCard eyebrow="Portfolio" title={site.name} subtitle={site.title} description={site.tagline} />,
+    <OgCard
+      eyebrow="Explore · PokéAPI"
+      title="Pokédex"
+      description="Browse species, filter by type, and track favorites, catches, and TCG cards."
+    />,
     { ...size },
   );
 }

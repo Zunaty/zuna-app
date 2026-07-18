@@ -5,13 +5,13 @@ import { OgCard } from "@/lib/og/og-card";
 import { ogContentType, ogSize } from "@/lib/og/shared";
 
 export const runtime = "edge";
-export const alt = `${site.name} — ${site.title}`;
+export const alt = `Resume — ${site.name}`;
 export const size = ogSize;
 export const contentType = ogContentType;
 
-export default function OpenGraphImage() {
+export default function ResumeOpenGraphImage() {
   return new ImageResponse(
-    <OgCard eyebrow="Portfolio" title={site.name} subtitle={site.title} description={site.tagline} />,
+    <OgCard eyebrow="Portfolio" title="Resume" description={`${site.name} · ${site.title} · ${site.location}`} />,
     { ...size },
   );
 }

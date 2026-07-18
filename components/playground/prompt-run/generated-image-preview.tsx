@@ -1,7 +1,7 @@
 "use client";
 
 import { X, ZoomIn } from "lucide-react";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "@/components/ui/button";
@@ -36,13 +36,18 @@ export function GeneratedImagePreview({
 }: GeneratedImagePreviewProps) {
   const [open, setOpen] = useState(false);
   const mounted = useIsClient();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!open) {
       return;
     }
 
     const previousOverflow = document.body.style.overflow;
+    const trigger = triggerRef.current;
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -54,12 +59,14 @@ export function GeneratedImagePreview({
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      trigger?.focus();
     };
   }, [open]);
 
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
@@ -107,6 +114,7 @@ export function GeneratedImagePreview({
               />
               <div className="relative z-10 flex max-h-full max-w-full items-center justify-center">
                 <Button
+                  ref={closeButtonRef}
                   type="button"
                   variant="secondary"
                   size="icon"

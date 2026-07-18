@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-07-08`
+Last updated: `2026-07-18`
 
 # Feature backlog
 
@@ -49,12 +49,12 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 
 ## Portfolio
 
-| Item                                                | Status  | Notes                                                                              |
-| --------------------------------------------------- | ------- | ---------------------------------------------------------------------------------- |
-| Core pages (home, about, projects, resume, contact) | ✅      |                                                                                    |
-| Project case studies                                | Ideas   | Deeper per-project pages if desired                                                |
-| OG / SEO pass                                       | Partial | Root `opengraph-image.tsx` + per-route metadata; no per-route OG images yet        |
-| **Aviation flight map**                             | ✅      | `/about` — KSLC hub, curved routes; [spec](../improvements/archive/2026/mapbox.md) |
+| Item                                                | Status | Notes                                                                              |
+| --------------------------------------------------- | ------ | ---------------------------------------------------------------------------------- |
+| Core pages (home, about, projects, resume, contact) | ✅     |                                                                                    |
+| Project case studies                                | Ideas  | Deeper per-project pages if desired                                                |
+| OG / SEO pass                                       | ✅     | Root + portfolio/Explore/Playground `opengraph-image.tsx`; per-route metadata      |
+| **Aviation flight map**                             | ✅     | `/about` — KSLC hub, curved routes; [spec](../improvements/archive/2026/mapbox.md) |
 
 ## Motion & 3D
 
@@ -79,12 +79,13 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 
 ## Launch polish
 
-| Item                | Status  | Notes                                   |
-| ------------------- | ------- | --------------------------------------- |
-| Performance audit   | Planned | Lighthouse on key routes                |
-| Accessibility audit | Planned | Keyboard, contrast, reduced motion      |
-| Custom domain       | Planned |                                         |
-| Analytics review    | Partial | Vercel Analytics + Speed Insights wired |
+| Item                | Status  | Notes                                                            |
+| ------------------- | ------- | ---------------------------------------------------------------- |
+| Performance audit   | Planned | Lighthouse on key routes                                         |
+| Accessibility audit | Partial | Skip link, nav keyboard, overlay focus; contrast pass still open |
+| Per-route OG images | ✅      | Portfolio, Explore, Playground                                   |
+| Custom domain       | ✅      | victorlperez.com                                                 |
+| Analytics review    | ✅      | Pageviews + Web Vitals via Vercel; custom events optional later  |
 
 ## How to use this doc
 

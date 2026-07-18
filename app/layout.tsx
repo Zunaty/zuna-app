@@ -7,6 +7,7 @@ import { AchievementProvider } from "@/components/achievements/achievement-provi
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { SkipToContent } from "@/components/layout/skip-to-content";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getServerResolvedThemeClass, getServerThemePreference } from "@/lib/theme/server";
 import { site } from "@/lib/data/site";
@@ -52,8 +53,11 @@ export default async function RootLayout({
           <MotionProvider>
             <AchievementProvider>
               <div className="flex min-h-screen flex-col">
+                <SkipToContent />
                 <SiteHeader />
-                <main className="flex-1">{children}</main>
+                <main id="main-content" className="flex-1" tabIndex={-1}>
+                  {children}
+                </main>
                 <SiteFooter />
               </div>
             </AchievementProvider>

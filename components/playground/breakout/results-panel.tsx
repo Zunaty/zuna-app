@@ -70,7 +70,9 @@ export function ResultsPanel({ snapshot, isPersonalBest, onPlayAgain, onChangeMo
       </dl>
 
       <div className="flex gap-3">
-        <Button onClick={onPlayAgain}>Play again</Button>
+        <Button autoFocus onClick={onPlayAgain}>
+          Play again
+        </Button>
         <Button variant="outline" onClick={onChangeMode}>
           Change mode
         </Button>

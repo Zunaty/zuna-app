@@ -47,13 +47,14 @@ export function DraftOverlay({ options, onPick }: DraftOverlayProps) {
       </m.div>
 
       <div className="grid w-full max-w-sm gap-3">
-        {options.map((id) => {
+        {options.map((id, index) => {
           const modifier = BREAKOUT_MODIFIERS[id];
 
           return (
             <m.button
               key={id}
               type="button"
+              autoFocus={index === 0}
               variants={fadeInUp}
               transition={reduceMotion ? instantTransition : motionTransition}
               onClick={() => onPick(id)}

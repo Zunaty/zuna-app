@@ -3,7 +3,7 @@
 import { Home, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/layout/user-nav";
@@ -11,11 +11,46 @@ import { useAuthUser } from "@/lib/auth/use-auth-user";
 import { navLinks } from "@/lib/data/site";
 import { cn } from "@/lib/utils";
 
+const navLinkClassName = (active: boolean) =>
+  cn(
+    "rounded-md px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    active ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground hover:text-foreground",
+  );
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [menuPathname, setMenuPathname] = useState(pathname);
   const { email, isLoading, signOut } = useAuthUser();
   const loginHref = `/auth/login?next=${encodeURIComponent(pathname)}`;
+  const menuId = useId();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
+
+  if (pathname !== menuPathname) {
+    setMenuPathname(pathname);
+    if (open) {
+      setOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    firstMobileLinkRef.current?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -25,7 +60,7 @@ export function SiteHeader() {
           aria-label="Home"
           onClick={() => setOpen(false)}
           className={cn(
-            "inline-flex size-9 items-center justify-center rounded-md transition-colors",
+            "inline-flex size-9 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             pathname === "/"
               ? "bg-accent text-accent-foreground"
               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -38,16 +73,7 @@ export function SiteHeader() {
           {navLinks.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-md px-3 py-2 text-sm transition-colors",
-                  active
-                    ? "bg-accent font-medium text-accent-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
+              <Link key={item.href} href={item.href} className={navLinkClassName(active)}>
                 {item.label}
               </Link>
             );
@@ -58,9 +84,11 @@ export function SiteHeader() {
           <UserNav />
           <ModeToggle />
           <button
+            ref={menuButtonRef}
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-md md:hidden"
+            className="inline-flex size-9 items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
             aria-expanded={open}
+            aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((prev) => !prev)}
           >
@@ -70,19 +98,17 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <nav className="border-t border-border/60 px-4 py-3 md:hidden" aria-label="Mobile">
+        <nav id={menuId} className="border-t border-border/60 px-4 py-3 md:hidden" aria-label="Mobile">
           <ul className="flex flex-col gap-1">
-            {navLinks.map((item) => {
+            {navLinks.map((item, index) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href}>
                   <Link
+                    ref={index === 0 ? firstMobileLinkRef : undefined}
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className={cn(
-                      "block rounded-md px-3 py-2 text-sm",
-                      active ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground",
-                    )}
+                    className={cn(navLinkClassName(active), "block")}
                   >
                     {item.label}
                   </Link>
@@ -100,10 +126,8 @@ export function SiteHeader() {
                     href="/profile"
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "block rounded-md px-3 py-2 text-sm",
-                      pathname === "/profile"
-                        ? "bg-accent font-medium text-accent-foreground"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                      navLinkClassName(pathname === "/profile"),
+                      "block hover:bg-accent hover:text-accent-foreground",
                     )}
                   >
                     Profile
@@ -116,7 +140,7 @@ export function SiteHeader() {
                       setOpen(false);
                       void signOut();
                     }}
-                    className="block w-full rounded-md px-3 py-2 text-left text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    className="block w-full rounded-md px-3 py-2 text-left text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Sign out
                   </button>
@@ -127,7 +151,7 @@ export function SiteHeader() {
                 <Link
                   href={loginHref}
                   onClick={() => setOpen(false)}
-                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  className={cn(navLinkClassName(false), "block hover:bg-accent hover:text-accent-foreground")}
                 >
                   Sign in
                 </Link>

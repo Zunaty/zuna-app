@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-07-08`
+Last updated: `2026-07-18`
 
 # Product roadmap
 
@@ -15,10 +15,10 @@ Public portfolio with an optional game-layer meta-progression system (achievemen
 The portfolio's core job is to impress visitors — get it live and fast before adding more features.
 
 - [ ] Performance audit — Lighthouse on key routes (Mapbox pages, Pokédex, Prompt Run likely heaviest)
-- [ ] Accessibility audit — keyboard nav, contrast, `prefers-reduced-motion` for Framer Motion surfaces
-- [ ] Per-route OG images (root `opengraph-image.tsx` exists; per-route missing)
-- [ ] Custom domain
-- [ ] Analytics review (Vercel Analytics + Speed Insights already wired)
+- [x] Accessibility audit — skip link, nav focus/Escape, overlay autofocus; reduced-motion already wired (contrast pass deferred)
+- [x] Per-route OG images — portfolio + Explore + Playground (shared `lib/og/` card)
+- [x] Custom domain — victorlperez.com
+- [x] Analytics review — Vercel Analytics + Speed Insights in root layout (pageviews / Web Vitals); no custom events needed for v1
 
 ### 2. Playground shared patterns
 

@@ -5,13 +5,18 @@ import { OgCard } from "@/lib/og/og-card";
 import { ogContentType, ogSize } from "@/lib/og/shared";
 
 export const runtime = "edge";
-export const alt = `${site.name} — ${site.title}`;
+export const alt = `Explore — ${site.name}`;
 export const size = ogSize;
 export const contentType = ogContentType;
 
-export default function OpenGraphImage() {
+export default function ExploreOpenGraphImage() {
   return new ImageResponse(
-    <OgCard eyebrow="Portfolio" title={site.name} subtitle={site.title} description={site.tagline} />,
+    <OgCard
+      eyebrow="Explore"
+      title="API playgrounds"
+      description="Live demos from public APIs — Pokédex and Mapbox geocoding, wired into polished UI."
+      titleSize={64}
+    />,
     { ...size },
   );
 }
