@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type RefObject } from "react";
 
+import { clientXToInternal } from "@/lib/game-canvas/coords";
 import type { GameInput } from "@/lib/game-canvas/types";
 
 const LEFT_KEYS = new Set(["ArrowLeft", "a", "A"]);
@@ -34,11 +35,7 @@ export function useGameInput(canvasRef: RefObject<HTMLCanvasElement | null>, int
 
     const toInternalX = (clientX: number): number => {
       const rect = canvas.getBoundingClientRect();
-      if (rect.width === 0) {
-        return 0;
-      }
-      const ratio = (clientX - rect.left) / rect.width;
-      return Math.min(internalWidth, Math.max(0, ratio * internalWidth));
+      return clientXToInternal(clientX, rect.left, rect.width, internalWidth);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {

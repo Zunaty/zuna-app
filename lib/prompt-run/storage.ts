@@ -3,8 +3,15 @@ import { formatPromptRunHighlight } from "@/lib/playground/highlights";
 import { mergePromptRunBest } from "@/lib/playground/merge-scores";
 import type { PromptRunModelState } from "@/lib/prompt-run/reducer";
 import { createId } from "@/lib/prompt-run/round";
+import { LOCAL_STORAGE_KEYS } from "@/lib/storage/keys";
+import {
+  createLocalStorageSnapshotCache,
+  readLocalJsonObject,
+  subscribeStorageEvents,
+  writeLocalJson,
+} from "@/lib/storage/local";
 
-const STORAGE_KEY = "zuna-prompt-run";
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.promptRun;
 export const PROMPT_RUN_STORAGE_EVENT = "prompt-run-storage-updated";
 
 export type PromptRunSettings = {
@@ -42,74 +49,43 @@ function defaultPayload(): StoragePayload {
 }
 
 function readStorage(): StoragePayload {
-  if (typeof window === "undefined") {
+  const data = readLocalJsonObject(STORAGE_KEY) as
+    | (Partial<StoragePayload> & { settings?: Partial<PromptRunSettings> })
+    | null;
+
+  if (!data) {
     return defaultPayload();
   }
 
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return defaultPayload();
-    }
-
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) {
-      return defaultPayload();
-    }
-
-    const data = parsed as Partial<StoragePayload> & {
-      settings?: Partial<PromptRunSettings>;
-    };
-
-    return {
-      settings: {
-        ...DEFAULT_SETTINGS,
-        ...data.settings,
-        categorySequence: data.settings?.categorySequence ?? DEFAULT_CATEGORY_SEQUENCE,
-        volume: Math.min(VOLUME_MAX, Math.max(VOLUME_MIN, data.settings?.volume ?? DEFAULT_SETTINGS.volume)),
-      },
-      bestRun: data.bestRun ?? null,
-      activeRun: data.activeRun ?? null,
-    };
-  } catch {
-    return defaultPayload();
-  }
-}
-
-let cachedStorageRaw: string | null | undefined;
-let cachedBestRunSnapshot: PromptRunBestRun | null = null;
-
-function writeStorage(payload: StoragePayload): void {
-  const raw = JSON.stringify(payload);
-  window.localStorage.setItem(STORAGE_KEY, raw);
-  cachedStorageRaw = raw;
-  cachedBestRunSnapshot = payload.bestRun;
-  window.dispatchEvent(new Event(PROMPT_RUN_STORAGE_EVENT));
-}
-
-export function subscribePromptRunStorage(onStoreChange: () => void): () => void {
-  const handler = () => onStoreChange();
-  window.addEventListener(PROMPT_RUN_STORAGE_EVENT, handler);
-  window.addEventListener("storage", handler);
-  return () => {
-    window.removeEventListener(PROMPT_RUN_STORAGE_EVENT, handler);
-    window.removeEventListener("storage", handler);
+  return {
+    settings: {
+      ...DEFAULT_SETTINGS,
+      ...data.settings,
+      categorySequence: data.settings?.categorySequence ?? DEFAULT_CATEGORY_SEQUENCE,
+      volume: Math.min(VOLUME_MAX, Math.max(VOLUME_MIN, data.settings?.volume ?? DEFAULT_SETTINGS.volume)),
+    },
+    bestRun: data.bestRun ?? null,
+    activeRun: data.activeRun ?? null,
   };
 }
 
+const bestRunSnapshot = createLocalStorageSnapshotCache<PromptRunBestRun | null>(
+  STORAGE_KEY,
+  () => readStorage().bestRun,
+  null,
+);
+
+function writeStorage(payload: StoragePayload): void {
+  const raw = writeLocalJson(STORAGE_KEY, payload, { eventName: PROMPT_RUN_STORAGE_EVENT });
+  bestRunSnapshot.remember(raw, payload.bestRun);
+}
+
+export function subscribePromptRunStorage(onStoreChange: () => void): () => void {
+  return subscribeStorageEvents(PROMPT_RUN_STORAGE_EVENT, onStoreChange);
+}
+
 export function getBestRunSnapshot(): PromptRunBestRun | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === cachedStorageRaw) {
-    return cachedBestRunSnapshot;
-  }
-
-  cachedStorageRaw = raw;
-  cachedBestRunSnapshot = readStorage().bestRun;
-  return cachedBestRunSnapshot;
+  return bestRunSnapshot.getSnapshot();
 }
 
 export function getPromptRunSettings(): PromptRunSettings {

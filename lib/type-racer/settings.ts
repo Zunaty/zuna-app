@@ -1,4 +1,7 @@
-const STORAGE_KEY = "zuna-type-racer-settings";
+import { LOCAL_STORAGE_KEYS } from "@/lib/storage/keys";
+import { readLocalJsonObject, writeLocalJson } from "@/lib/storage/local";
+
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.typeRacerSettings;
 
 export type TypeRacerSettings = {
   strictMode: boolean;
@@ -9,28 +12,14 @@ const DEFAULT_SETTINGS: TypeRacerSettings = {
 };
 
 export function getSettings(): TypeRacerSettings {
-  if (typeof window === "undefined") {
+  const parsed = readLocalJsonObject(STORAGE_KEY);
+  if (!parsed) {
     return DEFAULT_SETTINGS;
   }
 
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return DEFAULT_SETTINGS;
-    }
-
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) {
-      return DEFAULT_SETTINGS;
-    }
-
-    const strictMode = "strictMode" in parsed && parsed.strictMode === true;
-    return { strictMode };
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
+  return { strictMode: parsed.strictMode === true };
 }
 
 export function saveSettings(settings: TypeRacerSettings): void {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  writeLocalJson(STORAGE_KEY, settings);
 }

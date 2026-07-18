@@ -7,17 +7,7 @@ import { PlaygroundGameCard } from "@/components/playground/playground-game-card
 import { StaggerItem } from "@/components/motion/stagger-children";
 import { getBestScoreHighlight as getBreakoutHighlight, subscribeBreakoutStorage } from "@/lib/breakout/storage";
 import { getBestRunHighlight, subscribePromptRunStorage } from "@/lib/prompt-run/storage";
-import { getBestScoreHighlight, TYPE_RACER_STORAGE_EVENT } from "@/lib/type-racer/storage";
-
-function subscribeTypeRacerStorage(onStoreChange: () => void): () => void {
-  const handler = () => onStoreChange();
-  window.addEventListener(TYPE_RACER_STORAGE_EVENT, handler);
-  window.addEventListener("storage", handler);
-  return () => {
-    window.removeEventListener(TYPE_RACER_STORAGE_EVENT, handler);
-    window.removeEventListener("storage", handler);
-  };
-}
+import { getBestScoreHighlight, subscribeTypeRacerStorage } from "@/lib/type-racer/storage";
 
 function useTypeRacerHighlight(): string | null {
   const { cloudScores } = usePlaygroundScoreContext();

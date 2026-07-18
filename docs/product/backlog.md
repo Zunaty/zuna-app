@@ -24,13 +24,14 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 
 ## Playground — platform
 
-| Item                          | Status  | Notes                                                                      |
-| ----------------------------- | ------- | -------------------------------------------------------------------------- |
-| Playground hub                | ✅      | `/playground` — card grid linking to each game                             |
-| Guest progress (localStorage) | Partial | Type Racer best scores; Prompt Run settings, active run resume, best score |
-| Saved scores to Supabase      | Partial | Type Racer per-mode bests + Prompt Run best run; merge on sign-in          |
-| Shared achievements           | ✅      | Guest unlocks in localStorage; merge + `user_achievements` sync on sign-in |
-| Game audio                    | ✅      | Prompt Run rarity sounds + mute/volume settings                            |
+| Item                          | Status | Notes                                                                      |
+| ----------------------------- | ------ | -------------------------------------------------------------------------- |
+| Playground hub                | ✅     | `/playground` — card grid linking to each game                             |
+| Guest progress (localStorage) | ✅     | Shared `lib/storage/` helpers; Type Racer / Prompt Run / Breakout keys     |
+| Saved scores to Supabase      | ✅     | Per-game bests + merge on sign-in via `PlaygroundScoreProvider`            |
+| Shared game layout            | ✅     | `PlaygroundGameShell`                                                      |
+| Shared achievements           | ✅     | Guest unlocks in localStorage; merge + `user_achievements` sync on sign-in |
+| Game audio                    | ✅     | Prompt Run rarity sounds + mute/volume settings                            |
 
 ## Explore
 

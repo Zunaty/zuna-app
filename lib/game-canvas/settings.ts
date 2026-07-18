@@ -1,6 +1,13 @@
+import { LOCAL_STORAGE_KEYS } from "@/lib/storage/keys";
+import {
+  createLocalStorageSnapshotCache,
+  readLocalJsonObject,
+  subscribeStorageEvents,
+  writeLocalJson,
+} from "@/lib/storage/local";
 import type { FpsTarget } from "@/lib/game-canvas/types";
 
-const STORAGE_KEY = "zuna-game-settings";
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.gameSettings;
 export const GAME_SETTINGS_EVENT = "game-settings-updated";
 
 export type GameSettings = {
@@ -18,64 +25,27 @@ export function isFpsTarget(value: unknown): value is FpsTarget {
 }
 
 export function getGameSettings(): GameSettings {
-  if (typeof window === "undefined") {
+  const data = readLocalJsonObject(STORAGE_KEY);
+  if (!data) {
     return DEFAULT_SETTINGS;
   }
 
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return DEFAULT_SETTINGS;
-    }
-
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) {
-      return DEFAULT_SETTINGS;
-    }
-
-    const data = parsed as Partial<GameSettings>;
-    return {
-      fpsTarget: isFpsTarget(data.fpsTarget) ? data.fpsTarget : DEFAULT_SETTINGS.fpsTarget,
-    };
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
+  return {
+    fpsTarget: isFpsTarget(data.fpsTarget) ? data.fpsTarget : DEFAULT_SETTINGS.fpsTarget,
+  };
 }
 
-let cachedRaw: string | null | undefined;
-let cachedSnapshot: GameSettings = DEFAULT_SETTINGS;
+const settingsSnapshot = createLocalStorageSnapshotCache(STORAGE_KEY, getGameSettings, DEFAULT_SETTINGS);
 
 /** Referentially-stable settings snapshot for useSyncExternalStore. */
 export function getGameSettingsSnapshot(): GameSettings {
-  if (typeof window === "undefined") {
-    return DEFAULT_SETTINGS;
-  }
-
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === cachedRaw) {
-    return cachedSnapshot;
-  }
-
-  cachedRaw = raw;
-  cachedSnapshot = getGameSettings();
-  return cachedSnapshot;
+  return settingsSnapshot.getSnapshot();
 }
 
 export function saveGameSettings(settings: GameSettings): void {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch {
-    // Quota / private-mode failures shouldn't break the game.
-  }
-  window.dispatchEvent(new Event(GAME_SETTINGS_EVENT));
+  writeLocalJson(STORAGE_KEY, settings, { eventName: GAME_SETTINGS_EVENT, swallowErrors: true });
 }
 
 export function subscribeGameSettings(onStoreChange: () => void): () => void {
-  const handler = () => onStoreChange();
-  window.addEventListener(GAME_SETTINGS_EVENT, handler);
-  window.addEventListener("storage", handler);
-  return () => {
-    window.removeEventListener(GAME_SETTINGS_EVENT, handler);
-    window.removeEventListener("storage", handler);
-  };
+  return subscribeStorageEvents(GAME_SETTINGS_EVENT, onStoreChange);
 }

@@ -1,29 +1,27 @@
 import type { AchievementId } from "@/lib/achievements/definitions";
 import { mergeUnlocks, sanitizeUnlocks, type UnlockedAchievements } from "@/lib/achievements/unlocks";
+import { LOCAL_STORAGE_KEYS } from "@/lib/storage/keys";
+import {
+  createLocalStorageSnapshotCache,
+  readLocalJsonObject,
+  subscribeStorageEvents,
+  writeLocalJson,
+} from "@/lib/storage/local";
 
-const STORAGE_KEY = "zuna-achievements";
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.achievements;
 export const ACHIEVEMENTS_STORAGE_EVENT = "achievements-storage-updated";
 
 function readUnlocks(): UnlockedAchievements {
-  if (typeof window === "undefined") {
+  const parsed = readLocalJsonObject(STORAGE_KEY);
+  if (!parsed) {
     return {};
   }
 
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return {};
-    }
-
-    return sanitizeUnlocks(JSON.parse(raw));
-  } catch {
-    return {};
-  }
+  return sanitizeUnlocks(parsed);
 }
 
 function writeUnlocks(unlocks: UnlockedAchievements): void {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocks));
-  window.dispatchEvent(new Event(ACHIEVEMENTS_STORAGE_EVENT));
+  writeLocalJson(STORAGE_KEY, unlocks, { eventName: ACHIEVEMENTS_STORAGE_EVENT });
 }
 
 export function getLocalUnlocks(): UnlockedAchievements {
@@ -32,29 +30,15 @@ export function getLocalUnlocks(): UnlockedAchievements {
 
 const EMPTY_UNLOCKS: UnlockedAchievements = {};
 
-let cachedStorageRaw: string | null | undefined;
-let cachedSnapshot: UnlockedAchievements = EMPTY_UNLOCKS;
+const unlocksSnapshot = createLocalStorageSnapshotCache(STORAGE_KEY, readUnlocks, EMPTY_UNLOCKS);
 
 export function subscribeAchievementsStorage(onStoreChange: () => void): () => void {
-  const handler = () => onStoreChange();
-  window.addEventListener(ACHIEVEMENTS_STORAGE_EVENT, handler);
-  window.addEventListener("storage", handler);
-  return () => {
-    window.removeEventListener(ACHIEVEMENTS_STORAGE_EVENT, handler);
-    window.removeEventListener("storage", handler);
-  };
+  return subscribeStorageEvents(ACHIEVEMENTS_STORAGE_EVENT, onStoreChange);
 }
 
 /** Stable-reference snapshot for useSyncExternalStore. */
 export function getUnlocksSnapshot(): UnlockedAchievements {
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === cachedStorageRaw) {
-    return cachedSnapshot;
-  }
-
-  cachedStorageRaw = raw;
-  cachedSnapshot = readUnlocks();
-  return cachedSnapshot;
+  return unlocksSnapshot.getSnapshot();
 }
 
 export function getServerUnlocksSnapshot(): UnlockedAchievements {

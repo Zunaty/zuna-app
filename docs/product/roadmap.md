@@ -24,9 +24,9 @@ The portfolio's core job is to impress visitors — get it live and fast before 
 
 Pay down before the next game ships — two games already diverge slightly.
 
-- [ ] Guest localStorage conventions (shared helpers, consistent keys/merge-on-sign-in)
-- [ ] Shared game layout
-- [ ] Vitest coverage for pure game logic
+- [x] Guest localStorage conventions — `lib/storage/` keys + read/write/subscribe/snapshot helpers; games keep stable `zuna-*` keys
+- [x] Shared game layout — `PlaygroundGameShell` (scores provider, header, back link)
+- [x] Vitest coverage for pure game logic — shared storage helpers + game-canvas coords/FPS; existing game suites remain
 
 ### 3. New mini-games — canvas pair
 

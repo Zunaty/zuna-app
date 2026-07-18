@@ -1,10 +1,12 @@
 import { formatTypeRacerHighlight } from "@/lib/playground/highlights";
 import { mergeTypeRacerScores } from "@/lib/playground/merge-scores";
+import { LOCAL_STORAGE_KEYS } from "@/lib/storage/keys";
+import { readLocalJsonObject, subscribeStorageEvents, writeLocalJson } from "@/lib/storage/local";
 import type { TypeRacerMode } from "@/lib/type-racer/constants";
 import type { TypeRacerStats } from "@/lib/type-racer/scoring";
 import { roundAccuracy, roundWpm } from "@/lib/type-racer/scoring";
 
-const STORAGE_KEY = "zuna-type-racer-best";
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.typeRacerBest;
 export const TYPE_RACER_STORAGE_EVENT = "type-racer-storage-updated";
 
 export type TypeRacerBestScore = {
@@ -16,30 +18,20 @@ export type TypeRacerBestScore = {
 export type TypeRacerBestScores = Partial<Record<TypeRacerMode, TypeRacerBestScore>>;
 
 function readBestScores(): TypeRacerBestScores {
-  if (typeof window === "undefined") {
+  const parsed = readLocalJsonObject(STORAGE_KEY);
+  if (!parsed) {
     return {};
   }
 
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return {};
-    }
-
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed !== "object" || parsed === null) {
-      return {};
-    }
-
-    return parsed as TypeRacerBestScores;
-  } catch {
-    return {};
-  }
+  return parsed as TypeRacerBestScores;
 }
 
 function writeBestScores(scores: TypeRacerBestScores): void {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
-  window.dispatchEvent(new Event(TYPE_RACER_STORAGE_EVENT));
+  writeLocalJson(STORAGE_KEY, scores, { eventName: TYPE_RACER_STORAGE_EVENT });
+}
+
+export function subscribeTypeRacerStorage(onStoreChange: () => void): () => void {
+  return subscribeStorageEvents(TYPE_RACER_STORAGE_EVENT, onStoreChange);
 }
 
 export function getAllBestScores(): TypeRacerBestScores {
