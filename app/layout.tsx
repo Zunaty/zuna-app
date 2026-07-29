@@ -63,8 +63,12 @@ export default async function RootLayout({
             </AchievementProvider>
           </MotionProvider>
         </ThemeProvider>
-        <SpeedInsights />
-        <Analytics />
+        {process.env.NODE_ENV === "production" ? (
+          <>
+            <SpeedInsights />
+            <Analytics />
+          </>
+        ) : null}
       </body>
     </html>
   );
