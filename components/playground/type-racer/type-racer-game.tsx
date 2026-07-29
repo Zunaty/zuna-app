@@ -7,12 +7,14 @@ import { useAchievements } from "@/components/achievements/achievement-provider"
 import { usePlaygroundScoreContext } from "@/components/playground/playground-score-provider";
 
 import { CompetitiveSettings } from "@/components/playground/type-racer/competitive-settings";
+import { FocusPromptDisplay, type FocusKeystrokeFx } from "@/components/playground/type-racer/focus-prompt-display";
 import { LiveStats } from "@/components/playground/type-racer/live-stats";
 import { ModePicker } from "@/components/playground/type-racer/mode-picker";
 import { PromptDisplay, type KeystrokeFx } from "@/components/playground/type-racer/prompt-display";
 import { ResultsPanel } from "@/components/playground/type-racer/results-panel";
 import { Button } from "@/components/ui/button";
-import { isCountdownMode, TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
+import { isCountdownMode, isFocusMode, isTimedWordsMode, TYPE_RACER_MODE_LABEL } from "@/lib/type-racer/constants";
+import { splitPromptWords } from "@/lib/type-racer/focus";
 import { charsMatch, promptsEqual } from "@/lib/type-racer/matching";
 import { formatElapsedSeconds } from "@/lib/type-racer/scoring";
 import { instantTransition, springTransition } from "@/lib/motion/variants";
@@ -30,7 +32,13 @@ export function TypeRacerGame() {
   const lastTabAtRef = useRef(0);
   const keystrokeFxTimeoutRef = useRef<number | null>(null);
   const [keystrokeFx, setKeystrokeFx] = useState<KeystrokeFx | null>(null);
+  const [focusKeystrokeFx, setFocusKeystrokeFx] = useState<FocusKeystrokeFx | null>(null);
   const reduceMotion = useReducedMotion();
+  const focusMode = isFocusMode(state.mode);
+  const focusWords = focusMode ? splitPromptWords(state.prompt) : [];
+  const focusCurrentWord = focusWords[state.wordIndex] ?? "";
+  const focusPreviousWord = state.wordIndex > 0 ? (focusWords[state.wordIndex - 1] ?? null) : null;
+  const focusNextWord = state.wordIndex + 1 < focusWords.length ? (focusWords[state.wordIndex + 1] ?? null) : null;
 
   const focusInput = useCallback(() => {
     if (state.phase === "running") {
@@ -40,7 +48,7 @@ export function TypeRacerGame() {
 
   useEffect(() => {
     focusInput();
-  }, [focusInput, state.phase]);
+  }, [focusInput, state.phase, state.wordIndex]);
 
   useEffect(() => {
     if (state.phase !== "finished" || !state.stats) {
@@ -49,7 +57,7 @@ export function TypeRacerGame() {
 
     unlock("type-first-run");
 
-    if ((state.mode === "words-30" || state.mode === "words-60") && state.stats.wpm >= 60) {
+    if (isTimedWordsMode(state.mode) && state.stats.wpm >= 60) {
       unlock("type-60-wpm");
     }
 
@@ -116,20 +124,39 @@ export function TypeRacerGame() {
     start();
   };
 
-  const handleInputChange = (value: string) => {
+  const clearKeystrokeFxSoon = () => {
+    if (keystrokeFxTimeoutRef.current !== null) {
+      window.clearTimeout(keystrokeFxTimeoutRef.current);
+    }
+    keystrokeFxTimeoutRef.current = window.setTimeout(() => {
+      setKeystrokeFx(null);
+      setFocusKeystrokeFx(null);
+      keystrokeFxTimeoutRef.current = null;
+    }, 180);
+  };
+
+  const handleClassicInputChange = (value: string) => {
     if (value.length > state.input.length) {
       const index = value.length - 1;
       setKeystrokeFx({
         index,
         correct: charsMatch(value[index], state.prompt[index], matchOptions),
       });
-      if (keystrokeFxTimeoutRef.current !== null) {
-        window.clearTimeout(keystrokeFxTimeoutRef.current);
-      }
-      keystrokeFxTimeoutRef.current = window.setTimeout(() => {
-        setKeystrokeFx(null);
-        keystrokeFxTimeoutRef.current = null;
-      }, 180);
+      clearKeystrokeFxSoon();
+    }
+
+    setInput(value);
+  };
+
+  const handleFocusInputChange = (value: string) => {
+    const next = value.replace(/\s/g, "");
+    if (next.length > state.currentWordInput.length) {
+      const index = next.length - 1;
+      setFocusKeystrokeFx({
+        index,
+        correct: charsMatch(next[index], focusCurrentWord[index], matchOptions),
+      });
+      clearKeystrokeFxSoon();
     }
 
     setInput(value);
@@ -211,21 +238,35 @@ export function TypeRacerGame() {
           }}
           role="presentation"
         >
-          <PromptDisplay
-            prompt={state.prompt}
-            input={state.input}
-            keystrokeFx={keystrokeFx}
-            matchOptions={matchOptions}
-            reduceMotion={reduceMotion ?? false}
-          />
+          {focusMode ? (
+            <FocusPromptDisplay
+              previousWord={focusPreviousWord}
+              currentWord={focusCurrentWord}
+              nextWord={focusNextWord}
+              currentInput={state.currentWordInput}
+              keystrokeFx={focusKeystrokeFx}
+              matchOptions={matchOptions}
+              reduceMotion={reduceMotion ?? false}
+            />
+          ) : (
+            <PromptDisplay
+              prompt={state.prompt}
+              input={state.input}
+              keystrokeFx={keystrokeFx}
+              matchOptions={matchOptions}
+              reduceMotion={reduceMotion ?? false}
+            />
+          )}
           <label className="sr-only" htmlFor="type-racer-input">
-            Type the prompt shown above
+            {focusMode ? "Type the current word shown above" : "Type the prompt shown above"}
           </label>
           <textarea
             id="type-racer-input"
             ref={inputRef}
-            value={state.input}
-            onChange={(event) => handleInputChange(event.target.value)}
+            value={focusMode ? state.currentWordInput : state.input}
+            onChange={(event) =>
+              focusMode ? handleFocusInputChange(event.target.value) : handleClassicInputChange(event.target.value)
+            }
             onPaste={(event) => event.preventDefault()}
             autoComplete="off"
             autoCorrect="off"
@@ -237,7 +278,9 @@ export function TypeRacerGame() {
           />
           <p id="type-racer-hint" className="mt-2 text-xs text-muted-foreground">
             {state.timerStarted
-              ? "Click the prompt area if focus is lost. A physical keyboard works best."
+              ? focusMode
+                ? "Finish each word correctly to advance. Click the prompt area if focus is lost."
+                : "Click the prompt area if focus is lost. A physical keyboard works best."
               : "Start typing to begin the timer."}
           </p>
         </div>

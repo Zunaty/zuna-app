@@ -22,6 +22,7 @@ export function generateWordPrompt(wordCount = TYPE_RACER_WORD_COUNT): string {
 export function generatePrompt(mode: TypeRacerMode): string {
   switch (getPromptKind(mode)) {
     case "words":
+    case "focus":
       return generateWordPrompt();
     case "sentence":
       return pickRandom(TYPE_RACER_SENTENCES);

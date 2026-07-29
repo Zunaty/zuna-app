@@ -2,10 +2,16 @@
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
-import { getModeDurationMs, TYPE_RACER_COUNTDOWN_START, type TypeRacerMode } from "@/lib/type-racer/constants";
+import {
+  getModeDurationMs,
+  isFocusMode,
+  TYPE_RACER_COUNTDOWN_START,
+  type TypeRacerMode,
+} from "@/lib/type-racer/constants";
+import { applyFocusInput, splitPromptWords } from "@/lib/type-racer/focus";
 import { getMatchOptions, isStrictInputValid, promptsEqual } from "@/lib/type-racer/matching";
 import { generatePrompt } from "@/lib/type-racer/prompts";
-import { computeStats, type TypeRacerStats } from "@/lib/type-racer/scoring";
+import { computeFocusStats, computeStats, type TypeRacerStats } from "@/lib/type-racer/scoring";
 import { getSettings, saveSettings } from "@/lib/type-racer/settings";
 import { getBestScore, saveBestScoreIfBetter, type TypeRacerBestScore } from "@/lib/type-racer/storage";
 
@@ -16,6 +22,10 @@ type TypeRacerState = {
   mode: TypeRacerMode;
   prompt: string;
   input: string;
+  /** Focus mode: index of the word currently being typed. */
+  wordIndex: number;
+  /** Focus mode: buffer for the active word only. */
+  currentWordInput: string;
   countdown: number;
   timeLeftMs: number | null;
   elapsedMs: number;
@@ -50,6 +60,8 @@ function createInitialState(mode: TypeRacerMode = "words-60"): TypeRacerState {
     mode,
     prompt: "",
     input: "",
+    wordIndex: 0,
+    currentWordInput: "",
     countdown: TYPE_RACER_COUNTDOWN_START,
     timeLeftMs: getInitialTimeLeftMs(mode),
     elapsedMs: 0,
@@ -87,9 +99,24 @@ function getTimeLeftMs(state: TypeRacerState, now: number): number | null {
   return Math.max(0, duration - getElapsedMs(state, now));
 }
 
-function finishState(state: TypeRacerState, elapsedMs: number): TypeRacerState {
+function computeStateStats(state: TypeRacerState, elapsedMs: number): TypeRacerStats {
   const matchOptions = getMatchOptions(state.mode);
-  const stats = computeStats(state.prompt, state.input, elapsedMs, matchOptions);
+
+  if (isFocusMode(state.mode)) {
+    return computeFocusStats(
+      splitPromptWords(state.prompt),
+      state.wordIndex,
+      state.currentWordInput,
+      elapsedMs,
+      matchOptions,
+    );
+  }
+
+  return computeStats(state.prompt, state.input, elapsedMs, matchOptions);
+}
+
+function finishState(state: TypeRacerState, elapsedMs: number): TypeRacerState {
+  const stats = computeStateStats(state, elapsedMs);
   const isPersonalBest = saveBestScoreIfBetter(state.mode, stats);
 
   return {
@@ -100,6 +127,58 @@ function finishState(state: TypeRacerState, elapsedMs: number): TypeRacerState {
     isPersonalBest,
     bestScore: getBestScore(state.mode),
   };
+}
+
+function applyTimerStart(state: TypeRacerState, now: number, hasTyped: boolean): TypeRacerState {
+  const shouldStartTimer = !state.timerStarted && hasTyped;
+  const nextState: TypeRacerState = {
+    ...state,
+    timerStarted: state.timerStarted || shouldStartTimer,
+    startedAt: shouldStartTimer ? now : state.startedAt,
+    timeLeftMs: shouldStartTimer ? getInitialTimeLeftMs(state.mode) : getTimeLeftMs(state, now),
+    elapsedMs: 0,
+  };
+
+  if (nextState.timerStarted && nextState.startedAt !== null) {
+    nextState.elapsedMs = getElapsedMs(nextState, now);
+  }
+
+  return nextState;
+}
+
+function reduceFocusInput(state: TypeRacerState, value: string, now: number): TypeRacerState {
+  const words = splitPromptWords(state.prompt);
+  const matchOptions = getMatchOptions(state.mode);
+  const result = applyFocusInput({
+    words,
+    wordIndex: state.wordIndex,
+    currentWordInput: state.currentWordInput,
+    nextRaw: value,
+    strictMode: state.strictMode,
+    matchOptions,
+  });
+
+  if (result.rejected) {
+    return state;
+  }
+
+  const hasTyped = result.currentWordInput.length > 0 || result.wordIndex > state.wordIndex || result.advanced;
+  const nextState = applyTimerStart(
+    {
+      ...state,
+      wordIndex: result.wordIndex,
+      currentWordInput: result.currentWordInput,
+      input: words.slice(0, result.wordIndex).join(" "),
+    },
+    now,
+    hasTyped,
+  );
+
+  if (result.finished) {
+    return finishState(nextState, nextState.elapsedMs);
+  }
+
+  return nextState;
 }
 
 function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState {
@@ -130,6 +209,8 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         phase: "countdown",
         prompt: generatePrompt(state.mode),
         input: "",
+        wordIndex: 0,
+        currentWordInput: "",
         countdown: TYPE_RACER_COUNTDOWN_START,
         timeLeftMs: getInitialTimeLeftMs(state.mode),
         elapsedMs: 0,
@@ -160,6 +241,10 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         return state;
       }
 
+      if (isFocusMode(state.mode)) {
+        return reduceFocusInput(state, action.value, action.now);
+      }
+
       const nextInput = action.value.replace(/\r?\n/g, " ");
       const matchOptions = getMatchOptions(state.mode);
 
@@ -167,19 +252,7 @@ function reducer(state: TypeRacerState, action: TypeRacerAction): TypeRacerState
         return state;
       }
 
-      const shouldStartTimer = !state.timerStarted && nextInput.length > 0;
-      const nextState: TypeRacerState = {
-        ...state,
-        input: nextInput,
-        timerStarted: state.timerStarted || shouldStartTimer,
-        startedAt: shouldStartTimer ? action.now : state.startedAt,
-        timeLeftMs: shouldStartTimer ? getInitialTimeLeftMs(state.mode) : getTimeLeftMs(state, action.now),
-        elapsedMs: 0,
-      };
-
-      if (nextState.timerStarted && nextState.startedAt !== null) {
-        nextState.elapsedMs = getElapsedMs(nextState, action.now);
-      }
+      const nextState = applyTimerStart({ ...state, input: nextInput }, action.now, nextInput.length > 0);
 
       if (promptsEqual(state.prompt, nextInput, matchOptions)) {
         return finishState(nextState, nextState.elapsedMs);
@@ -291,7 +364,17 @@ export function useTypeRacer(initialMode: TypeRacerMode = "words-60", options?: 
 
   const matchOptions = getMatchOptions(state.mode);
   const liveStats =
-    state.phase === "running" ? computeStats(state.prompt, state.input, state.elapsedMs, matchOptions) : null;
+    state.phase === "running"
+      ? isFocusMode(state.mode)
+        ? computeFocusStats(
+            splitPromptWords(state.prompt),
+            state.wordIndex,
+            state.currentWordInput,
+            state.elapsedMs,
+            matchOptions,
+          )
+        : computeStats(state.prompt, state.input, state.elapsedMs, matchOptions)
+      : null;
 
   return {
     state,

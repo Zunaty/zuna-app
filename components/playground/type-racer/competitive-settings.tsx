@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import { isCaseSensitiveMode, type TypeRacerMode } from "@/lib/type-racer/constants";
+import { getPromptKind, isCaseSensitiveMode, type TypeRacerMode } from "@/lib/type-racer/constants";
 import { cn } from "@/lib/utils";
 
 type CompetitiveSettingsProps = {
@@ -11,8 +11,19 @@ type CompetitiveSettingsProps = {
   onStrictModeChange: (strictMode: boolean) => void;
 };
 
+function modeHint(mode: TypeRacerMode): string {
+  if (isCaseSensitiveMode(mode)) {
+    return "Sentences and paragraphs match case and punctuation.";
+  }
+
+  if (getPromptKind(mode) === "focus") {
+    return "Word focus ignores letter case. Complete each word correctly to advance — no spacebar.";
+  }
+
+  return "Random words ignore letter case.";
+}
+
 export function CompetitiveSettings({ mode, strictMode, disabled, onStrictModeChange }: CompetitiveSettingsProps) {
-  const caseSensitive = isCaseSensitiveMode(mode);
   const switchId = "type-racer-strict-mode";
 
   return (
@@ -48,7 +59,7 @@ export function CompetitiveSettings({ mode, strictMode, disabled, onStrictModeCh
         </Label>
       </div>
       <p className="text-xs text-muted-foreground">
-        {caseSensitive ? "Sentences and paragraphs match case and punctuation." : "Random words ignore letter case."}
+        {modeHint(mode)}
         {strictMode ? " Mistakes block progress until corrected." : " Mistakes can be corrected with backspace."}
       </p>
     </div>

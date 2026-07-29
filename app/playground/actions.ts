@@ -12,10 +12,8 @@ import {
 } from "@/lib/playground/merge-scores";
 import type { PromptRunBestRun } from "@/lib/prompt-run/storage";
 import { createClient } from "@/lib/supabase/server";
-import type { TypeRacerMode } from "@/lib/type-racer/constants";
+import { TYPE_RACER_MODES, type TypeRacerMode } from "@/lib/type-racer/constants";
 import type { TypeRacerBestScore } from "@/lib/type-racer/storage";
-
-const TYPE_RACER_MODES: TypeRacerMode[] = ["words-30", "words-60", "sentence", "paragraph"];
 
 function isBreakoutMode(value: string): value is BreakoutMode {
   return (BREAKOUT_MODES as readonly string[]).includes(value);
@@ -26,7 +24,7 @@ export type PlaygroundScoreActionState = {
 };
 
 function isTypeRacerMode(value: string): value is TypeRacerMode {
-  return TYPE_RACER_MODES.includes(value as TypeRacerMode);
+  return (TYPE_RACER_MODES as readonly string[]).includes(value);
 }
 
 async function requireUserId(): Promise<{ userId: string } | { error: string }> {

@@ -3,6 +3,7 @@
 import {
   getPromptKind,
   getWordsDuration,
+  toFocusMode,
   toWordsMode,
   TYPE_RACER_PROMPT_KIND_LABEL,
   TYPE_RACER_PROMPT_KINDS,
@@ -31,18 +32,29 @@ function pickerButtonClass(selected: boolean, disabled?: boolean): string {
 
 export function ModePicker({ mode, disabled, onModeChange }: ModePickerProps) {
   const promptKind = getPromptKind(mode);
-  const wordsDuration = getWordsDuration(mode);
+  const timedDuration = getWordsDuration(mode);
+  const showDuration = promptKind === "words" || promptKind === "focus";
 
   const handlePromptKindChange = (kind: TypeRacerPromptKind) => {
     if (kind === "words") {
-      onModeChange(toWordsMode(wordsDuration));
+      onModeChange(toWordsMode(timedDuration));
+      return;
+    }
+
+    if (kind === "focus") {
+      onModeChange(toFocusMode(timedDuration));
       return;
     }
 
     onModeChange(kind);
   };
 
-  const handleWordsDurationChange = (duration: TypeRacerWordsDuration) => {
+  const handleDurationChange = (duration: TypeRacerWordsDuration) => {
+    if (promptKind === "focus") {
+      onModeChange(toFocusMode(duration));
+      return;
+    }
+
     onModeChange(toWordsMode(duration));
   };
 
@@ -67,10 +79,10 @@ export function ModePicker({ mode, disabled, onModeChange }: ModePickerProps) {
         })}
       </div>
 
-      {promptKind === "words" ? (
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Words duration">
+      {showDuration ? (
+        <div className="flex flex-wrap gap-2" role="group" aria-label={`${promptKind} duration`}>
           {TYPE_RACER_WORDS_DURATIONS.map((duration) => {
-            const selected = wordsDuration === duration;
+            const selected = timedDuration === duration;
 
             return (
               <button
@@ -78,7 +90,7 @@ export function ModePicker({ mode, disabled, onModeChange }: ModePickerProps) {
                 type="button"
                 disabled={disabled}
                 aria-pressed={selected}
-                onClick={() => handleWordsDurationChange(duration)}
+                onClick={() => handleDurationChange(duration)}
                 className={pickerButtonClass(selected, disabled)}
               >
                 {duration} seconds

@@ -3,14 +3,12 @@ import type { BreakoutBestScores } from "@/lib/breakout/storage";
 import type { PromptRunBestRun } from "@/lib/prompt-run/storage";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabasePublicEnv } from "@/lib/supabase/env";
-import type { TypeRacerMode } from "@/lib/type-racer/constants";
+import { TYPE_RACER_MODES, type TypeRacerMode } from "@/lib/type-racer/constants";
 import type { TypeRacerBestScores } from "@/lib/type-racer/storage";
 import type { PlaygroundCloudScores } from "@/lib/playground/merge-scores";
 
-const TYPE_RACER_MODES_DB = ["words-30", "words-60", "sentence", "paragraph"] as const;
-
 function isTypeRacerMode(value: string): value is TypeRacerMode {
-  return (TYPE_RACER_MODES_DB as readonly string[]).includes(value);
+  return (TYPE_RACER_MODES as readonly string[]).includes(value);
 }
 
 function isBreakoutMode(value: string): value is BreakoutMode {
