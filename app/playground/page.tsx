@@ -10,7 +10,7 @@ import { getUserPlaygroundScores } from "@/lib/playground/server-scores";
 
 export const metadata: Metadata = {
   title: "Playground",
-  description: `Mini-games and interactive experiments on ${site.name}'s portfolio — Type Racer, Prompt Run, and more.`,
+  description: `Mini-games and interactive experiments on ${site.name}'s portfolio — Type Racer, Prompt Run, Style Lab, and more.`,
 };
 
 export default async function PlaygroundPage() {

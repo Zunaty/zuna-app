@@ -9,6 +9,7 @@ export const LOCAL_STORAGE_KEYS = {
   breakout: "zuna-breakout",
   gameSettings: "zuna-game-settings",
   achievements: "zuna-achievements",
+  styleLab: "zuna-style-lab",
 } as const;
 
 export type LocalStorageKey = (typeof LOCAL_STORAGE_KEYS)[keyof typeof LOCAL_STORAGE_KEYS];

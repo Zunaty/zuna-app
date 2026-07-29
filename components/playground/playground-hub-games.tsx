@@ -73,6 +73,16 @@ export function PlaygroundHubGames() {
           localStat={breakoutStat}
         />
       </StaggerItem>
+      <StaggerItem>
+        <PlaygroundGameCard
+          title="Style Lab"
+          description="Restyle the whole site — presets plus knobs for radius, accent color, and fonts."
+          href="/playground/style-lab"
+          status="live"
+          eyebrow="Experiment"
+          ctaLabel="Open"
+        />
+      </StaggerItem>
     </>
   );
 }

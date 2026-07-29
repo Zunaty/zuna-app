@@ -12,6 +12,7 @@ type PlaygroundGameCardProps = {
   status: "live" | "coming-soon";
   eyebrow?: string;
   localStat?: string | null;
+  ctaLabel?: string;
 };
 
 export function PlaygroundGameCard({
@@ -21,6 +22,7 @@ export function PlaygroundGameCard({
   status,
   eyebrow = "Mini-game",
   localStat,
+  ctaLabel = "Play",
 }: PlaygroundGameCardProps) {
   const isLive = status === "live";
 
@@ -45,7 +47,7 @@ export function PlaygroundGameCard({
           {isLive ? (
             <Button variant="outline" asChild>
               <Link href={href}>
-                Play
+                {ctaLabel}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
