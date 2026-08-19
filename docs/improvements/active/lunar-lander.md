@@ -207,6 +207,7 @@ Category: **Playground** / **Lunar Lander** in the roadmap achievement table.
 ## Related
 
 - [breakout.md](./breakout.md) — builds the shared canvas engine first
+- [asteroids.md](./asteroids.md) — rotate + thrust cousin; sequencing vs this game is still open
 - [prompt-run.md](./prompt-run.md) — audio pattern to reuse
 - [motion-and-3d.md](./motion-and-3d.md) — particles/motion conventions (HUD/overlays only; gameplay is canvas-native)
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist

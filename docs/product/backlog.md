@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `product`
-Last updated: `2026-07-18`
+Last updated: `2026-08-19`
 
 # Feature backlog
 
@@ -10,17 +10,18 @@ For prioritized platform work (launch polish, shared patterns, next game), see [
 
 ## Playground — games
 
-| Item                        | Status  | Route / notes                                                                                                                                          |
-| --------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)                                                    |
-| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/archive/2026/type-racer-polish.md)                                           |
-| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                                                                     |
-| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                                                               |
-| **Prompt Run**              | ✅      | `/playground/prompt-run` — rounds, shop, generate, motion, audio; [spec](../improvements/active/prompt-run.md)                                         |
-| Prompt Run — AI images      | ✅      | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                                                         |
-| Prompt Run — run archive    | Ideas   | Completed-run history on start screen (localStorage); guest persist otherwise shipped                                                                  |
-| **Breakout**                | Planned | `/playground/breakout` — retro brick-breaker; Classic + Roguelite draft modes; builds shared canvas engine; [spec](../improvements/active/breakout.md) |
-| **Lunar Lander**            | Planned | `/playground/lunar-lander` — Earth-to-Moon three-phase mission; ships after Breakout; [spec](../improvements/active/lunar-lander.md)                   |
+| Item                        | Status  | Route / notes                                                                                                                                                         |
+| --------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Type Racer**              | ✅      | `/playground/type-racer` — words, sentence, paragraph; [spec](../improvements/active/type-racer.md)                                                                   |
+| Type Racer — words polish   | ✅      | Live stats, timer on first key, motion, shortcuts; [spec](../improvements/archive/2026/type-racer-polish.md)                                                          |
+| Type Racer — sentence mode  | ✅      | Curated one-liners                                                                                                                                                    |
+| Type Racer — paragraph mode | ✅      | Short passages, 120s cap                                                                                                                                              |
+| **Prompt Run**              | ✅      | `/playground/prompt-run` — rounds, shop, generate, motion, audio; [spec](../improvements/active/prompt-run.md)                                                        |
+| Prompt Run — AI images      | ✅      | [FLUX.2 Turbo](https://fal.ai/models/fal-ai/flux-2/turbo) @ $0.008/MP; env-gated, rate-limited                                                                        |
+| Prompt Run — run archive    | Ideas   | Completed-run history on start screen (localStorage); guest persist otherwise shipped                                                                                 |
+| **Breakout**                | Planned | `/playground/breakout` — retro brick-breaker; Classic + Roguelite draft modes; builds shared canvas engine; [spec](../improvements/active/breakout.md)                |
+| **Lunar Lander**            | Planned | `/playground/lunar-lander` — Earth-to-Moon three-phase mission; ships after Breakout; [spec](../improvements/active/lunar-lander.md)                                  |
+| **Asteroids**               | Planned | `/playground/asteroids` — wrap-around shooter, Classic + Roguelite loadout/field drafts; sequencing vs Lunar Lander open; [spec](../improvements/active/asteroids.md) |
 
 ## Playground — platform
 

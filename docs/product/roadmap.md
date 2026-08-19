@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-07-18`
+Last updated: `2026-08-19`
 
 # Product roadmap
 
@@ -30,11 +30,12 @@ Pay down before the next game ships — two games already diverge slightly.
 
 ### 3. New mini-games — canvas pair
 
-Picked and specced: **Breakout** first (validates the shared canvas engine), then **Lunar Lander** (flagship, Earth-to-Moon mission).
+Picked and specced: **Breakout** first (validates the shared canvas engine), then **Lunar Lander** (flagship, Earth-to-Moon mission). **Asteroids** is specced as another canvas candidate; sequencing vs the lander is still open.
 
 - [x] Pick and spec the next game — [breakout.md](../improvements/active/breakout.md), [lunar-lander.md](../improvements/active/lunar-lander.md)
 - [x] Breakout — shared `lib/game-canvas/` engine + Classic core + juice + Roguelite draft mode (needs `yarn supabase:db-push` for the `breakout_best_scores` table)
 - [ ] Lunar Lander — descent MVP first, then full three-phase mission
+- [x] Asteroids — spec only — Classic + Roguelite weapon/field drafts; [asteroids.md](../improvements/active/asteroids.md)
 - [x] Build on the shared patterns above (guest persist, Supabase bests, achievements)
 
 ## Deferred

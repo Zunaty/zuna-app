@@ -263,6 +263,7 @@ Classic ships fully playable before the Roguelite layer lands — but the state 
 ## Related
 
 - [lunar-lander.md](./lunar-lander.md) — flagship canvas game built on this engine
+- [asteroids.md](./asteroids.md) — wrap-around shooter candidate; reuses this engine + draft pattern
 - [prompt-run.md](./prompt-run.md) — audio pattern to reuse
 - [motion-and-3d.md](./motion-and-3d.md) — motion conventions (HUD/overlays only; gameplay is canvas-native)
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist
