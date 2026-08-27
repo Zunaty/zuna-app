@@ -6,6 +6,7 @@ import { usePlaygroundScoreContext } from "@/components/playground/playground-sc
 import { PlaygroundGameCard } from "@/components/playground/playground-game-card";
 import { StaggerItem } from "@/components/motion/stagger-children";
 import { getBestScoreHighlight as getBreakoutHighlight, subscribeBreakoutStorage } from "@/lib/breakout/storage";
+import { playgroundGames, type PlaygroundGameId } from "@/lib/data/playground-games";
 import { getBestRunHighlight, subscribePromptRunStorage } from "@/lib/prompt-run/storage";
 import { getBestScoreHighlight, subscribeTypeRacerStorage } from "@/lib/type-racer/storage";
 
@@ -44,53 +45,27 @@ export function PlaygroundHubGames() {
   const promptRunStat = usePromptRunHighlight();
   const breakoutStat = useBreakoutHighlight();
 
+  const localStats: Partial<Record<PlaygroundGameId, string | null>> = {
+    "type-racer": typeRacerStat,
+    "prompt-run": promptRunStat,
+    breakout: breakoutStat,
+  };
+
   return (
     <>
-      <StaggerItem>
-        <PlaygroundGameCard
-          title="Type Racer"
-          description="Timed typing tests — random words, sentences, or paragraphs with WPM and accuracy scoring."
-          href="/playground/type-racer"
-          status="live"
-          localStat={typeRacerStat}
-        />
-      </StaggerItem>
-      <StaggerItem>
-        <PlaygroundGameCard
-          title="Prompt Run"
-          description="Roguelike prompt builder — draft categories, shop for buffs, then generate art from your run."
-          href="/playground/prompt-run"
-          status="live"
-          localStat={promptRunStat}
-        />
-      </StaggerItem>
-      <StaggerItem>
-        <PlaygroundGameCard
-          title="Breakout"
-          description="Retro brick breaker on canvas — classic levels, or draft boons and curses in Roguelite mode."
-          href="/playground/breakout"
-          status="live"
-          localStat={breakoutStat}
-        />
-      </StaggerItem>
-      <StaggerItem>
-        <PlaygroundGameCard
-          title="Asteroids"
-          description="Wrap-around arena shooter — rotate, thrust, and split the rocks across eight Classic waves."
-          href="/playground/asteroids"
-          status="live"
-        />
-      </StaggerItem>
-      <StaggerItem>
-        <PlaygroundGameCard
-          title="Style Lab"
-          description="Restyle the whole site — presets plus knobs for radius, accent color, and fonts."
-          href="/playground/style-lab"
-          status="live"
-          eyebrow="Experiment"
-          ctaLabel="Open"
-        />
-      </StaggerItem>
+      {playgroundGames.map((game) => (
+        <StaggerItem key={game.id}>
+          <PlaygroundGameCard
+            title={game.title}
+            description={game.description}
+            href={game.href}
+            status={game.status}
+            localStat={localStats[game.id]}
+            eyebrow={game.eyebrow}
+            ctaLabel={game.ctaLabel}
+          />
+        </StaggerItem>
+      ))}
     </>
   );
 }

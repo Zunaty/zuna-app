@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 
-import { FeaturedProjects, HomeHero, HomeSkills, ZoneHighlights } from "@/components/portfolio/home-sections";
+import {
+  FeaturedPlayground,
+  FeaturedProjects,
+  HomeHero,
+  HomeSkills,
+  ZoneHighlights,
+} from "@/components/portfolio/home-sections";
 import { PageShell } from "@/components/layout/page-shell";
 import { site } from "@/lib/data/site";
 
@@ -18,6 +24,7 @@ export default function HomePage() {
     <PageShell className="flex flex-col gap-16 sm:gap-20">
       <HomeHero />
       <FeaturedProjects />
+      <FeaturedPlayground />
       <HomeSkills />
       <ZoneHighlights />
     </PageShell>
