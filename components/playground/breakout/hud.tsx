@@ -1,7 +1,8 @@
 "use client";
 
-import { Gauge, Heart, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Heart, Pause, Play, Volume2, VolumeX } from "lucide-react";
 
+import { FpsToggle } from "@/components/playground/fps-toggle";
 import { Button } from "@/components/ui/button";
 import { BREAKOUT_MODE_LABEL } from "@/lib/breakout/constants";
 import type { BreakoutSnapshot } from "@/lib/breakout/use-breakout";
@@ -48,16 +49,7 @@ export function BreakoutHud({
       </div>
 
       <div className="flex items-center gap-1">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onToggleFps}
-          aria-label={`Frame rate: ${fpsTarget} fps. Toggle.`}
-          className="gap-1 px-2 font-mono text-xs text-muted-foreground"
-        >
-          <Gauge className="size-4" aria-hidden />
-          {fpsTarget}
-        </Button>
+        <FpsToggle fpsTarget={fpsTarget} onToggle={onToggleFps} />
         <Button
           variant="ghost"
           size="sm"
