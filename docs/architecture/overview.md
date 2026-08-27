@@ -29,6 +29,8 @@ Account       →  Supabase auth, saved progress, achievements
 /playground
 /playground/type-racer
 /playground/prompt-run
+/playground/breakout
+/playground/asteroids
 /explore/pokemon
 /explore/geo
 /chat

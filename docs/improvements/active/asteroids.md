@@ -1,12 +1,12 @@
 Status: `active`
 Scope: `playground`
-Last updated: `2026-08-19`
+Last updated: `2026-08-27`
 
 # Asteroids — mini-game spec
 
 A wrap-around arena shooter for the **Playground** zone, in the Asteroids lineage, with two modes: **Classic** (pure retro — ship, bullets, rocks that split) and **Roguelite** (endless waves — draft a loadout and reshape the field after every clear). Canvas rendering on the shared fixed-timestep engine at a user-selectable **30 or 60 fps** (see [Breakout — frame rate](./breakout.md#frame-rate--fixed-timestep-at-30-or-60-fps)). Guest play via localStorage; Supabase per-mode best-score sync following the shared playground patterns.
 
-> **Sequencing:** Specced as a canvas candidate. [Lunar Lander](./lunar-lander.md) is still the roadmap's next canvas game; which of the two ships first is **undecided**. Both reuse `lib/game-canvas/` from [Breakout](./breakout.md). This game is the closer cousin to the lander on **controls** (rotate + thrust) and to Breakout on **Roguelite drafts**.
+> **Sequencing:** Ships **after** [Breakout](./breakout.md) and **before** [Lunar Lander](./lunar-lander.md). Classic is in progress on the shared canvas engine; the lander reuses the same `GameInput` (`up` / `fireHeld`) and remains the flagship physics game after this one.
 
 ## Why this game
 
@@ -22,7 +22,7 @@ A wrap-around arena shooter for the **Playground** zone, in the Asteroids lineag
 
 Linked from `/playground` hub alongside Type Racer, Prompt Run, and Breakout.
 
-**Display name** is an open decision — **Asteroids** is the working title (same classic-name convention as Breakout / Lunar Lander).
+**Display name** is **Asteroids** (same classic-name convention as Breakout / Lunar Lander).
 
 ## Modes
 
@@ -141,18 +141,18 @@ Classic has no pickups.
 
 ## Physics & mechanics
 
-| Mechanic        | Rule                                                                                           |
-| --------------- | ---------------------------------------------------------------------------------------------- |
-| World           | Axis-aligned rectangle; **wrap** for ship, rocks, and projectiles                              |
-| Ship motion     | Rotate at fixed angular speed while held; thrust along nose; drag so you can stop              |
-| Fire            | Cooldown from derived fire rate; spawn projectile at nose with muzzle velocity                 |
-| Rocks           | Large → medium → small on death; each fragment inherits a kick of parent velocity              |
-| Shooting stars  | Constant high velocity, no wrap, no split; spawn from a telegraphed edge                       |
-| Collisions      | Circle vs circle (ship, rocks, stars, bullets). Blasts are a radius query at detonation.       |
-| Seekers         | Steer toward nearest rock (not stars, not fragments smaller than a floor) with a max turn rate |
-| Fuses           | Countdown in seconds; on 0, split or detonate; on hit-before-0, trigger at impact point        |
-| Lives           | 3 per run; hit → lose life, respawn center with i-frames                                       |
-| Tunneling guard | Substep when per-tick travel exceeds the smallest collision radius (30 fps / seekers / stars)  |
+| Mechanic        | Rule                                                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| World           | Axis-aligned rectangle; **wrap** for ship, rocks, and projectiles. Projectiles also expire after a short TTL so they cannot fill the field. |
+| Ship motion     | Rotate at fixed angular speed while held; thrust along nose; drag so you can stop                                                           |
+| Fire            | Cooldown from derived fire rate; spawn projectile at nose with muzzle velocity                                                              |
+| Rocks           | Large → medium → small on death; each fragment inherits a kick of parent velocity                                                           |
+| Shooting stars  | Constant high velocity, no wrap, no split; spawn from a telegraphed edge                                                                    |
+| Collisions      | Circle vs circle (ship, rocks, stars, bullets). Blasts are a radius query at detonation.                                                    |
+| Seekers         | Steer toward nearest rock (not stars, not fragments smaller than a floor) with a max turn rate                                              |
+| Fuses           | Countdown in seconds; on 0, split or detonate; on hit-before-0, trigger at impact point                                                     |
+| Lives           | 3 per run; hit → lose life, respawn center with i-frames                                                                                    |
+| Tunneling guard | Substep when per-tick travel exceeds the smallest collision radius (30 fps / seekers / stars)                                               |
 
 No gravity. Stylized inertia, not n-body. All constants in units/second so 30 and 60 fps feel identical.
 
@@ -241,6 +241,8 @@ lib/asteroids/
   waves.ts               # rock budget, star lanes — Vitest
   update.ts              # pure (state, input, dt) → state — Vitest
   scoring.ts             # — Vitest
+  render.ts              # vector ship / rocks / shots
+  use-asteroids.ts       # canvas loop, snapshot for React HUD
   storage.ts             # localStorage per-mode bests (shared conventions)
 ```
 
@@ -323,29 +325,27 @@ Table shape can mirror `breakout_best_scores` (`user_id`, `mode`, `score`, `leve
 
 ## Rollout
 
-| Step                    | Status  | Deliverable                                                               |
-| ----------------------- | ------- | ------------------------------------------------------------------------- |
-| Spec                    | Done    | This doc                                                                  |
-| Input extension         | Planned | `GameInput` + `useGameInput` gain `up` / `fireHeld` (shared with Lander)  |
-| Classic core            | Planned | Wrap, ship, bullets, splitting rocks, lives, wave 1; pure update + Vitest |
-| Classic waves + scoring | Planned | 8 waves, mode select, results                                             |
-| Juice                   | Planned | Particles, audio, telegraphs, reduced-motion path                         |
-| Roguelite loadout       | Planned | Draft screen, delivery/payload/scale, exclusive groups + gating           |
-| Field curses + stars    | Planned | Swarm / giants / gravel / shooting stars                                  |
-| Timed multi-shot        | Planned | Pickup drop, staggered vs spread overlay                                  |
-| Persist + achievements  | Planned | Per-mode bests local + Supabase, achievement wiring                       |
+| Step                    | Status      | Deliverable                                                              |
+| ----------------------- | ----------- | ------------------------------------------------------------------------ |
+| Spec                    | Done        | This doc                                                                 |
+| Input extension         | Done        | `GameInput` + `useGameInput` gain `up` / `fireHeld` (shared with Lander) |
+| Classic core            | Done        | Wrap, ship, bullets, splitting rocks, lives; pure update + Vitest        |
+| Classic waves + scoring | In progress | 8 waves, mode select, results — playable; persist/juice still later      |
+| Juice                   | Planned     | Particles, audio, telegraphs, reduced-motion path                        |
+| Roguelite loadout       | Planned     | Draft screen, delivery/payload/scale, exclusive groups + gating          |
+| Field curses + stars    | Planned     | Swarm / giants / gravel / shooting stars                                 |
+| Timed multi-shot        | Planned     | Pickup drop, staggered vs spread overlay                                 |
+| Persist + achievements  | Planned     | Per-mode bests local + Supabase, achievement wiring                      |
 
-Classic ships fully playable before the Roguelite layer — but the state shape (`projectiles[]`, `modifiers`, `delivery`/`payload` on derived config) is loadout-ready from the first commit.
-
-**Do not start implementation** until this game is chosen over (or sequenced after) Lunar Lander on the [roadmap](../../product/roadmap.md).
+Classic ships fully playable before the Roguelite layer — the state shape (`projectiles[]`, `modifiers`, `delivery`/`payload` on derived config) is loadout-ready from the first commit.
 
 ## Open decisions
 
 | Question                   | Lean                                                                                              |
 | -------------------------- | ------------------------------------------------------------------------------------------------- |
-| Display name               | **Asteroids** for now; rename if we want something more original                                  |
-| Sequencing vs Lunar Lander | Undecided — Lander is still "up next" on the roadmap until you pick                               |
-| Canvas resolution          | Fixed internal landscape (e.g. 640×480) scaled to container                                       |
+| Display name               | **Asteroids**                                                                                     |
+| Sequencing vs Lunar Lander | **Asteroids first** — Classic is the smaller slice; Lander stays flagship after                   |
+| Canvas resolution          | Fixed internal landscape **640×480**, scaled to container                                         |
 | Friendly fire (own blast)  | No in v1 — portfolio visitors should not suicide on a long fuse                                   |
 | Seeker target              | Nearest rock above a size floor; never stars (stars are too fast; dumb missiles are the star gun) |
 | Fuse length                | One constant per payload in v1; shorter/longer fuse cards later (same gating pattern as scale)    |
@@ -359,7 +359,7 @@ Classic ships fully playable before the Roguelite layer — but the state shape 
 ## Related
 
 - [breakout.md](./breakout.md) — shared canvas engine, draft overlay, modifier-as-data pattern
-- [lunar-lander.md](./lunar-lander.md) — rotate + thrust; sequencing still open
+- [lunar-lander.md](./lunar-lander.md) — rotate + thrust; ships after this game
 - [prompt-run.md](./prompt-run.md) — rarity colors, audio pattern
 - [motion-and-3d.md](./motion-and-3d.md) — HUD/overlays only; gameplay is canvas-native
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist

@@ -1,12 +1,12 @@
 Status: `active`
 Scope: `playground`
-Last updated: `2026-07-08`
+Last updated: `2026-08-27`
 
 # Lunar Lander — mini-game spec
 
 A three-phase Earth-to-Moon mission for the **Playground** zone: launch from Earth, escape into a coast phase, flip the ship, and soft-land on the Moon with whatever fuel is left. Canvas rendering on the shared fixed-timestep engine at a user-selectable **30 or 60 fps** (see [Breakout — frame rate](./breakout.md#frame-rate--fixed-timestep-at-30-or-60-fps)). Guest play via localStorage; Supabase bests per the shared playground patterns.
 
-> **Sequencing:** Ships **after** [Breakout](./breakout.md), which builds and validates the shared canvas engine (`lib/game-canvas/`). This is the flagship canvas game — more physics, more phases, more polish.
+> **Sequencing:** Ships **after** [Asteroids](./asteroids.md). Breakout validated `lib/game-canvas/`; Asteroids adds rotate + thrust + hold-to-fire on `GameInput`. This remains the flagship canvas game — more physics, more phases, more polish.
 
 ## Why this game
 
@@ -207,7 +207,7 @@ Category: **Playground** / **Lunar Lander** in the roadmap achievement table.
 ## Related
 
 - [breakout.md](./breakout.md) — builds the shared canvas engine first
-- [asteroids.md](./asteroids.md) — rotate + thrust cousin; sequencing vs this game is still open
+- [asteroids.md](./asteroids.md) — rotate + thrust cousin; ships before this game
 - [prompt-run.md](./prompt-run.md) — audio pattern to reuse
 - [motion-and-3d.md](./motion-and-3d.md) — particles/motion conventions (HUD/overlays only; gameplay is canvas-native)
 - [product/backlog.md](../../product/backlog.md) — playground games wishlist

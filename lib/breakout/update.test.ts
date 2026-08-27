@@ -5,7 +5,14 @@ import type { BreakoutState } from "@/lib/breakout/types";
 import { applyDraftPick, createBreakoutState, updateBreakout } from "@/lib/breakout/update";
 import type { GameInput } from "@/lib/game-canvas/types";
 
-const idleInput: GameInput = { left: false, right: false, pointerX: null, primaryPressed: false };
+const idleInput: GameInput = {
+  left: false,
+  right: false,
+  up: false,
+  pointerX: null,
+  primaryPressed: false,
+  fireHeld: false,
+};
 const serveInput: GameInput = { ...idleInput, primaryPressed: true };
 
 const DT = 1 / 60;
@@ -233,8 +240,7 @@ describe("soak: simulated play stays stable", () => {
     for (let i = 0; i < ticks; i += 1) {
       const ball = state.balls[0];
       const input: GameInput = {
-        left: false,
-        right: false,
+        ...idleInput,
         pointerX: ball ? ball.pos.x - 12 : null,
         primaryPressed: state.phase === "serve",
       };

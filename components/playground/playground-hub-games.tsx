@@ -75,6 +75,14 @@ export function PlaygroundHubGames() {
       </StaggerItem>
       <StaggerItem>
         <PlaygroundGameCard
+          title="Asteroids"
+          description="Wrap-around arena shooter — rotate, thrust, and split the rocks across eight Classic waves."
+          href="/playground/asteroids"
+          status="live"
+        />
+      </StaggerItem>
+      <StaggerItem>
+        <PlaygroundGameCard
           title="Style Lab"
           description="Restyle the whole site — presets plus knobs for radius, accent color, and fonts."
           href="/playground/style-lab"

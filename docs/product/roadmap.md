@@ -1,6 +1,6 @@
 Status: `active`
 Scope: `platform`
-Last updated: `2026-08-19`
+Last updated: `2026-08-27`
 
 # Product roadmap
 
@@ -30,12 +30,12 @@ Pay down before the next game ships — two games already diverge slightly.
 
 ### 3. New mini-games — canvas pair
 
-Picked and specced: **Breakout** first (validates the shared canvas engine), then **Lunar Lander** (flagship, Earth-to-Moon mission). **Asteroids** is specced as another canvas candidate; sequencing vs the lander is still open.
+Picked and specced: **Breakout** first (validates the shared canvas engine), then **Asteroids** (wrap-around shooter; Classic playable), then **Lunar Lander** (flagship, Earth-to-Moon mission). Asteroids extends shared `GameInput` with rotate + thrust + hold-to-fire, which the lander reuses.
 
-- [x] Pick and spec the next game — [breakout.md](../improvements/active/breakout.md), [lunar-lander.md](../improvements/active/lunar-lander.md)
+- [x] Pick and spec the next game — [breakout.md](../improvements/active/breakout.md), [lunar-lander.md](../improvements/active/lunar-lander.md), [asteroids.md](../improvements/active/asteroids.md)
 - [x] Breakout — shared `lib/game-canvas/` engine + Classic core + juice + Roguelite draft mode (needs `yarn supabase:db-push` for the `breakout_best_scores` table)
+- [ ] Asteroids — Classic core is playable; juice, Roguelite drafts, persist, and achievements still open; [asteroids.md](../improvements/active/asteroids.md)
 - [ ] Lunar Lander — descent MVP first, then full three-phase mission
-- [x] Asteroids — spec only — Classic + Roguelite weapon/field drafts; [asteroids.md](../improvements/active/asteroids.md)
 - [x] Build on the shared patterns above (guest persist, Supabase bests, achievements)
 
 ## Deferred
