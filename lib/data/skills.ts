@@ -1,7 +1,11 @@
 export const skillGroups = [
   {
+    title: "Languages",
+    skills: ["TypeScript", "JavaScript", "Python", "Java", "C#"],
+  },
+  {
     title: "Frontend",
-    skills: ["Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
+    skills: ["Next.js", "React", "Tailwind CSS", "shadcn/ui"],
   },
   {
     title: "Backend & data",
@@ -13,7 +17,7 @@ export const skillGroups = [
   },
   {
     title: "AI & automation",
-    skills: ["OpenAI", "LangChain", "Vercel AI SDK", "Automation pipelines"],
+    skills: ["Claude", "ChatGPT", "Grok", "Cursor", "LangChain", "Vercel AI SDK", "Automation pipelines"],
   },
   {
     title: "Web3",

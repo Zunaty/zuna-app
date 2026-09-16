@@ -57,6 +57,10 @@ const skillCategoryColors: CategoryColorSet[] = [
     pill: "border-orange-500/45 bg-orange-500/15 text-orange-900 dark:text-orange-100",
     filterActive: "border-orange-600 bg-orange-600 text-white dark:border-orange-500 dark:bg-orange-500",
   },
+  {
+    pill: "border-teal-500/45 bg-teal-500/15 text-teal-900 dark:text-teal-100",
+    filterActive: "border-teal-600 bg-teal-600 text-white dark:border-teal-500 dark:bg-teal-500",
+  },
 ];
 
 function getCategoryColors(groups: readonly SkillGroup[], category: string): CategoryColorSet {
