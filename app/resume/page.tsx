@@ -7,13 +7,51 @@ import { StaggerChildren, StaggerItem } from "@/components/motion/stagger-childr
 import { PageShell } from "@/components/layout/page-shell";
 import { SkillsGrid } from "@/components/portfolio/skills-grid";
 import { Button } from "@/components/ui/button";
-import { education, experience } from "@/lib/data/resume";
+import { education, earlierExperience, experience, type Experience } from "@/lib/data/resume";
 import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: "Resume",
   description: `Experience and skills for ${site.name}.`,
 };
+
+function ExperienceList({
+  jobs,
+  staggerKey,
+  accent = false,
+}: {
+  jobs: readonly Experience[];
+  staggerKey: string;
+  accent?: boolean;
+}) {
+  return (
+    <StaggerChildren as="ul" className="mt-6 space-y-10" staggerKey={staggerKey}>
+      {jobs.map((job) => (
+        <StaggerItem
+          key={`${job.company}-${job.role}-${job.period}`}
+          as="li"
+          className={accent ? "border-l-2 border-primary/30 pl-4" : "border-l-2 border-border pl-4"}
+        >
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="font-semibold">{job.role}</h3>
+            <span className="text-sm text-muted-foreground">{job.period}</span>
+          </div>
+          <p className="text-sm font-medium text-muted-foreground">
+            {job.company}
+            {job.employment ? ` · ${job.employment}` : null}
+          </p>
+          {job.location ? <p className="text-sm text-muted-foreground">{job.location}</p> : null}
+          {job.summary ? <p className="mt-2 text-sm text-muted-foreground">{job.summary}</p> : null}
+          <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted-foreground">
+            {job.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+        </StaggerItem>
+      ))}
+    </StaggerChildren>
+  );
+}
 
 export default function ResumePage() {
   return (
@@ -32,23 +70,15 @@ export default function ResumePage() {
         <section className="space-y-10">
           <div>
             <h2 className="text-xl font-semibold">Experience</h2>
-            <StaggerChildren as="ul" className="mt-6 space-y-10" staggerKey="resume-experience">
-              {experience.map((job) => (
-                <StaggerItem key={`${job.company}-${job.period}`} as="li" className="border-l-2 border-primary/30 pl-4">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="font-semibold">{job.role}</h3>
-                    <span className="text-sm text-muted-foreground">{job.period}</span>
-                  </div>
-                  <p className="text-sm font-medium text-muted-foreground">{job.company}</p>
-                  {job.summary ? <p className="mt-2 text-sm text-muted-foreground">{job.summary}</p> : null}
-                  <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted-foreground">
-                    {job.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
+            <ExperienceList jobs={experience} staggerKey="resume-experience" accent />
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold">Earlier experience</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Service, operations, and data work before full-time software engineering.
+            </p>
+            <ExperienceList jobs={earlierExperience} staggerKey="resume-earlier-experience" />
           </div>
 
           <div>

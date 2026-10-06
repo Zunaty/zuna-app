@@ -2,6 +2,8 @@ export type Experience = {
   role: string;
   company: string;
   period: string;
+  location?: string;
+  employment?: string;
   summary?: string;
   bullets: readonly string[];
 };
@@ -41,6 +43,58 @@ export const experience: Experience[] = [
       "Managed application deployments using Vercel and maintained development workflows across GitHub repositories.",
       "Established Git branching, code review, and deployment processes that improved team collaboration and release stability.",
       "Performed application testing, debugging, and quality assurance throughout development and pre-production release cycles.",
+    ],
+  },
+];
+
+export const earlierExperience: Experience[] = [
+  {
+    role: "Food Packer",
+    company: "Pete's Meals",
+    employment: "Part-time",
+    period: "May 2020 — Dec 2021",
+    location: "Sandy, Utah",
+    bullets: [
+      "Assisted in the preparation of meals for a newly established meal packing service.",
+      "Maintained cleanliness and organization of the work area to ensure efficient operations.",
+      "Collaborated with a small team to deliver quality meals to customers.",
+      "Contributed quality assurance insights to enhance the company website's user experience.",
+    ],
+  },
+  {
+    role: "Barback",
+    company: "Hoppers Bar & Grill",
+    employment: "Part-time",
+    period: "May 2015 — Aug 2020",
+    location: "Salt Lake City, Utah",
+    summary: "Also served, bussed, washed dishes, and worked catering — every role short of management.",
+    bullets: [
+      "Filled in across the restaurant so service could keep moving on busy shifts.",
+      "Developed customer service skills while collaborating with team members in a fast-paced restaurant environment.",
+      "Supported events and catering from setup through guest service and breakdown.",
+    ],
+  },
+  {
+    role: "Data Entry Specialist",
+    company: "Intermountain Healthcare",
+    period: "Jun 2017 — Jul 2017",
+    location: "Salt Lake City, Utah",
+    bullets: [
+      "Managed data entry tasks using Excel and Word to ensure accurate data handling.",
+      "Successfully transferred training software from an outdated system to a new platform, enhancing operational efficiency.",
+      "Collaborated with team members at Intermountain Healthcare to streamline data processes in a fast-paced environment.",
+    ],
+  },
+  {
+    role: "Data Entry Specialist",
+    company: "BoardCo Inc.",
+    period: "Sep 2014 — Apr 2015",
+    location: "Provo, Utah",
+    bullets: [
+      "Edited product items using website software to ensure accurate online representation.",
+      "Managed inventory effectively, maintaining organized records for seamless operations.",
+      "Transferred data from the old website to the new platform, enhancing user experience.",
+      "Utilized Excel and Word to create and update product listings, improving accessibility.",
     ],
   },
 ];
